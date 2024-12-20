@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @Controller
 public class TestController {
 
-    @GetMapping("/gettable")
-    public String index(@ModelAttribute PersonEntity personEntity){
+    @GetMapping("/index")
+    public String index(){
 
-        return "index.html";
+        return "Catalog.html";
     }
 }
