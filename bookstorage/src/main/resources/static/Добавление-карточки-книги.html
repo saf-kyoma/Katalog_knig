@@ -9,6 +9,70 @@
   <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
   <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
   <meta name="theme-color" content="#2cccc4">
+
+  <style>
+    /* Стили для контейнера тегов */
+    .tags-input-container {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      border: 1px solid #ccc;
+      padding: 5px;
+      border-radius: 4px;
+    }
+
+    /* Стили для тэгов */
+    .tag {
+      background-color: #2cccc4;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 3px;
+      margin: 2px;
+      display: flex;
+      align-items: center;
+    }
+
+    .tag .remove-tag {
+      margin-left: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* Стили для списка подсказок жанра */
+    .suggestions-list {
+      position: absolute;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      width: 100%;
+      max-height: 150px;
+      overflow-y: auto;
+      z-index: 1000;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .suggestions-list li {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .suggestions-list li:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* Стили для поля языка */
+    .u-input-language {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    /* Дополнительные стили по необходимости */
+  </style>
+
 </head>
 <body data-path-to-root="./" class="u-body u-xl-mode" data-lang="ru">
 <section class="u-clearfix u-section-1" id="sec-64ce">
@@ -20,6 +84,9 @@
             source="email"
             name="form"
             style="padding: 10px;">
+
+        <!-- Скрытое поле для идентификатора книги (для редактирования) -->
+        <input type="hidden" id="book-id" name="bookId" value="">
 
         <!-- Название книги -->
         <div class="u-form-group u-form-name u-label-left">
@@ -36,30 +103,34 @@
 
         <!-- Жанр -->
         <div class="u-form-group u-form-select u-label-left u-form-group-2">
-          <label for="select-55f6" class="u-label">Жанр</label>
-          <div class="u-form-select-wrapper">
-            <select id="select-55f6" name="genre" class="u-input u-input-rectangle" required>
-              <option value="">Выберите жанр</option>
-              <option value="Фэнтези">Фэнтези</option>
-              <option value="Триллер">Триллер</option>
-              <option value="Комедия">Комедия</option>
-              <!-- Добавьте другие жанры по необходимости -->
-            </select>
+          <label for="genre-input" class="u-label">Жанр</label>
+          <div class="tags-input-container">
+            <input type="text"
+                   id="genre-input"
+                   name="genre"
+                   class="u-input u-input-rectangle"
+                   placeholder="Введите жанр"
+                   title="Допускаются только буквы и пробелы"
+                   required>
+            <div class="tags-container" id="genre-tags"></div>
           </div>
         </div>
 
         <!-- Язык -->
         <div class="u-form-group u-form-select u-label-left u-form-group-8">
-          <label for="select-4fe4" class="u-label">Язык</label>
-          <div class="u-form-select-wrapper">
-            <select id="select-4fe4" name="language" class="u-input u-input-rectangle" required>
-              <option value="">Выберите язык</option>
-              <option value="Русский">Русский</option>
-              <option value="Английский">Английский</option>
-              <option value="Немецкий">Немецкий</option>
-              <!-- Добавьте другие языки по необходимости -->
-            </select>
-          </div>
+          <label for="language-select" class="u-label">Язык</label>
+
+          <select id="language-select" name="language" class="u-input u-input-rectangle" required>
+            <option value="" disabled selected>Выберите язык</option>
+            <option value="Русский">Русский</option>
+            <option value="Английский">Английский</option>
+            <option value="Немецкий">Немецкий</option>
+            <option value="Французский">Французский</option>
+            <option value="Испанский">Испанский</option>
+            <option value="Китайский">Китайский</option>
+            <option value="Японский">Японский</option>
+            <!-- Добавьте другие языки при необходимости -->
+          </select>
         </div>
 
         <!-- Автор -->
@@ -178,7 +249,7 @@
   </div>
 </footer>
 
-<!-- Скрипты валидации -->
+<!-- Скрипты валидации и функциональности -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     // Регулярное выражение для удаления нежелательных символов (разрешены буквы, цифры, пробелы, дефисы)
@@ -266,6 +337,120 @@
         // Если все проверки пройдены, форма отправляется
       });
     }
+
+     /////////////////////////////////////////////////////////////
+
+
+    /////////////////////////////////////////////////////////////
+    // Валидация Жанра с Тэгами
+    const genreInput = document.getElementById('genre-input');
+    const genreTagsContainer = document.getElementById('genre-tags');
+
+    // Список доступных жанров
+    const availableGenres = [
+      'Фэнтези',
+      'Триллер',
+      'Комедия',
+      'Драма',
+      'Научная фантастика',
+      'Романтика',
+      'Ужасы',
+      'Исторический',
+      'Приключения',
+      'Мистика'
+      // Добавьте другие жанры по необходимости
+    ];
+
+    // Функция для создания тэга
+    function createTag(text) {
+      const tag = document.createElement('span');
+      tag.classList.add('tag');
+      tag.textContent = text;
+
+      const removeBtn = document.createElement('span');
+      removeBtn.classList.add('remove-tag');
+      removeBtn.textContent = '×';
+      removeBtn.addEventListener('click', function() {
+        genreTagsContainer.removeChild(tag);
+      });
+
+      tag.appendChild(removeBtn);
+      genreTagsContainer.appendChild(tag);
+    }
+    // Разрешаем ввод только букв и пробелов
+  genreInput.addEventListener('input', function() {
+    this.value = this.value.replace(/[^A-Za-zА-Яа-яЁё\s]/g, '');
+  });
+
+    // Функция для фильтрации жанров для подсказок
+    function filterGenres(query) {
+      return availableGenres.filter(genre => genre.toLowerCase().includes(query.toLowerCase()) &&
+        !Array.from(genreTagsContainer.children).some(tag => tag.firstChild.textContent === genre));
+    }
+
+    // Создание списка подсказок
+    function createSuggestionsList(filteredGenres) {
+      // Удаление предыдущих подсказок
+      const existingList = document.getElementById('genre-suggestions');
+      if (existingList) {
+        existingList.remove();
+      }
+
+      if (filteredGenres.length === 0) return;
+
+      const list = document.createElement('ul');
+      list.id = 'genre-suggestions';
+      list.classList.add('suggestions-list');
+
+      filteredGenres.forEach(genre => {
+        const listItem = document.createElement('li');
+        listItem.textContent = genre;
+        listItem.addEventListener('click', function() {
+          createTag(genre);
+          genreInput.value = '';
+          list.remove();
+        });
+        list.appendChild(listItem);
+      });
+
+      genreInput.parentElement.appendChild(list);
+    }
+
+    // Обработчик ввода в поле жанра
+    genreInput.addEventListener('input', function() {
+      const query = this.value.trim();
+      if (query.length === 0) {
+        const existingList = document.getElementById('genre-suggestions');
+        if (existingList) existingList.remove();
+        return;
+      }
+
+      const filtered = filterGenres(query);
+      createSuggestionsList(filtered);
+    });
+
+    // Закрытие подсказок при клике вне поля
+    document.addEventListener('click', function(event) {
+      if (!genreInput.contains(event.target) && !genreTagsContainer.contains(event.target)) {
+        const existingList = document.getElementById('genre-suggestions');
+        if (existingList) existingList.remove();
+      }
+    });
+
+    // Обработка нажатия клавиши Enter для добавления жанра
+    genreInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        const query = this.value.trim();
+        if (availableGenres.includes(query) &&
+            !Array.from(genreTagsContainer.children).some(tag => tag.firstChild.textContent === query)) {
+          createTag(query);
+          this.value = '';
+          const existingList = document.getElementById('genre-suggestions');
+          if (existingList) existingList.remove();
+        }
+      }
+    });
   });
 </script>
 
