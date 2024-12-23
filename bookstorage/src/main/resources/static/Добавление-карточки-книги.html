@@ -1,119 +1,458 @@
 <!DOCTYPE html>
-<html style="font-size: 16px;" lang="ru"><head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="utf-8">
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <title>Добавление карточки книги</title>
-    <link rel="stylesheet" href="nicepage.css" media="screen">
-<link rel="stylesheet" href="Добавление-карточки-книги.css" media="screen">
-    <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
-    <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
-    <meta name="generator" content="Nicepage 7.1.0, nicepage.com">
-    <meta name="referrer" content="origin">
-    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
-    
-    
-    
-    <script type="application/ld+json">{
-		"@context": "http://schema.org",
-		"@type": "Organization",
-		"name": ""
-}</script>
-    <meta name="theme-color" content="#2cccc4">
-    <meta property="og:title" content="Добавление карточки книги">
-    <meta property="og:type" content="website">
-  <meta data-intl-tel-input-cdn-path="intlTelInput/"></head>
-  <body data-path-to-root="./" data-include-products="true" class="u-body u-xl-mode" data-lang="ru">
-    <section class="u-clearfix u-section-1" id="sec-64ce">
-      <div class="u-clearfix u-sheet u-sheet-1">
-        <h4 class="u-text u-text-1">Добавление книги</h4>
-        <div class="u-form u-form-1">
-          <form action="https://forms.nicepagesrv.com/v2/form/process" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="email" name="form" style="padding: 10px;">
-            <div class="u-form-group u-form-name u-label-left">
-              <label for="name-e75d" class="u-label">Название</label>
-              <input type="text" placeholder="Введите Ваше имя" id="name-e75d" name="name" class="u-input u-input-rectangle u-input-1" required="">
-            </div>
-            <div class="u-form-group u-form-select u-label-left u-form-group-2">
-              <label for="select-55f6" class="u-label">Жанр</label>
-              <div class="u-form-select-wrapper">
-                <select id="select-55f6" name="select" class="u-input u-input-rectangle">
-                  <option value="Фэнтези" data-calc="">Фэнтези</option>
-                  <option value="Триллер" data-calc="">Триллер</option>
-                  <option value="Комедия" data-calc="">Комедия</option>
-                </select>
-                <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
-              </div>
-            </div>
-            <div class="u-form-email u-form-group u-label-left">
-              <label for="email-e75d" class="u-label">Автор</label>
-              <input type="email" placeholder="Введите имейл адрес" id="email-e75d" name="email" class="u-input u-input-rectangle u-input-3" required="">
-            </div>
-            <div class="u-form-date u-form-group u-label-left u-form-group-4">
-              <label for="date-13b1" class="u-label">Год</label>
-              <input type="text" placeholder="ММ/ДД/ГГГГ" id="date-13b1" name="date" class="u-input u-input-rectangle u-input-4" required="" data-date-format="mm/dd/yyyy">
-            </div>
-            <div class="u-form-group u-label-left u-form-group-5">
-              <label for="text-39ba" class="u-label">Издатель</label>
-              <input type="text" placeholder="" id="text-39ba" name="text" class="u-input u-input-rectangle u-input-5">
-            </div>
-            <div class="u-form-group u-form-number u-form-number-layout-number u-label-left u-form-group-6">
-              <label for="number-1420" class="u-label">Страницы</label>
-              <div class="u-input-row" data-value="0">
-                <input value="0" min="1" max="10000" step="1" type="number" placeholder="" id="number-1420" name="number" class="u-border-1 u-input u-input-rectangle u-number u-text-black u-input-6">
-              </div>
-            </div>
-            <div class="u-form-group u-form-number u-form-number-layout-number u-label-left u-form-group-7">
-              <label for="number-e44e" class="u-label">Кол-во</label>
-              <div class="u-input-row" data-value="0">
-                <input value="0" min="0" max="100" step="1" type="number" placeholder="" id="number-e44e" name="number-1" class="u-input u-input-rectangle u-text-black u-input-7">
-              </div>
-            </div>
-            <div class="u-form-group u-form-select u-label-left u-form-group-8">
-              <label for="select-4fe4" class="u-label">Язык</label>
-              <div class="u-form-select-wrapper">
-                <select id="select-4fe4" name="select-1" class="u-input u-input-rectangle u-input-8">
-                  <option value="Русский" data-calc="">Русский</option>
-                  <option value="Английский" data-calc="">Английский</option>
-                  <option value="Немецкий" data-calc="">Немецкий</option>
-                </select>
-                <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
-              </div>
-            </div>
-            <div class="u-form-group u-label-left u-form-group-9">
-              <label for="text-24cc" class="u-label">ISBN</label>
-              <input type="text" placeholder="" id="text-24cc" name="text-1" class="u-input u-input-rectangle u-input-9">
-            </div>
-            <div class="u-form-group u-form-submit u-label-left">
-              <label class="u-label u-label-10"></label>
-              <input type="submit" value="submit" class="u-form-control-hidden">
-              <div class="u-align-left u-btn-submit-container">
-                <a href="#" class="u-btn u-btn-round u-btn-submit u-button-style u-radius u-btn-1">Добавить<br>
-                </a>
-              </div>
-            </div>
-            <div class="u-form-send-message u-form-send-success"> Спасибо! Ваше сообщение отправлено. </div>
-            <div class="u-form-send-error u-form-send-message"> Отправка не удалась. Пожалуйста, исправьте ошибки и попробуйте еще раз. </div>
-            <input type="hidden" value="" name="recaptchaResponse">
-            <input type="hidden" name="formServices" value="234d2f51-51fe-7107-fa98-0d7a5e49113d">
-          </form>
+<html style="font-size: 16px;" lang="ru">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <title>Добавление карточки книги</title>
+  <link rel="stylesheet" href="nicepage.css" media="screen">
+  <link rel="stylesheet" href="Добавление-карточки-книги.css" media="screen">
+  <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
+  <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
+  <meta name="theme-color" content="#2cccc4">
+
+  <style>
+    /* Стили для контейнера тегов */
+    .tags-input-container {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      border: 1px solid #ccc;
+      padding: 5px;
+      border-radius: 4px;
+    }
+
+    /* Стили для тэгов */
+    .tag {
+      background-color: #2cccc4;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 3px;
+      margin: 2px;
+      display: flex;
+      align-items: center;
+    }
+
+    .tag .remove-tag {
+      margin-left: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* Стили для списка подсказок жанра */
+    .suggestions-list {
+      position: absolute;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      width: 100%;
+      max-height: 150px;
+      overflow-y: auto;
+      z-index: 1000;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .suggestions-list li {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .suggestions-list li:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* Стили для поля языка */
+    .u-input-language {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    /* Дополнительные стили по необходимости */
+  </style>
+
+</head>
+<body data-path-to-root="./" class="u-body u-xl-mode" data-lang="ru">
+<section class="u-clearfix u-section-1" id="sec-64ce">
+  <div class="u-clearfix u-sheet u-sheet-1">
+    <h4 class="u-text u-text-1">Добавление книги</h4>
+    <div class="u-form u-form-1">
+      <form action="https://forms.nicepagesrv.com/v2/form/process"
+            class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form"
+            source="email"
+            name="form"
+            style="padding: 10px;">
+
+        <!-- Скрытое поле для идентификатора книги (для редактирования) -->
+        <input type="hidden" id="book-id" name="bookId" value="">
+
+        <!-- Название книги -->
+        <div class="u-form-group u-form-name u-label-left">
+          <label for="name-e75d" class="u-label">Название</label>
+          <input type="text"
+                 placeholder="Введите название книги"
+                 id="name-e75d"
+                 name="name"
+                 class="u-input u-input-rectangle u-input-1"
+                 required
+                 pattern="[A-Za-zА-Яа-я0-9\s\-]+"
+                 title="Разрешены только буквы, цифры, пробелы и дефис (-)">
         </div>
-        <a href="" class="u-btn u-btn-round u-button-style u-hover-palette-1-dark-1 u-palette-1-base u-radius u-btn-2">Отмена </a>
-      </div>
-    </section>
-    
-    
-    
-    <footer class="u-align-center u-clearfix u-container-align-center u-footer u-grey-80 u-footer" id="sec-2f71"><div class="u-clearfix u-sheet u-sheet-1">
-        <p class="u-small-text u-text u-text-variant u-text-1"> О вопросах и проблемах сообщать главному администратору или писать на почту GlobalMaster@book.com</p>
-      </div></footer>
-    <section class="u-backlink u-clearfix u-grey-80">
-      <p class="u-text">
-        <span>This site was created with the </span>
-        <a class="u-link" href="https://nicepage.com/" target="_blank" rel="nofollow">
-          <span>Nicepage</span>
-        </a>
-      </p>
-    </section>
-  
-</body></html>
+
+        <!-- Жанр -->
+        <div class="u-form-group u-form-select u-label-left u-form-group-2">
+          <label for="genre-input" class="u-label">Жанр</label>
+          <div class="tags-input-container">
+            <input type="text"
+                   id="genre-input"
+                   name="genre"
+                   class="u-input u-input-rectangle"
+                   placeholder="Введите жанр"
+                   title="Допускаются только буквы и пробелы"
+                   required>
+            <div class="tags-container" id="genre-tags"></div>
+          </div>
+        </div>
+
+        <!-- Язык -->
+        <div class="u-form-group u-form-select u-label-left u-form-group-8">
+          <label for="language-select" class="u-label">Язык</label>
+
+          <select id="language-select" name="language" class="u-input u-input-rectangle" required>
+            <option value="" disabled selected>Выберите язык</option>
+            <option value="Русский">Русский</option>
+            <option value="Английский">Английский</option>
+            <option value="Немецкий">Немецкий</option>
+            <option value="Французский">Французский</option>
+            <option value="Испанский">Испанский</option>
+            <option value="Китайский">Китайский</option>
+            <option value="Японский">Японский</option>
+            <!-- Добавьте другие языки при необходимости -->
+          </select>
+        </div>
+
+        <!-- Автор -->
+        <div class="u-form-group u-form-email u-label-left">
+          <label for="author-e75d" class="u-label">Автор</label>
+          <input type="text"
+                 placeholder="Введите автора"
+                 id="author-e75d"
+                 name="author"
+                 class="u-input u-input-rectangle u-input-3"
+                 required
+                 pattern="[A-Za-zА-Яа-я0-9\s\-]+"
+                 title="Разрешены только буквы, цифры, пробелы и дефис (-)">
+        </div>
+
+        <!-- Год -->
+        <div class="u-form-date u-form-group u-label-left u-form-group-4">
+          <label for="date-13b1" class="u-label">Год</label>
+          <input type="date"
+                 id="date-13b1"
+                 name="date"
+                 class="u-input u-input-rectangle u-input-4"
+                 required>
+        </div>
+
+        <!-- Издатель -->
+        <div class="u-form-group u-label-left u-form-group-5">
+          <label for="text-39ba" class="u-label">Издатель</label>
+          <input type="text"
+                 placeholder="Введите издателя"
+                 id="text-39ba"
+                 name="publisher"
+                 class="u-input u-input-rectangle u-input-5"
+                 required
+                 pattern="[A-Za-zА-Яа-я0-9\s\-]+"
+                 title="Разрешены только буквы, цифры, пробелы и дефис (-)">
+        </div>
+
+        <!-- Страницы -->
+        <div class="u-form-group u-form-number u-form-number-layout-number u-label-left u-form-group-6">
+          <label for="number-1420" class="u-label">Страницы</label>
+          <div class="u-input-row" data-value="0">
+            <input type="number"
+                   id="number-1420"
+                   name="pages"
+                   class="u-border-1 u-input u-input-rectangle u-number u-text-black u-input-6"
+                   value="0"
+                   min="1"
+                   max="10000"
+                   step="1"
+                   required>
+          </div>
+        </div>
+
+        <!-- Количество -->
+        <div class="u-form-group u-form-number u-form-number-layout-number u-label-left u-form-group-7">
+          <label for="number-e44e" class="u-label">Кол-во</label>
+          <div class="u-input-row" data-value="0">
+            <input type="number"
+                   id="number-e44e"
+                   name="quantity"
+                   class="u-input u-input-rectangle u-text-black u-input-7"
+                   value="0"
+                   min="0"
+                   max="100"
+                   step="1"
+                   required>
+          </div>
+        </div>
+
+        <!-- ISBN -->
+        <div class="u-form-group u-label-left u-form-group-9">
+          <label for="text-24cc" class="u-label">ISBN</label>
+          <input type="text"
+                 placeholder="Пример: 9785699120147"
+                 id="text-24cc"
+                 name="isbn"
+                 class="u-input u-input-rectangle u-input-9"
+                 required
+                 pattern="\d{13}"
+                 maxlength="13"
+                 inputmode="numeric"
+                 title="Введите ISBN-13, состоящий из 13 цифр без дефисов">
+        </div>
+
+        <!-- Кнопки отправки и отмены -->
+        <div class="u-form-group u-form-submit u-label-left">
+          <label class="u-label u-label-10"></label>
+          <input type="submit" value="submit" class="u-form-control-hidden">
+          <div class="u-align-left u-btn-submit-container">
+            <button type="submit" class="u-btn u-btn-round u-btn-submit u-button-style u-radius u-btn-1">Добавить</button>
+          </div>
+        </div>
+
+        <!-- Сообщения об отправке -->
+        <div class="u-form-send-message u-form-send-success"> Спасибо! Ваше сообщение отправлено. </div>
+        <div class="u-form-send-error u-form-send-message"> Отправка не удалась. Пожалуйста, исправьте ошибки и попробуйте еще раз. </div>
+
+        <!-- Скрытые поля -->
+        <input type="hidden" value="" name="recaptchaResponse">
+        <input type="hidden" name="formServices" value="234d2f51-51fe-7107-fa98-0d7a5e49113d">
+      </form>
+    </div>
+
+    <!-- Кнопка "Отмена" -->
+    <a href="" class="u-btn u-btn-round u-button-style u-hover-palette-1-dark-1 u-palette-1-base u-radius u-btn-2">Отмена</a>
+  </div>
+</section>
+
+<!-- Подвал сайта -->
+<footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-2f71">
+  <div class="u-clearfix u-sheet u-sheet-1">
+    <p class="u-small-text u-text u-text-variant u-text-1">
+      О вопросах и проблемах сообщать главному администратору или писать на почту <a href="mailto:GlobalMaster@book.com">GlobalMaster@book.com</a>
+    </p>
+  </div>
+</footer>
+
+<!-- Скрипты валидации и функциональности -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Регулярное выражение для удаления нежелательных символов (разрешены буквы, цифры, пробелы, дефисы)
+    const regex = /[^A-Za-zА-Яа-я0-9\s\-]/g;
+    const fields = ['name-e75d', 'author-e75d', 'text-39ba'];
+
+    // Добавляем обработчик события input для каждого поля
+    fields.forEach(function(id) {
+      const input = document.getElementById(id);
+      if (input) { // Проверяем, существует ли элемент
+        input.addEventListener('input', function() {
+          this.value = this.value.replace(regex, '');
+        });
+      }
+    });
+
+    /////////////////////////////////////////////////////////////
+    // Ограничение даты до текущего дня
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Месяцы начинаются с 0
+    const year = today.getFullYear();
+    const formattedDate = `${year}-${month}-${day}`;
+
+    const dateInput = document.getElementById('date-13b1');
+    if (dateInput) {
+      dateInput.setAttribute('max', formattedDate);
+    }
+
+    //////////////////////////////////////////////////////////////
+    // Валидация ISBN-13
+    const form = document.querySelector('form[name="form"]');
+    const isbnInput = document.getElementById('text-24cc');
+
+    if (form && isbnInput) { // Проверяем, существуют ли элементы
+      // Предотвращаем ввод нецифровых символов в поле ISBN
+      isbnInput.addEventListener('keypress', function(event) {
+        const charCode = event.charCode ? event.charCode : event.keyCode;
+        // Разрешаем только цифры (0-9)
+        if (charCode < 48 || charCode > 57) {
+          event.preventDefault();
+        }
+      });
+
+      // Дополнительная защита от вставки нецифровых символов
+      isbnInput.addEventListener('paste', function(event) {
+        const pasteData = event.clipboardData.getData('text');
+        if (!/^\d+$/.test(pasteData)) {
+          event.preventDefault();
+        }
+      });
+
+      form.addEventListener('submit', function(event) {
+        const isbnValue = isbnInput.value.trim();
+
+        // Проверка длины и префикса
+        if (isbnValue.length !== 13 || !isbnValue.startsWith('978')) {
+          alert('ISBN должен содержать 13 цифр и начинаться с 978.');
+          event.preventDefault();
+          return;
+        }
+
+        // Проверка, что все символы являются цифрами
+        if (!/^\d{13}$/.test(isbnValue)) {
+          alert('ISBN должен содержать только цифры.');
+          event.preventDefault();
+          return;
+        }
+
+        // Вычисление контрольной цифры
+        let sum = 0;
+        for (let i = 0; i < 12; i++) {
+          const digit = parseInt(isbnValue[i], 10);
+          sum += (i % 2 === 0) ? digit : digit * 3;
+        }
+        const calculatedCheckDigit = (10 - (sum % 10)) % 10;
+        const actualCheckDigit = parseInt(isbnValue[12], 10);
+
+        if (calculatedCheckDigit !== actualCheckDigit) {
+          alert('Неверная контрольная цифра ISBN.');
+          event.preventDefault();
+          return;
+        }
+
+        // Если все проверки пройдены, форма отправляется
+      });
+    }
+
+     /////////////////////////////////////////////////////////////
+
+
+    /////////////////////////////////////////////////////////////
+    // Валидация Жанра с Тэгами
+    const genreInput = document.getElementById('genre-input');
+    const genreTagsContainer = document.getElementById('genre-tags');
+
+    // Список доступных жанров
+    const availableGenres = [
+      'Фэнтези',
+      'Триллер',
+      'Комедия',
+      'Драма',
+      'Научная фантастика',
+      'Романтика',
+      'Ужасы',
+      'Исторический',
+      'Приключения',
+      'Мистика'
+      // Добавьте другие жанры по необходимости
+    ];
+
+    // Функция для создания тэга
+    function createTag(text) {
+      const tag = document.createElement('span');
+      tag.classList.add('tag');
+      tag.textContent = text;
+
+      const removeBtn = document.createElement('span');
+      removeBtn.classList.add('remove-tag');
+      removeBtn.textContent = '×';
+      removeBtn.addEventListener('click', function() {
+        genreTagsContainer.removeChild(tag);
+      });
+
+      tag.appendChild(removeBtn);
+      genreTagsContainer.appendChild(tag);
+    }
+    // Разрешаем ввод только букв и пробелов
+  genreInput.addEventListener('input', function() {
+    this.value = this.value.replace(/[^A-Za-zА-Яа-яЁё\s]/g, '');
+  });
+
+    // Функция для фильтрации жанров для подсказок
+    function filterGenres(query) {
+      return availableGenres.filter(genre => genre.toLowerCase().includes(query.toLowerCase()) &&
+        !Array.from(genreTagsContainer.children).some(tag => tag.firstChild.textContent === genre));
+    }
+
+    // Создание списка подсказок
+    function createSuggestionsList(filteredGenres) {
+      // Удаление предыдущих подсказок
+      const existingList = document.getElementById('genre-suggestions');
+      if (existingList) {
+        existingList.remove();
+      }
+
+      if (filteredGenres.length === 0) return;
+
+      const list = document.createElement('ul');
+      list.id = 'genre-suggestions';
+      list.classList.add('suggestions-list');
+
+      filteredGenres.forEach(genre => {
+        const listItem = document.createElement('li');
+        listItem.textContent = genre;
+        listItem.addEventListener('click', function() {
+          createTag(genre);
+          genreInput.value = '';
+          list.remove();
+        });
+        list.appendChild(listItem);
+      });
+
+      genreInput.parentElement.appendChild(list);
+    }
+
+    // Обработчик ввода в поле жанра
+    genreInput.addEventListener('input', function() {
+      const query = this.value.trim();
+      if (query.length === 0) {
+        const existingList = document.getElementById('genre-suggestions');
+        if (existingList) existingList.remove();
+        return;
+      }
+
+      const filtered = filterGenres(query);
+      createSuggestionsList(filtered);
+    });
+
+    // Закрытие подсказок при клике вне поля
+    document.addEventListener('click', function(event) {
+      if (!genreInput.contains(event.target) && !genreTagsContainer.contains(event.target)) {
+        const existingList = document.getElementById('genre-suggestions');
+        if (existingList) existingList.remove();
+      }
+    });
+
+    // Обработка нажатия клавиши Enter для добавления жанра
+    genreInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        const query = this.value.trim();
+        if (availableGenres.includes(query) &&
+            !Array.from(genreTagsContainer.children).some(tag => tag.firstChild.textContent === query)) {
+          createTag(query);
+          this.value = '';
+          const existingList = document.getElementById('genre-suggestions');
+          if (existingList) existingList.remove();
+        }
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
