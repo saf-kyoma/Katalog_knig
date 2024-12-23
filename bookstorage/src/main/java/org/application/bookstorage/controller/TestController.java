@@ -1,16 +1,24 @@
 package org.application.bookstorage.controller;
 
-import org.application.bookstorage.dao.PersonEntity;
-import org.springframework.stereotype.Controller;
+import org.application.bookstorage.dao.Author;
+import org.application.bookstorage.service.AuthorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import java.util.List;
+
+@RestController
 public class TestController {
 
-    @GetMapping("/index")
-    public String index(){
+    @Autowired
+    private AuthorService authorService;
 
-        return "Catalog.html";
+    @GetMapping("/index")
+    public ResponseEntity<List<Author>> index(){
+        List<Author> allAuthors = authorService.getAllAuthors();
+
+        return ResponseEntity.ok(allAuthors);
     }
 }

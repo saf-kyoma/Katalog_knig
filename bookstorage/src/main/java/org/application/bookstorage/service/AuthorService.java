@@ -1,6 +1,6 @@
 package org.application.bookstorage.service;
 
-import org.application.bookstorage.entity.Author;
+import org.application.bookstorage.dao.Author;
 import org.application.bookstorage.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class AuthorService {
     }
 
     // Получить автора по ID
-    public Author getAuthorById(Integer id) {
+    public Author getAuthorById(Long id) {
         return authorRepository.findById(id).orElse(null);
     }
 
@@ -34,7 +34,7 @@ public class AuthorService {
     }
 
     // Удалить автора
-    public void deleteAuthor(Integer id) {
+    public void deleteAuthor(Long id) {
         authorRepository.deleteById(id);
     }
 }
