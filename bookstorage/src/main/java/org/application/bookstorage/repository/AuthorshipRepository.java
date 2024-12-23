@@ -1,11 +1,11 @@
 package org.application.bookstorage.repository;
 
-import org.application.bookstorage.dao.Author;
+import org.application.bookstorage.dao.Authorship;
+import org.application.bookstorage.dao.AuthorshipId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AuthorRepository extends JpaRepository<Author, Integer> {
+public interface AuthorshipRepository extends JpaRepository<Authorship, AuthorshipId> {
     // Дополнительные методы поиска при необходимости
 }
-

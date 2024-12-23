@@ -1,54 +1,54 @@
 package org.application.bookstorage.dao;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import org.hibernate.annotations.Fetch;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.sql.Date;
-import java.util.List;
+import java.util.Set;
+
 
 @Entity
-@Data
-@Table(name = "books")
-public class Book{
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table (name = "books")
+public class Book {
+     @Id
+     @Column(name = "isbn")
+     private String isbn;
 
-    @Id
-    @Column(name = "isbn")
-    private String isbn;
+     @Column(name = "name")
+     private String name;
 
-    @Column(name = "name")
-    private String name;
+     @Column(name = "publication_year")
+     private String publicationYear; // Изменено на String для соответствия SQL типу date
 
-    @Column(name = "publication_year")
-    private Date date;
+     @Column(name = "age_limit")
+     private float ageLimit; // Изменено на float для соответствия SQL типу real
 
-    @Column(name = "age_limit")
-    private Double ageLimit;
+     @ManyToOne
+     @JoinColumn(name = "publishing_company")
+     private PublishingCompany publishingCompany;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "publishing_company")
-    private PublishingCompany publishingCompany;
+     @Column(name = "page_count")
+     private int pageCount;
 
-    @Column(name = "page_count")
-    private Integer pageCount;
+     @Column(name = "language")
+     private String language;
 
-    @Column(name = "language")
-    private String language;
+     @Column(name = "cost")
+     private float cost;
 
-    @Column(name = "cost")
-    private Double cost;
+     @Column(name = "count_of_books")
+     private int countOfBooks;
 
-    @Column(name = "count_of_books")
-    private Integer countBook;
+     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+     private Set<Authorship> authorships;
 
-    @ManyToMany
-    @JoinTable(
-            name = "book_styles",
-            joinColumns = {@JoinColumn(name = "book_isbn")},
-            inverseJoinColumns = {@JoinColumn(name = "style")}
-    )
-    private List<Styles> styles;
+     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+     private Set<BookStyles> bookStyles;
 
-    @ManyToMany(mappedBy = "books")
-    private List<Author> authors;
 }
