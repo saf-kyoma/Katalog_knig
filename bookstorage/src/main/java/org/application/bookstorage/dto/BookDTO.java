@@ -5,6 +5,8 @@ import lombok.Data;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 @Data
 public class BookDTO {
     @NotBlank(message = "ISBN книги не может быть пустым")
@@ -27,4 +29,6 @@ public class BookDTO {
     private float cost;
 
     private int countOfBooks;
+
+    private List<AuthorDTO> authors;
 }

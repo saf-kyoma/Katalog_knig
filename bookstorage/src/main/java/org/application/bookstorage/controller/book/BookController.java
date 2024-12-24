@@ -3,6 +3,7 @@ package org.application.bookstorage.controller.book;
 import lombok.RequiredArgsConstructor;
 import org.application.bookstorage.dao.Book;
 import org.application.bookstorage.dto.BookDTO;
+import org.application.bookstorage.dto.AuthorDTO;
 import org.application.bookstorage.service.book.BookService;
 import org.application.bookstorage.service.publishingcompany.PublishingCompanyService;
 import org.springframework.http.HttpStatus;
@@ -111,6 +112,21 @@ public class BookController {
         dto.setLanguage(book.getLanguage());
         dto.setCost(book.getCost());
         dto.setCountOfBooks(book.getCountOfBooks());
+
+        // Маппинг авторов
+        List<AuthorDTO> authors = book.getAuthorships().stream()
+                .map(authorship -> {
+                    AuthorDTO authorDTO = new AuthorDTO();
+                    authorDTO.setId(authorship.getAuthor().getId());
+                    authorDTO.setFio(authorship.getAuthor().getFio());
+                    authorDTO.setBirthDate(authorship.getAuthor().getBirthDate());
+                    authorDTO.setCountry(authorship.getAuthor().getCountry());
+                    authorDTO.setNickname(authorship.getAuthor().getNickname());
+                    return authorDTO;
+                }).collect(Collectors.toList());
+
+        dto.setAuthors(authors);
+
         return dto;
     }
 }
