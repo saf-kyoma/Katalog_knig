@@ -1,5 +1,6 @@
 package org.application.bookstorage.dao;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +32,7 @@ public class Book {
 
      @ManyToOne
      @JoinColumn(name = "publishing_company")
+     @JsonManagedReference
      private PublishingCompany publishingCompany;
 
      @Column(name = "page_count")

@@ -349,7 +349,7 @@
         </div>
 
         <!-- Издатель -->
-        <div class="u-form-group">
+        <div class="u-form-group" style="position: relative;">
           <label for="publishingCompany" class="u-label">Издатель</label>
           <input
                   type="text"
@@ -360,7 +360,12 @@
                   required
                   pattern="[A-Za-zА-Яа-я0-9\s\-]+"
                   title="Разрешены только буквы, цифры, пробелы и дефис (-)"
+                  autocomplete="off"
           >
+          <!-- Список подсказок -->
+          <ul id="publishingCompany-suggestions" class="suggestions-list" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 1000; background: white; border: 1px solid #ccc; max-height: 200px; overflow-y: auto; padding-left: 0; margin-top: 0;">
+            <!-- Элементы списка будут добавляться динамически -->
+          </ul>
         </div>
 
         <!-- Количество страниц -->
@@ -459,25 +464,23 @@
 <!-- Скрипты валидации и функциональности -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Регулярное выражение для удаления нежелательных символов (разрешены буквы, цифры, пробелы, дефисы)
+    // 1. Очистка нежелательных символов в полях
     const regex = /[^A-Za-zА-Яа-я0-9\s\-]/g;
-    const fields = ['name', 'authorFio', 'publishingCompany'];
+    const fields = ['name', 'publishingCompany'];
 
-    // Добавляем обработчик события input для каждого поля
     fields.forEach(function(id) {
       const input = document.getElementById(id);
-      if (input) { // Проверяем, существует ли элемент
+      if (input) {
         input.addEventListener('input', function() {
           this.value = this.value.replace(regex, '');
         });
       }
     });
 
-    /////////////////////////////////////////////////////////////
-    // Ограничение даты до текущего дня
+    // 2. Ограничение даты до текущего дня
     const today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
-    const month = String(today.getMonth() + 1).padStart(2, '0'); // Месяцы начинаются с 0
+    const month = String(today.getMonth() + 1).padStart(2, '0');
     const year = today.getFullYear();
     const formattedDate = `${year}-${month}-${day}`;
 
@@ -486,8 +489,7 @@
       dateInput.setAttribute('max', formattedDate);
     }
 
-    //////////////////////////////////////////////////////////////
-    // Валидация ISBN-13
+    // 3. Валидация ISBN-13
     const isbnInput = document.getElementById('isbn');
 
     function formatISBN(value) {
@@ -553,9 +555,7 @@
       isbnInput.addEventListener('keydown', restrictISBNInput);
     }
 
-    /////////////////////////////////////////////////////////////
-    // Функциональность для динамического добавления и удаления авторов
-
+    // 4. Функциональность для динамического добавления и удаления авторов
     const authorsContainer = document.getElementById('authors-container');
     const addAuthorBtn = document.querySelector('.add-author-btn');
 
@@ -606,10 +606,85 @@
       authorGroup.appendChild(fioGroup);
 
       authorsContainer.appendChild(authorGroup);
+
+      // Добавляем обработчики для нового поля ФИО автора
+      addAuthorFioListener(fioInput, suggestionsList, authorIdInput);
     });
 
-    /////////////////////////////////////////////////////////////
-    // Валидация Жанра с Тэгами
+    // 5. Функциональность для подсказок авторов из базы данных
+    function showAuthorSuggestions(inputElement, suggestionsListElement, authorIdInput) {
+      const query = inputElement.value.trim();
+      if (query.length === 0) {
+        suggestionsListElement.innerHTML = '';
+        suggestionsListElement.style.display = 'none';
+        return;
+      }
+
+      console.log(`Запрос к авторам: ${query}`); // Логирование запроса
+
+      // Отправка AJAX-запроса на сервер для поиска авторов
+      fetch(`/api/authors/search?q=${encodeURIComponent(query)}`)
+        .then(response => {
+          console.log('Получен ответ для авторов:', response); // Логирование ответа
+          return response.json();
+        })
+        .then(data => {
+          console.log('Данные авторов:', data); // Логирование полученных данных
+          suggestionsListElement.innerHTML = '';
+          if (data.length === 0) {
+            const noResultItem = document.createElement('li');
+            noResultItem.textContent = 'Автор не найден. Можно добавить нового.';
+            noResultItem.style.cursor = 'default';
+            suggestionsListElement.appendChild(noResultItem);
+            suggestionsListElement.style.display = 'block';
+            return;
+          }
+
+          data.forEach(author => {
+            const listItem = document.createElement('li');
+            // Используем 'fio' и добавляем 'nickname', если он есть
+            listItem.textContent = `${author.fio}${author.nickname ? ' (' + author.nickname + ')' : ''}, ${author.birthDate || '---'}, ${author.country || '---'}`;
+            listItem.addEventListener('click', function() {
+              inputElement.value = author.fio;
+              authorIdInput.value = author.id; // Сохраняем ID автора
+              suggestionsListElement.innerHTML = '';
+              suggestionsListElement.style.display = 'none';
+            });
+            suggestionsListElement.appendChild(listItem);
+          });
+          suggestionsListElement.style.display = 'block';
+        })
+        .catch(error => {
+          console.error('Ошибка при получении подсказок авторов:', error);
+        });
+    }
+
+    function addAuthorFioListener(inputElement, suggestionsListElement, authorIdInput) {
+      inputElement.addEventListener('input', function() {
+        showAuthorSuggestions(inputElement, suggestionsListElement, authorIdInput);
+      });
+
+      // Закрытие списка подсказок при клике вне поля
+      document.addEventListener('click', function(event) {
+        if (!inputElement.contains(event.target) && !suggestionsListElement.contains(event.target)) {
+          suggestionsListElement.innerHTML = '';
+          suggestionsListElement.style.display = 'none';
+        }
+      });
+    }
+
+    // Инициализируем обработчики для существующих полей ФИО автора
+    const initialAuthorInputs = document.querySelectorAll('.author-fio');
+    const initialAuthorSuggestions = document.querySelectorAll('.author-suggestions-list');
+    const initialAuthorIds = document.querySelectorAll('.author-id');
+
+    initialAuthorInputs.forEach((input, index) => {
+      const suggestionsListElement = initialAuthorSuggestions[index];
+      const authorIdInput = initialAuthorIds[index];
+      addAuthorFioListener(input, suggestionsListElement, authorIdInput);
+    });
+
+    // 6. Валидация Жанра с Тэгами
     const genreInput = document.getElementById('genre-input');
     const genreTagsContainer = document.getElementById('genre-tags');
     const genresHiddenInput = document.getElementById('genres-hidden'); // Скрытое поле
@@ -737,9 +812,7 @@
       }
     });
 
-    /////////////////////////////////////////////////////////////
-    // Функциональность для отправки формы через AJAX
-
+    // 7. Функциональность для отправки формы через AJAX
     const form = document.getElementById('book-add-form');
 
     form.addEventListener('submit', function(event) {
@@ -814,6 +887,8 @@
         genres: genres
       };
 
+      console.log('Отправляемые данные:', bookDTO); // Логирование данных
+
       // Отправка данных на сервер через Fetch API
       fetch('/api/books', {
         method: 'POST',
@@ -829,8 +904,8 @@
           document.querySelector('.u-form-send-error').style.display = 'none';
           form.reset();
           // Очистка тегов жанров
-          document.getElementById('genre-tags').innerHTML = '';
-          document.getElementById('genres-hidden').value = '';
+          genreTagsContainer.innerHTML = '';
+          genresHiddenInput.value = '';
           // Удаление дополнительных авторов, оставляем только первый
           const authorGroups = document.querySelectorAll('.author-group');
           authorGroups.forEach((group, index) => {
@@ -849,81 +924,75 @@
         }
       })
       .catch(error => {
-        console.error('Ошибка:', error);
+        console.error('Ошибка при отправке формы:', error);
         document.querySelector('.u-form-send-success').style.display = 'none';
         document.querySelector('.u-form-send-error').style.display = 'block';
       });
     });
 
-    /////////////////////////////////////////////////////////////
-    // Функциональность для подсказок авторов из базы данных
-
-    // Функция для отображения подсказок авторов
-    function showAuthorSuggestions(inputElement, suggestionsListElement, authorIdInput) {
+    // 8. Функциональность для подсказок издательств из базы данных
+    function showPublishingCompanySuggestions(inputElement, suggestionsListElement) {
       const query = inputElement.value.trim();
       if (query.length === 0) {
         suggestionsListElement.innerHTML = '';
+        suggestionsListElement.style.display = 'none';
         return;
       }
 
-      // Отправка AJAX-запроса на сервер для поиска авторов
-      fetch(`/api/authors/search?q=${encodeURIComponent(query)}`)
-        .then(response => response.json())
+      console.log(`Запрос к издательствам: ${query}`); // Логирование запроса
+
+      // Отправка AJAX-запроса на сервер для поиска издательств
+      fetch(`/api/publishing-companies/search?q=${encodeURIComponent(query)}`)
+        .then(response => {
+          console.log('Получен ответ для издательств:', response); // Логирование ответа
+          return response.json();
+        })
         .then(data => {
+          console.log('Данные издательств:', data); // Логирование полученных данных
           suggestionsListElement.innerHTML = '';
           if (data.length === 0) {
             const noResultItem = document.createElement('li');
-            noResultItem.textContent = 'Автор не найден. Можно добавить нового.';
+            noResultItem.textContent = 'Издательство не найдено. Можно добавить новое.';
             noResultItem.style.cursor = 'default';
             suggestionsListElement.appendChild(noResultItem);
+            suggestionsListElement.style.display = 'block';
             return;
           }
 
-          data.forEach(author => {
+          data.forEach(company => {
             const listItem = document.createElement('li');
-            // Используем 'fio' и добавляем 'nickname', если он есть
-            listItem.textContent = `${author.fio}${author.nickname ? ' (' + author.nickname + ')' : ''}, ${author.birthDate || '---'}, ${author.country || '---'}`;
+            listItem.textContent = company.name;
             listItem.addEventListener('click', function() {
-              inputElement.value = author.fio;
-              authorIdInput.value = author.id; // Сохраняем ID автора
+              inputElement.value = company.name;
               suggestionsListElement.innerHTML = '';
+              suggestionsListElement.style.display = 'none';
             });
             suggestionsListElement.appendChild(listItem);
           });
+          suggestionsListElement.style.display = 'block';
         })
         .catch(error => {
-          console.error('Ошибка при получении подсказок авторов:', error);
+          console.error('Ошибка при получении подсказок издательств:', error);
         });
     }
 
-    // Добавляем обработчики для существующих и динамически добавляемых полей ФИО автора
-    function addAuthorFioListeners() {
-      const authorFioInputs = document.querySelectorAll('.author-fio');
-      authorFioInputs.forEach(input => {
-        const parentGroup = input.closest('.u-form-group');
-        const suggestionsListElement = parentGroup.querySelector('.author-suggestions-list');
-        const authorIdInput = parentGroup.querySelector('.author-id');
+    // Добавляем обработчик для поля издательства
+    const publishingCompanyInput = document.getElementById('publishingCompany');
+    const publishingCompanySuggestions = document.getElementById('publishingCompany-suggestions');
 
-        input.addEventListener('input', function() {
-          showAuthorSuggestions(input, suggestionsListElement, authorIdInput);
-        });
+    if (publishingCompanyInput && publishingCompanySuggestions) {
+      publishingCompanyInput.addEventListener('input', function() {
+        showPublishingCompanySuggestions(publishingCompanyInput, publishingCompanySuggestions);
+      });
 
-        // Закрытие списка подсказок при клике вне поля
-        document.addEventListener('click', function(event) {
-          if (!input.contains(event.target) && !suggestionsListElement.contains(event.target)) {
-            suggestionsListElement.innerHTML = '';
-          }
-        });
+      // Закрытие списка подсказок при клике вне поля
+      document.addEventListener('click', function(event) {
+        if (!publishingCompanyInput.contains(event.target) && !publishingCompanySuggestions.contains(event.target)) {
+          publishingCompanySuggestions.innerHTML = '';
+          publishingCompanySuggestions.style.display = 'none';
+        }
       });
     }
-
-    // Инициализируем обработчики при загрузке страницы
-    addAuthorFioListeners();
-
-    // Инициализируем обработчики при добавлении нового автора
-    addAuthorBtn.addEventListener('click', function() {
-      setTimeout(addAuthorFioListeners, 0); // Используем setTimeout для ожидания добавления элементов
-    });
   });
 </script>
 

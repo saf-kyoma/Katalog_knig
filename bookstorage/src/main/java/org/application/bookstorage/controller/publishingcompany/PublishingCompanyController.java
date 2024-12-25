@@ -76,6 +76,13 @@ public class PublishingCompanyController {
         }
     }
 
+    // Эндпоинт для поиска издательств по части названия
+    @GetMapping("/search")
+    public ResponseEntity<List<PublishingCompany>> searchPublishingCompanies(@RequestParam("q") String query) {
+        List<PublishingCompany> companies = publishingCompanyService.searchPublishingCompaniesByName(query);
+        return ResponseEntity.ok(companies);
+    }
+
     // Ручной маппинг DTO в сущность
     private PublishingCompany mapToEntity(PublishingCompanyDTO dto) {
         PublishingCompany company = new PublishingCompany();
