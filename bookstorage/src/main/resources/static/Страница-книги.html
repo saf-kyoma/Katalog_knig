@@ -6,6 +6,7 @@
     <title>Страница книги</title>
     <link rel="stylesheet" href="publishing_companies.css">
     <style>
+        /* Ваши существующие стили */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -89,10 +90,17 @@
             color: #fff;
             text-decoration: none;
             text-align: center;
+            cursor: pointer;
         }
 
         .btn:hover {
             background-color: #249a9a;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            color: red;
         }
     </style>
 </head>
@@ -111,44 +119,137 @@
         <tbody>
         <tr>
             <th>ISBN</th>
-            <td></td>
+            <td id="isbn"></td>
         </tr>
         <tr>
             <th>Название</th>
-            <td></td>
+            <td id="name"></td>
         </tr>
         <tr>
             <th>Год публикации</th>
-            <td></td>
+            <td id="publicationYear"></td>
         </tr>
         <tr>
             <th>Возрастное ограничение</th>
-            <td></td>
+            <td id="ageLimit"></td>
         </tr>
         <tr>
             <th>Издатель</th>
-            <td></td>
+            <td id="publishingCompany"></td>
         </tr>
         <tr>
             <th>Число страниц</th>
-            <td></td>
+            <td id="pageCount"></td>
         </tr>
         <tr>
             <th>Язык</th>
-            <td></td>
+            <td id="language"></td>
         </tr>
         <tr>
             <th>Цена</th>
-            <td></td>
+            <td id="cost"></td>
         </tr>
         <tr>
             <th>Кол-во экземпляров</th>
-            <td></td>
+            <td id="countOfBooks"></td>
+        </tr>
+        <tr>
+            <th>Авторы</th>
+            <td id="authors"></td>
+        </tr>
+        <tr>
+            <th>Жанры</th>
+            <td id="genres"></td>
         </tr>
         </tbody>
     </table>
-    <a href="#" class="btn">Редактировать</a>
-    <a href="#" class="btn">Удалить</a>
+    <a href="#" id="editButton" class="btn">Редактировать</a>
+    <button id="deleteButton" class="btn">Удалить</button>
+    <div id="message" class="message"></div>
 </div>
+
+<script>
+    // Функция для получения параметра из URL
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    // Функция для отображения сообщения
+    function showMessage(message, isError = true) {
+        const messageDiv = document.getElementById('message');
+        messageDiv.textContent = message;
+        messageDiv.style.color = isError ? 'red' : 'green';
+    }
+
+    // Получаем ISBN из URL
+    const isbn = getQueryParam('isbn');
+
+    if (!isbn) {
+        showMessage('ISBN книги не указан в URL.');
+    } else {
+        // Запрос к API для получения информации о книге
+        fetch(`/api/books/${encodeURIComponent(isbn)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Книга не найдена.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Заполняем таблицу данными
+                document.getElementById('isbn').textContent = data.isbn;
+                document.getElementById('name').textContent = data.name;
+                document.getElementById('publicationYear').textContent = data.publicationYear;
+                document.getElementById('ageLimit').textContent = data.ageLimit;
+                document.getElementById('publishingCompany').textContent = data.publishingCompany;
+                document.getElementById('pageCount').textContent = data.pageCount;
+                document.getElementById('language').textContent = data.language;
+                document.getElementById('cost').textContent = data.cost;
+                document.getElementById('countOfBooks').textContent = data.countOfBooks;
+
+                // Обработка авторов с проверкой на наличие псевдонима
+                const authors = data.authors.map(author => {
+                    if (author.nickname && author.nickname.trim() !== '') {
+                        return `${author.fio} (${author.nickname})`;
+                    } else {
+                        return author.fio;
+                    }
+                }).join(', ');
+                document.getElementById('authors').textContent = authors;
+
+                // Обработка жанров
+                const genres = data.genres.join(', ');
+                document.getElementById('genres').textContent = genres;
+
+                // Настройка кнопки редактирования
+                const editButton = document.getElementById('editButton');
+                editButton.href = `edit-book.html?isbn=${encodeURIComponent(data.isbn)}`;
+            })
+            .catch(error => {
+                showMessage(error.message);
+            });
+
+        // Обработчик кнопки удаления
+        document.getElementById('deleteButton').addEventListener('click', () => {
+            if (confirm('Вы уверены, что хотите удалить эту книгу?')) {
+                fetch(`/api/books/${encodeURIComponent(isbn)}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.status === 204) {
+                        alert('Книга успешно удалена.');
+                        window.location.href = 'catalog.html';
+                    } else {
+                        throw new Error('Ошибка при удалении книги.');
+                    }
+                })
+                .catch(error => {
+                    showMessage(error.message);
+                });
+            }
+        });
+    }
+</script>
 </body>
 </html>

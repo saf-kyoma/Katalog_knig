@@ -334,7 +334,7 @@
         const nameCell = document.createElement('td');
         nameCell.className = 'u-border-1 u-border-grey-30 u-palette-4-light-3 u-table-cell';
         const link = document.createElement('a');
-        link.href = `Страница-книги.html?id=${book.isbn}`; // Использование ISBN в качестве параметра
+        link.href = `Страница-книги.html?isbn=${book.isbn}`; // Использование ISBN в качестве параметра
         link.textContent = book.name || 'Без названия';
         link.className = 'text-decoration-none';
         link.style.color = '#0d6efd'; // Цвет ссылки по умолчанию Bootstrap
