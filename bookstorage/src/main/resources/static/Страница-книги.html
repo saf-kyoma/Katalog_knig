@@ -137,10 +137,6 @@
             <td id="name"></td>
         </tr>
         <tr>
-            <th>Автор</th>
-            <td></td>
-        </tr>
-        <tr>
             <th>Год публикации</th>
             <td id="publicationYear"></td>
         </tr>
@@ -179,7 +175,7 @@
         </tbody>
     </table>
 
-    <a href="Редакт-книги.html" id="editButton" class="btn">Редактировать</a>
+    <a id="editButton" class="btn">Редактировать</a>
     <a href="Каталог.html" id="deleteButton" class="btn">Удалить</a>
 
     <div id="message" class="message"></div>
@@ -241,7 +237,7 @@
 
                 // Настройка кнопки редактирования
                 const editButton = document.getElementById('editButton');
-                editButton.href = `edit-book.html?isbn=${encodeURIComponent(data.isbn)}`;
+                editButton.href = `Редакт-книги.html?isbn=${encodeURIComponent(data.isbn)}`;
             })
             .catch(error => {
                 showMessage(error.message);
