@@ -17,6 +17,7 @@
   <meta property="og:title" content="Каталог">
   <meta property="og:type" content="website">
   <meta data-intl-tel-input-cdn-path="intlTelInput/">
+
 </head>
 
 <body data-home-page="Каталог.html" data-home-page-title="Каталог" data-path-to-root="./" data-include-products="true" class="u-body u-xl-mode" data-lang="ru">
@@ -83,31 +84,25 @@
   <div class="u-expanded-width u-table u-table-responsive u-table-1">
     <table class="u-table-entity">
       <colgroup>
-        <col width="11.8%">
-        <col width="10.2%">
-        <col width="11%">
-        <col width="11%">
-        <col width="11%">
-        <col width="10.999999999999986%">
-        <col width="11.7%">
-        <col width="10.9%">
-        <col width="11.399999999999986%">
+        <col width="16.66%">
+        <col width="16.66%">
+        <col width="16.66%">
+        <col width="16.66%">
+        <col width="16.66%">
+        <col width="16.66%">
       </colgroup>
       <thead class="u-palette-4-base u-table-header u-table-header-1">
       <tr style="height: 43px;">
-        <th class="u-border-1 u-border-palette-4-base u-table-cell u-table-cell-1">Название книги</th>
-        <th class="u-border-1 u-border-palette-4-base u-table-cell u-table-cell-2">Жанр(-ы)</th>
-        <th class="u-border-1 u-border-palette-4-base u-table-cell u-table-cell-3">Автор(-ы)</th>
-        <th class="u-border-3 u-border-no-left u-border-no-right u-border-no-top u-border-palette-4-base u-table-cell u-table-cell-4">Год издания</th>
-        <th class="u-border-1 u-border-palette-4-base u-table-cell u-table-cell-5">Издательство</th>
-        <th class="u-border-1 u-border-palette-4-base u-table-cell u-table-cell-6">Число страниц</th>
-        <th class="u-border-1 u-border-palette-4-base u-table-cell u-table-cell-7">Кол-во экземп.</th>
-        <th class="u-border-1 u-border-palette-4-base u-table-cell u-table-cell-8">Язык</th>
-        <th class="u-border-1 u-border-palette-4-base u-table-cell u-table-cell-9">ISBN</th>
+        <th>Название книги <button class="sort-button" data-column="name"></button></th>
+        <th>Автор <button class="sort-button" data-column="author"></button></th>
+        <th>Дата издания <button class="sort-button" data-column="publication_year"></button></th>
+        <th>Издательство <button class="sort-button" data-column="publishing_company"></button></th>
+        <th>Количество экземпляров <button class="sort-button" data-column="count_of_books"></button></th>
+        <th>ISBN <button class="sort-button" data-column="isbn"></button></th>
       </tr>
       </thead>
       <tbody class="u-table-body u-table-body-1">
-      <!-- Строки будут динамически заполняться с помощью JavaScript -->
+      <!-- Динамическое содержимое -->
       </tbody>
     </table>
   </div>
@@ -225,6 +220,71 @@
         tableBody.appendChild(row);
       });
     }
+  ////////////////////СОРТИРОВКА
+  const tableBody = document.querySelector('.u-table-body-1');
+
+  // Функция для загрузки данных с сервера
+  function fetchData(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    const apiUrl = `/api/books?${queryString}`;
+
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) throw new Error('Ошибка загрузки данных');
+        return response.json();
+      })
+      .then(data => populateTable(data))
+      .catch(error => console.error('Ошибка:', error));
+  }
+
+  // Функция для заполнения таблицы данными
+  function populateTable(data) {
+    tableBody.innerHTML = '';
+
+    data.forEach(book => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td class="u-border-1 u-border-grey-30 u-table-cell">${book.name}</td>
+        <td class="u-border-1 u-border-grey-30 u-table-cell">${book.authors}</td>
+        <td class="u-border-1 u-border-grey-30 u-table-cell">${book.publication_year}</td>
+        <td class="u-border-1 u-border-grey-30 u-table-cell">${book.publishing_company}</td>
+        <td class="u-border-1 u-border-grey-30 u-table-cell">${book.count_of_books}</td>
+        <td class="u-border-1 u-border-grey-30 u-table-cell">${book.isbn}</td>
+      `;
+      tableBody.appendChild(row);
+    });
+  }
+
+  // Функция для обработки сортировки
+  function handleSort(column, button) {
+    const currentOrder = button.getAttribute('data-order') || 'asc';
+    const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+    button.setAttribute('data-order', newOrder);
+    button.textContent = newOrder === 'asc' ? '▲' : '▼';
+    fetchData({ sort_column: column, sort_order: newOrder });
+  }
+
+  // Добавляем стрелки сортировки к заголовкам
+  const tableHeaders = document.querySelectorAll('thead th');
+  tableHeaders.forEach(header => {
+    const columnName = header.textContent.trim().toLowerCase().replace(/\s+/g, '_');
+    const sortButton = header.querySelector('.sort-button');
+
+    // Устанавливаем начальное содержимое кнопки
+    sortButton.textContent = '▲';
+
+    // Убираем стандартные стили кнопки и устанавливаем собственные
+    sortButton.style.background = 'none';
+    sortButton.style.border = 'none';
+    sortButton.style.padding = '0';
+    sortButton.style.marginLeft = '5px';
+    sortButton.style.cursor = 'pointer';
+    sortButton.style.fontSize = '12px'; // Регулируйте размер по необходимости
+    sortButton.style.userSelect = 'none';
+
+    // Добавляем обработчик события клика
+    sortButton.addEventListener('click', () => handleSort(columnName, sortButton));
+  });
 
     // Вызов функции получения книг при загрузке страницы
     fetchBooks();
