@@ -27,6 +27,7 @@
   <meta property="og:type" content="website">
   <meta data-intl-tel-input-cdn-path="intlTelInput/">
 
+
   <style>
     body {
         font-family: Arial, sans-serif;
@@ -71,12 +72,38 @@
 
     .container {
         margin: 20px auto;
-        max-width: 1200px;
+
+        max-width: 800px;
+
         background: #fff;
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        width: 25%; /* Каждая колонка равной ширины */
+    }
+
+    table th {
+        background-color: #2cccc4;
+        color: white;
+        text-transform: uppercase;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
 
     .btn {
         display: inline-block;
@@ -119,6 +146,7 @@
         padding: 10px 0;
         text-align: center;
     }
+
   </style>
 </head>
 
@@ -127,20 +155,21 @@
 <header class="u-header" id="sec-233d" data-animation-name="" data-animation-duration="0" data-animation-delay="0" data-animation-direction="">
   <h1>Каталог</h1>
   <nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1" data-responsive-from="XS" data-submenu-level="on-click">
-    <ul class="navbar-nav">
-      <li class="nav-item"><a class="nav-link" href="Каталог.html">Каталог</a></li>
-      <li class="nav-item"><a class="nav-link" href="Добавление-карточки-книги.html">Добавление книги</a></li>
+    <ul>
+      <li><a href="Каталог.html">Каталог</a></li>
+      <li><a href="Добавление-карточки-книги.html">Добавление книги</a></li>
+      <li><a href="Страница-авторов.html">Авторы</a></li>
+      <li><a href="Страница-издательств.html">Издатели</a></li>
+      <li><a href="Вход-в-систему.html">Войти</a></li>
     </ul>
-    <style class="menu-style">
-      @media (max-width: 539px) {
-        [data-responsive-from="XS"] .u-nav-container {
-            display: none;
-        }
-        [data-responsive-from="XS"] .menu-collapse {
-            display: block;
-        }
-      }
-    </style>
+    <style class="menu-style">@media (max-width: 539px) {
+                        [data-responsive-from="XS"] .u-nav-container {
+                            display: none;
+                        }
+                        [data-responsive-from="XS"] .menu-collapse {
+                            display: block;
+                        }
+                    }</style>
   </nav>
 
   <div class="u-clearfix u-sheet u-valign-top u-sheet-1">
@@ -149,7 +178,15 @@
 
     <div class="d-flex align-items-center">
       <!-- Кнопка Поиск -->
-      <button id="searchButton" class="btn btn-primary me-2">Поиск</button>
+      <a href="#" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-1-dark-2 u-radius u-btn-1">Поиск </a>
+      <button id="searchButton" class="btn btn-primary me-2" type="submit">
+        <span class="u-search-icon u-spacing-10">
+                  <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 56.966 56.966"><use xlink:href="#svg-b9b6"></use></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg-b9b6" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" class="u-svg-content"><path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23
+  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92
+  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17
+  s-17-7.626-17-17S14.61,6,23.984,6z"></path></svg>
+                </span></button>
       <!-- Кнопка Сбросить поиск -->
       <button id="resetButton" class="btn btn-secondary">Сбросить поиск</button>
     </div>
@@ -328,7 +365,6 @@
 
       books.forEach(book => {
         const row = document.createElement('tr');
-        row.style.height = '28px';
 
         // Название книги (гиперссылка)
         const nameCell = document.createElement('td');
@@ -336,43 +372,31 @@
         const link = document.createElement('a');
         link.href = `Страница-книги.html?isbn=${book.isbn}`; // Использование ISBN в качестве параметра
         link.textContent = book.name || 'Без названия';
+
         link.className = 'text-decoration-none';
         link.style.color = '#0d6efd'; // Цвет ссылки по умолчанию Bootstrap
+
         nameCell.appendChild(link);
         row.appendChild(nameCell);
 
-        // Автор(-ы)
-        const authorsCell = document.createElement('td');
-        authorsCell.className = 'u-border-1 u-border-grey-30 u-table-cell';
-        if (book.authors && Array.isArray(book.authors) && book.authors.length > 0) {
-          const authors = book.authors.map(author => author.fio).join(', ');
-          authorsCell.textContent = authors;
-        } else {
-          authorsCell.textContent = 'Неизвестно';
-        }
-        row.appendChild(authorsCell);
+        // Остальные столбцы
+        const authorCell = document.createElement('td');
+        authorCell.textContent = book.authors ? book.authors.join(', ') : 'Неизвестно';
+        row.appendChild(authorCell);
 
-        // Дата издания
         const yearCell = document.createElement('td');
-        yearCell.className = 'u-border-1 u-border-grey-30 u-table-cell';
         yearCell.textContent = book.publicationYear || 'Не указано';
         row.appendChild(yearCell);
 
-        // Издательство
         const publishingCell = document.createElement('td');
-        publishingCell.className = 'u-border-1 u-border-grey-30 u-table-cell';
         publishingCell.textContent = book.publishingCompany || 'Не указано';
         row.appendChild(publishingCell);
 
-        // Количество экземпляров
         const countCell = document.createElement('td');
-        countCell.className = 'u-border-1 u-border-grey-30 u-table-cell';
-        countCell.textContent = book.countOfBooks !== undefined ? book.countOfBooks : 'Не указано';
+        countCell.textContent = book.countOfBooks || 'Не указано';
         row.appendChild(countCell);
 
-        // ISBN
         const isbnCell = document.createElement('td');
-        isbnCell.className = 'u-border-1 u-border-grey-30 u-table-cell';
         isbnCell.textContent = book.isbn || 'Не указано';
         row.appendChild(isbnCell);
 
@@ -426,6 +450,7 @@
         searchForm.addEventListener('submit', handleSearch);
       }
 
+
       // Добавляем обработчик события к кнопке "Поиск"
       const searchButton = document.querySelector('#searchButton');
       if (searchButton) {
@@ -451,6 +476,7 @@
 
     // Первоначальный запрос для отображения всех книг
     fetchBooks({ search: currentSearch, sort_column: currentSortColumn, sort_order: currentSortOrder });
+
   });
 </script>
 

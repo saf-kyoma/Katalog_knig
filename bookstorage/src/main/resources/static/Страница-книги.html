@@ -108,11 +108,22 @@
 <header>
     <h1>Информация о книге</h1>
 </header>
-<nav>
+<nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1" data-responsive-from="XS" data-submenu-level="on-click">
     <ul>
-        <li><a href="catalog.html">Каталог</a></li>
+        <li><a href="Каталог.html">Каталог</a></li>
         <li><a href="Добавление-карточки-книги.html">Добавление книги</a></li>
+        <li><a href="Страница-авторов.html">Авторы</a></li>
+        <li><a href="Страница-издательств.html">Издатели</a></li>
+        <li><a href="Вход-в-систему.html">Войти</a></li>
     </ul>
+    <style class="menu-style">@media (max-width: 539px) {
+                        [data-responsive-from="XS"] .u-nav-container {
+                            display: none;
+                        }
+                        [data-responsive-from="XS"] .menu-collapse {
+                            display: block;
+                        }
+                    }</style>
 </nav>
 <div class="container">
     <table>
@@ -124,6 +135,10 @@
         <tr>
             <th>Название</th>
             <td id="name"></td>
+        </tr>
+        <tr>
+            <th>Автор</th>
+            <td></td>
         </tr>
         <tr>
             <th>Год публикации</th>
@@ -163,8 +178,10 @@
         </tr>
         </tbody>
     </table>
-    <a href="#" id="editButton" class="btn">Редактировать</a>
-    <button id="deleteButton" class="btn">Удалить</button>
+
+    <a href="Редакт-книги.html" id="editButton" class="btn">Редактировать</a>
+    <a href="Каталог.html" id="deleteButton" class="btn">Удалить</a>
+
     <div id="message" class="message"></div>
 </div>
 
@@ -251,5 +268,6 @@
         });
     }
 </script>
+
 </body>
 </html>

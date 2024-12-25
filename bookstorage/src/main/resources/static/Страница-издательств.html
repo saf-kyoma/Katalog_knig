@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Издательства</title>
+  <title>Страница издательств</title>
   <link rel="stylesheet" href="publishing_companies.css">
   <style>
     body {
@@ -66,7 +66,6 @@
         border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
-        width: 50%;
     }
 
     table th {
@@ -94,11 +93,16 @@
     .btn:hover {
         background-color: #249a9a;
     }
+
+    .checkbox-column {
+        text-align: center;
+        width: 5%;
+    }
   </style>
 </head>
 <body>
 <header>
-  <h1>Информация об издательстве</h1>
+  <h1>Издатели</h1>
 </header>
 <nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1" data-responsive-from="XS" data-submenu-level="on-click">
   <ul>
@@ -118,27 +122,42 @@
                     }</style>
 </nav>
 <div class="container">
+  <a href="#" class="btn">Удалить выбранные</a>
+
   <table>
+    <thead>
+    <tr>
+      <th class="checkbox-column"><input type="checkbox" onclick="toggleAllCheckboxes(this)"></th>
+      <th>Название</th>
+      <th>Год основания</th>
+      <th>Контактная информация</th>
+      <th>Город</th>
+    </tr>
+    </thead>
     <tbody>
     <tr>
-      <th>Название</th>
+      <td class="checkbox-column"><input type="checkbox"></td>
+      <td></td>
+      <td></td>
+      <td></td>
       <td></td>
     </tr>
     <tr>
-      <th>Год Основания</th>
+      <td class="checkbox-column"><input type="checkbox"></td>
       <td></td>
-    </tr>
-    <tr>
-      <th>Контактная Информация</th>
       <td></td>
-    </tr>
-    <tr>
-      <th>Город</th>
+      <td></td>
       <td></td>
     </tr>
     </tbody>
   </table>
-  <a href="Редактирование-издателя.html" class="btn">Редактировать</a>
 </div>
+<script>
+  // Функция для выбора/снятия всех чекбоксов
+  function toggleAllCheckboxes(source) {
+      const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+      checkboxes.forEach(checkbox => checkbox.checked = source.checked);
+  }
+</script>
 </body>
 </html>
