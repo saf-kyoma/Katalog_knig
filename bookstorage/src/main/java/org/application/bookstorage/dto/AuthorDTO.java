@@ -7,8 +7,8 @@ import jakarta.validation.constraints.NotNull;
 
 @Data
 public class AuthorDTO {
-    @NotNull(message = "ID автора не может быть null")
-    private int id;
+//    @NotNull(message = "ID автора не может быть null")
+    private Integer id;
 
     @NotBlank(message = "ФИО автора не может быть пустым")
     private String fio;

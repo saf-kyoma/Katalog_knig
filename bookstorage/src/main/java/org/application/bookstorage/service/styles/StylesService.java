@@ -11,5 +11,7 @@ public interface StylesService {
     List<Styles> getAllStyles();
     Styles updateStyle(Long id, Styles style);
     void deleteStyle(Long id);
+
+    Optional<Styles> getStyleByName(String name);
 }
 

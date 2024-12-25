@@ -50,4 +50,9 @@ public class AuthorServiceImpl implements AuthorService {
                 .orElseThrow(() -> new RuntimeException("Автор не найден с id " + id));
         authorRepository.delete(author);
     }
+
+    @Override
+    public List<Author> searchAuthorsByFio(String fio) {
+        return authorRepository.findByFioContainingIgnoreCase(fio);
+    }
 }
