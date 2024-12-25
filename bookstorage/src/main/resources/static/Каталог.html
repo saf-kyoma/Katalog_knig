@@ -17,96 +17,6 @@
   <meta property="og:title" content="Каталог">
   <meta property="og:type" content="website">
   <meta data-intl-tel-input-cdn-path="intlTelInput/">
-  <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-    }
-
-    header {
-        background-color: #2cccc4;
-        color: #fff;
-        padding: 10px 20px;
-        text-align: center;
-    }
-
-    nav {
-        background-color: #249a9a;
-        padding: 10px;
-    }
-
-    nav ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-    }
-
-    nav ul li {
-        margin: 0 15px;
-    }
-
-    nav ul li a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    nav ul li a:hover {
-        text-decoration: underline;
-    }
-
-    .container {
-        margin: 20px auto;
-        max-width: 800px;
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-    }
-
-    table th, table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-        width: 50%;
-    }
-
-    table th {
-        background-color: #2cccc4;
-        color: white;
-        text-transform: uppercase;
-    }
-
-    table tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-
-    .btn {
-        display: inline-block;
-        padding: 10px 15px;
-        margin: 5px;
-        border: none;
-        border-radius: 5px;
-        background-color: #2cccc4;
-        color: #fff;
-        text-decoration: none;
-        text-align: center;
-    }
-
-    .btn:hover {
-        background-color: #249a9a;
-    }
-  </style>
 </head>
 
 <body data-home-page="Каталог.html" data-home-page-title="Каталог" data-path-to-root="./" data-include-products="true" class="u-body u-xl-mode" data-lang="ru">
@@ -142,7 +52,8 @@
       </button>
       <input class="u-search-input" type="search" name="search" value="" placeholder="Введите название книги">
     </form>
-  </div></header>
+  </div>
+</header>
 <section class="u-clearfix u-section-1" id="sec-25c7">
   <div class="u-expanded-width u-table u-table-responsive u-table-1">
     <table class="u-table-entity">
@@ -191,8 +102,11 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     // Функция для получения книг из API
-    function fetchBooks() {
-      fetch('/api/books')
+    function fetchBooks(params = {}) {
+      const queryString = new URLSearchParams(params).toString();
+      const apiUrl = `/api/books${queryString ? '?' + queryString : ''}`;
+
+      fetch(apiUrl)
         .then(response => {
           if (!response.ok) {
             throw new Error('Сетевая ошибка: ' + response.statusText);
@@ -218,24 +132,16 @@
         const row = document.createElement('tr');
         row.style.height = '28px';
 
-        // Создание и заполнение ячеек
-
         // Название книги
         const nameCell = document.createElement('td');
         nameCell.className = 'u-border-1 u-border-grey-30 u-palette-4-light-3 u-table-cell';
-        nameCell.textContent = book.name;
+        nameCell.textContent = book.name || 'Без названия';
         row.appendChild(nameCell);
-
-        // Жанр(-ы) - оставляем пустым согласно требованиям
-        const genresCell = document.createElement('td');
-        genresCell.className = 'u-border-1 u-border-grey-30 u-table-cell';
-        genresCell.textContent = ''; // Пусто
-        row.appendChild(genresCell);
 
         // Автор(-ы)
         const authorsCell = document.createElement('td');
         authorsCell.className = 'u-border-1 u-border-grey-30 u-table-cell';
-        if (book.authors && book.authors.length > 0) {
+        if (book.authors && Array.isArray(book.authors) && book.authors.length > 0) {
           const authors = book.authors.map(author => author.fio).join(', ');
           authorsCell.textContent = authors;
         } else {
@@ -243,115 +149,76 @@
         }
         row.appendChild(authorsCell);
 
-        // Год издания
+        // Дата издания
         const yearCell = document.createElement('td');
         yearCell.className = 'u-border-1 u-border-grey-30 u-table-cell';
-        yearCell.textContent = book.publicationYear;
+        yearCell.textContent = book.publicationYear || 'Не указано';
         row.appendChild(yearCell);
 
         // Издательство
         const publishingCell = document.createElement('td');
         publishingCell.className = 'u-border-1 u-border-grey-30 u-table-cell';
-        publishingCell.textContent = book.publishingCompany;
+        publishingCell.textContent = book.publishingCompany || 'Не указано';
         row.appendChild(publishingCell);
 
-        // Число страниц - оставляем пустым согласно требованиям
-        const pageCountCell = document.createElement('td');
-        pageCountCell.className = 'u-border-1 u-border-grey-30 u-table-cell';
-        pageCountCell.textContent = ''; // Пусто
-        row.appendChild(pageCountCell);
-
-        // Кол-во экземп.
+        // Количество экземпляров
         const countCell = document.createElement('td');
         countCell.className = 'u-border-1 u-border-grey-30 u-table-cell';
-        countCell.textContent = book.countOfBooks;
+        countCell.textContent = book.countOfBooks !== undefined ? book.countOfBooks : 'Не указано';
         row.appendChild(countCell);
-
-        // Язык - оставляем пустым согласно требованиям
-        const languageCell = document.createElement('td');
-        languageCell.className = 'u-border-1 u-border-grey-30 u-table-cell';
-        languageCell.textContent = ''; // Пусто
-        row.appendChild(languageCell);
 
         // ISBN
         const isbnCell = document.createElement('td');
         isbnCell.className = 'u-border-1 u-border-grey-30 u-table-cell';
-        isbnCell.textContent = book.isbn;
+        isbnCell.textContent = book.isbn || 'Не указано';
         row.appendChild(isbnCell);
 
         // Добавление строки в тело таблицы
         tableBody.appendChild(row);
       });
     }
-  ////////////////////СОРТИРОВКА
-  const tableBody = document.querySelector('.u-table-body-1');
 
-  // Функция для загрузки данных с сервера
-  function fetchData(params = {}) {
-    const queryString = new URLSearchParams(params).toString();
-    const apiUrl = `/api/books?${queryString}`;
+    //////////////////// СОРТИРОВКА
+    const tableBody = document.querySelector('.u-table-body-1');
 
-    fetch(apiUrl)
-      .then(response => {
-        if (!response.ok) throw new Error('Ошибка загрузки данных');
-        return response.json();
-      })
-      .then(data => populateTable(data))
-      .catch(error => console.error('Ошибка:', error));
-  }
+    // Функция для обработки сортировки
+    function handleSort(column, button) {
+      const currentOrder = button.getAttribute('data-order') || 'asc';
+      const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+      button.setAttribute('data-order', newOrder);
+      button.textContent = newOrder === 'asc' ? '▲' : '▼';
+      fetchBooks({ sort_column: column, sort_order: newOrder });
+    }
 
-  // Функция для заполнения таблицы данными
-  function populateTable(data) {
-    tableBody.innerHTML = '';
+    // Добавляем стрелки сортировки к заголовкам
+    const tableHeaders = document.querySelectorAll('thead th');
+    tableHeaders.forEach(header => {
+      const sortButton = header.querySelector('.sort-button');
+      if (sortButton) {
+        // Устанавливаем начальное содержимое кнопки
+        sortButton.textContent = '▲';
 
-    data.forEach(book => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td class="u-border-1 u-border-grey-30 u-table-cell">${book.name}</td>
-        <td class="u-border-1 u-border-grey-30 u-table-cell">${book.authors}</td>
-        <td class="u-border-1 u-border-grey-30 u-table-cell">${book.publication_year}</td>
-        <td class="u-border-1 u-border-grey-30 u-table-cell">${book.publishing_company}</td>
-        <td class="u-border-1 u-border-grey-30 u-table-cell">${book.count_of_books}</td>
-        <td class="u-border-1 u-border-grey-30 u-table-cell">${book.isbn}</td>
-      `;
-      tableBody.appendChild(row);
+        // Убираем стандартные стили кнопки и устанавливаем собственные
+        sortButton.style.background = 'none';
+        sortButton.style.border = 'none';
+        sortButton.style.padding = '0';
+        sortButton.style.marginLeft = '5px';
+        sortButton.style.cursor = 'pointer';
+        sortButton.style.fontSize = '12px'; // Регулируйте размер по необходимости
+        sortButton.style.userSelect = 'none';
+
+        // Определение имени столбца для сортировки
+        const columnName = sortButton.getAttribute('data-column');
+
+        // Добавляем обработчик события клика
+        sortButton.addEventListener('click', () => handleSort(columnName, sortButton));
+      }
     });
-  }
-
-  // Функция для обработки сортировки
-  function handleSort(column, button) {
-    const currentOrder = button.getAttribute('data-order') || 'asc';
-    const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
-    button.setAttribute('data-order', newOrder);
-    button.textContent = newOrder === 'asc' ? '▲' : '▼';
-    fetchData({ sort_column: column, sort_order: newOrder });
-  }
-
-  // Добавляем стрелки сортировки к заголовкам
-  const tableHeaders = document.querySelectorAll('thead th');
-  tableHeaders.forEach(header => {
-    const columnName = header.textContent.trim().toLowerCase().replace(/\s+/g, '_');
-    const sortButton = header.querySelector('.sort-button');
-
-    // Устанавливаем начальное содержимое кнопки
-    sortButton.textContent = '▲';
-
-    // Убираем стандартные стили кнопки и устанавливаем собственные
-    sortButton.style.background = 'none';
-    sortButton.style.border = 'none';
-    sortButton.style.padding = '0';
-    sortButton.style.marginLeft = '5px';
-    sortButton.style.cursor = 'pointer';
-    sortButton.style.fontSize = '12px'; // Регулируйте размер по необходимости
-    sortButton.style.userSelect = 'none';
-
-    // Добавляем обработчик события клика
-    sortButton.addEventListener('click', () => handleSort(columnName, sortButton));
-  });
 
     // Вызов функции получения книг при загрузке страницы
     fetchBooks();
   });
 </script>
 
-</body></html>
+</body>
+</html>

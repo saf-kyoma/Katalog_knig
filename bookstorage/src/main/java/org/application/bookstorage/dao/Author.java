@@ -17,6 +17,7 @@ import java.util.Set;
 public class Author {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Автоинкремент
     @Column(name = "id")
     private Integer id;
 

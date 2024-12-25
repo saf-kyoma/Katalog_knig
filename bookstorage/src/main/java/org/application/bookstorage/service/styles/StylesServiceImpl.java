@@ -46,4 +46,21 @@ public class StylesServiceImpl implements StylesService {
                 .orElseThrow(() -> new RuntimeException("Стиль не найден с id " + id));
         stylesRepository.delete(style);
     }
+
+    @Override
+    public Optional<Styles> getStyleByName(String name) {
+        // Попытка найти жанр с точным совпадением
+        Optional<Styles> exactMatch = stylesRepository.findByNameIgnoreCase(name);
+        if (exactMatch.isPresent()) {
+            return exactMatch;
+        }
+        // Если точного совпадения нет, ищем жанр, название которого содержит заданную строку
+        List<Styles> partialMatches = stylesRepository.findByNameContainingIgnoreCase(name);
+        if (!partialMatches.isEmpty()) {
+            // Возвращаем первый найденный жанр из частичных совпадений
+            return Optional.of(partialMatches.get(0));
+        }
+        // Если совпадений нет, возвращаем пустой Optional
+        return Optional.empty();
+    }
 }

@@ -7,6 +7,7 @@ import org.application.bookstorage.service.author.AuthorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
 import java.util.List;
@@ -44,6 +45,16 @@ public class AuthorController {
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(authors, HttpStatus.OK);
+    }
+
+    // Добавление метода поиска авторов
+    @GetMapping("/search")
+    public ResponseEntity<List<AuthorDTO>> searchAuthors(@RequestParam("q") String query) {
+        List<Author> authors = authorService.searchAuthorsByFio(query);
+        List<AuthorDTO> authorDTOs = authors.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(authorDTOs, HttpStatus.OK);
     }
 
     // Обновление автора

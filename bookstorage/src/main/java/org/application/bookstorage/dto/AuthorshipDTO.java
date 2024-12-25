@@ -10,6 +10,6 @@ public class AuthorshipDTO {
     @NotBlank(message = "ISBN книги не может быть пустым")
     private String bookIsbn;
 
-    @NotNull(message = "ID автора не может быть null")
-    private int authorId;
+    //@NotNull(message = "ID автора не может быть null")
+    private Integer authorId;
 }

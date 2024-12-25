@@ -31,4 +31,6 @@ public class BookDTO {
     private int countOfBooks;
 
     private List<AuthorDTO> authors;
+
+    private List<String> genres;
 }
