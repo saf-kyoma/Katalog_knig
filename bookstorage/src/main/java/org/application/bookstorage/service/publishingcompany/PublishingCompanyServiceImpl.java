@@ -48,4 +48,9 @@ public class PublishingCompanyServiceImpl implements PublishingCompanyService {
                 .orElseThrow(() -> new RuntimeException("Издательство не найдено с именем " + name));
         publishingCompanyRepository.delete(company);
     }
+
+    @Override
+    public List<PublishingCompany> searchPublishingCompaniesByName(String name) {
+        return publishingCompanyRepository.findByNameContainingIgnoreCase(name);
+    }
 }

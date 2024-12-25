@@ -11,4 +11,5 @@ public interface PublishingCompanyService {
     List<PublishingCompany> getAllPublishingCompanies();
     PublishingCompany updatePublishingCompany(String name, PublishingCompany company);
     void deletePublishingCompany(String name);
+    List<PublishingCompany> searchPublishingCompaniesByName(String name);
 }

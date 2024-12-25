@@ -1,5 +1,6 @@
 package org.application.bookstorage.dao;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,5 +29,6 @@ public class PublishingCompany {
     private String city;
 
     @OneToMany(mappedBy = "publishingCompany", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonBackReference
     private Set<Book> books;
 }
