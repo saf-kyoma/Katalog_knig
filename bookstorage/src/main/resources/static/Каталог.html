@@ -26,9 +26,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1" data-responsive-from="XS" data-submenu-level="on-click">
-      <ul>
-        <li><a href="catalog.html">Каталог</a></li>
-        <li><a href="Добавление-карточки-книги.html">Добавление книги</a></li>
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="catalog.html">Каталог</a></li>
+        <li class="nav-item"><a class="nav-link" href="Добавление-карточки-книги.html">Добавление книги</a></li>
       </ul>
       <style class="menu-style">@media (max-width: 539px) {
                         [data-responsive-from="XS"] .u-nav-container {
@@ -39,46 +39,50 @@
                         }
                     }</style>
     </nav>
-    <a href="#" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-1-dark-2 u-radius u-btn-1">Поиск </a>
-    <form action="#" class="u-border-1 u-border-grey-30 u-search u-search-left u-white u-search-1" data-search-token="no-license" data-href="search/search.html">
-      <button class="u-search-button" type="submit">
-                <span class="u-search-icon u-spacing-10">
-                  <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 56.966 56.966"><use xlink:href="#svg-b9b6"></use></svg>
-                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg-b9b6" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" class="u-svg-content"><path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23
-  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92
-  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17
-  s-17-7.626-17-17S14.61,6,23.984,6z"></path></svg>
-                </span>
-      </button>
-      <input class="u-search-input" type="search" name="search" value="" placeholder="Введите название книги">
+
+    <div class="d-flex align-items-center">
+      <!-- Кнопка Поиск -->
+      <button id="searchButton" class="btn btn-primary me-2">Поиск</button>
+      <!-- Кнопка Сбросить поиск -->
+      <button id="resetButton" class="btn btn-secondary">Сбросить поиск</button>
+    </div>
+
+    <!-- Форма поиска (скрытая, так как кнопка "Поиск" теперь отдельно) -->
+    <form id="searchForm" class="u-border-1 u-border-grey-30 u-search u-search-left u-white u-search-1 mt-3">
+      <div class="input-group">
+        <input class="u-search-input form-control" type="search" name="search" value="" placeholder="Введите название книги">
+        <button class="btn btn-outline-secondary" type="submit">Искать</button>
+      </div>
     </form>
   </div>
 </header>
 <section class="u-clearfix u-section-1" id="sec-25c7">
-  <div class="u-expanded-width u-table u-table-responsive u-table-1">
-    <table class="u-table-entity">
-      <colgroup>
-        <col width="16.66%">
-        <col width="16.66%">
-        <col width="16.66%">
-        <col width="16.66%">
-        <col width="16.66%">
-        <col width="16.66%">
-      </colgroup>
-      <thead class="u-palette-4-base u-table-header u-table-header-1">
-      <tr style="height: 43px;">
-        <th>Название книги <button class="sort-button" data-column="name"></button></th>
-        <th>Автор <button class="sort-button" data-column="author"></button></th>
-        <th>Дата издания <button class="sort-button" data-column="publication_year"></button></th>
-        <th>Издательство <button class="sort-button" data-column="publishing_company"></button></th>
-        <th>Количество экземпляров <button class="sort-button" data-column="count_of_books"></button></th>
-        <th>ISBN <button class="sort-button" data-column="isbn"></button></th>
-      </tr>
-      </thead>
-      <tbody class="u-table-body u-table-body-1">
-      <!-- Динамическое содержимое -->
-      </tbody>
-    </table>
+  <div class="container mt-4">
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered">
+        <colgroup>
+          <col style="width: 16.66%;">
+          <col style="width: 16.66%;">
+          <col style="width: 16.66%;">
+          <col style="width: 16.66%;">
+          <col style="width: 16.66%;">
+          <col style="width: 16.66%;">
+        </colgroup>
+        <thead class="table-dark">
+        <tr>
+          <th>Название книги <button class="sort-button btn btn-sm btn-light" data-column="name">▲</button></th>
+          <th>Автор <button class="sort-button btn btn-sm btn-light" data-column="author">▲</button></th>
+          <th>Дата издания <button class="sort-button btn btn-sm btn-light" data-column="publication_year">▲</button></th>
+          <th>Издательство <button class="sort-button btn btn-sm btn-light" data-column="publishing_company">▲</button></th>
+          <th>Количество экземпляров <button class="sort-button btn btn-sm btn-light" data-column="count_of_books">▲</button></th>
+          <th>ISBN <button class="sort-button btn btn-sm btn-light" data-column="isbn">▲</button></th>
+        </tr>
+        </thead>
+        <tbody class="u-table-body u-table-body-1">
+        <!-- Динамическое содержимое -->
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
 
@@ -101,10 +105,79 @@
 <!-- Пользовательский JavaScript для получения и отображения книг -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Функция для получения книг из API
+    let currentSortColumn = 'name';
+    let currentSortOrder = 'asc';
+    let currentSearch = '';
+
+    /**
+     * Получает текущее значение поля поиска.
+     *
+     * @return {string} Обрезанная строка поиска.
+     */
+    function getSearchValue() {
+      const searchInput = document.querySelector('.u-search-input');
+      return searchInput.value.trim();
+    }
+
+    /**
+     * Обрабатывает отправку формы поиска.
+     *
+     * @param {Event} event - Событие отправки формы.
+     */
+    function handleSearch(event) {
+      event.preventDefault(); // Предотвращаем стандартную отправку формы
+      currentSearch = getSearchValue();
+      // Сбрасываем сортировку к значениям по умолчанию при поиске
+      currentSortColumn = 'name';
+      currentSortOrder = 'asc';
+      resetSortButtons();
+      fetchBooks({ search: currentSearch, sort_column: currentSortColumn, sort_order: currentSortOrder });
+    }
+
+    /**
+     * Обрабатывает нажатие на кнопку "Поиск".
+     */
+    function handleSearchButton() {
+      currentSearch = getSearchValue();
+      // Сбрасываем сортировку к значениям по умолчанию при поиске
+      currentSortColumn = 'name';
+      currentSortOrder = 'asc';
+      resetSortButtons();
+      fetchBooks({ search: currentSearch, sort_column: currentSortColumn, sort_order: currentSortOrder });
+    }
+
+    /**
+     * Обрабатывает нажатие на кнопку "Сбросить поиск".
+     */
+    function handleResetButton() {
+      currentSearch = '';
+      document.querySelector('.u-search-input').value = '';
+      // Сбрасываем сортировку к значениям по умолчанию
+      currentSortColumn = 'name';
+      currentSortOrder = 'asc';
+      resetSortButtons();
+      fetchBooks({ search: currentSearch, sort_column: currentSortColumn, sort_order: currentSortOrder });
+    }
+
+    /**
+     * Сбрасывает все кнопки сортировки к их исходному состоянию.
+     */
+    function resetSortButtons() {
+      const sortButtons = document.querySelectorAll('.sort-button');
+      sortButtons.forEach(button => {
+        button.setAttribute('data-order', 'asc');
+        button.textContent = '▲';
+      });
+    }
+
+    /**
+     * Получает книги из API на основе предоставленных параметров.
+     *
+     * @param {Object} params - Параметры запроса для получения книг.
+     */
     function fetchBooks(params = {}) {
-      const queryString = new URLSearchParams(params).toString();
-      const apiUrl = `/api/books${queryString ? '?' + queryString : ''}`;
+      const queryParams = new URLSearchParams(params).toString();
+      const apiUrl = `/api/books${queryParams ? '?' + queryParams : ''}`;
 
       fetch(apiUrl)
         .then(response => {
@@ -121,14 +194,27 @@
         });
     }
 
-    // Функция для заполнения таблицы данными о книгах
+    /**
+     * Заполняет HTML-таблицу полученными данными о книгах.
+     *
+     * @param {Array} books - Список книг для отображения.
+     */
     function populateTable(books) {
       const tableBody = document.querySelector('.u-table-body-1');
-      // Очистка существующих строк таблицы
       tableBody.innerHTML = '';
 
+      if (books.length === 0) {
+        const row = document.createElement('tr');
+        const cell = document.createElement('td');
+        cell.colSpan = 6;
+        cell.className = 'text-center';
+        cell.textContent = 'Книги не найдены.';
+        row.appendChild(cell);
+        tableBody.appendChild(row);
+        return;
+      }
+
       books.forEach(book => {
-        // Создание новой строки таблицы
         const row = document.createElement('tr');
         row.style.height = '28px';
 
@@ -173,50 +259,68 @@
         isbnCell.textContent = book.isbn || 'Не указано';
         row.appendChild(isbnCell);
 
-        // Добавление строки в тело таблицы
         tableBody.appendChild(row);
       });
     }
 
-    //////////////////// СОРТИРОВКА
-    const tableBody = document.querySelector('.u-table-body-1');
-
-    // Функция для обработки сортировки
+    /**
+     * Обрабатывает логику сортировки при клике на кнопку сортировки.
+     *
+     * @param {string} column - Столбец для сортировки.
+     * @param {HTMLElement} button - Элемент кнопки сортировки.
+     */
     function handleSort(column, button) {
       const currentOrder = button.getAttribute('data-order') || 'asc';
       const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
       button.setAttribute('data-order', newOrder);
       button.textContent = newOrder === 'asc' ? '▲' : '▼';
-      fetchBooks({ sort_column: column, sort_order: newOrder });
+      currentSortColumn = column;
+      currentSortOrder = newOrder;
+      fetchBooks({ search: currentSearch, sort_column: currentSortColumn, sort_order: currentSortOrder });
     }
 
-    // Добавляем стрелки сортировки к заголовкам
-    const tableHeaders = document.querySelectorAll('thead th');
-    tableHeaders.forEach(header => {
-      const sortButton = header.querySelector('.sort-button');
-      if (sortButton) {
-        // Устанавливаем начальное содержимое кнопки
-        sortButton.textContent = '▲';
-
-        // Убираем стандартные стили кнопки и устанавливаем собственные
-        sortButton.style.background = 'none';
-        sortButton.style.border = 'none';
-        sortButton.style.padding = '0';
-        sortButton.style.marginLeft = '5px';
-        sortButton.style.cursor = 'pointer';
-        sortButton.style.fontSize = '12px'; // Регулируйте размер по необходимости
-        sortButton.style.userSelect = 'none';
-
-        // Определение имени столбца для сортировки
-        const columnName = sortButton.getAttribute('data-column');
-
-        // Добавляем обработчик события клика
-        sortButton.addEventListener('click', () => handleSort(columnName, sortButton));
+    /**
+     * Инициализирует обработчики событий для формы поиска и кнопок сортировки.
+     */
+    function initializeEventListeners() {
+      // Добавляем обработчик события к форме поиска
+      const searchForm = document.querySelector('#searchForm');
+      if (searchForm) {
+        searchForm.addEventListener('submit', handleSearch);
       }
-    });
 
-    // Вызов функции получения книг при загрузке страницы
-    fetchBooks();
+      // Добавляем обработчик события к кнопке "Поиск"
+      const searchButton = document.querySelector('#searchButton');
+      if (searchButton) {
+        searchButton.addEventListener('click', handleSearchButton);
+      }
+
+      // Добавляем обработчик события к кнопке "Сбросить поиск"
+      const resetButton = document.querySelector('#resetButton');
+      if (resetButton) {
+        resetButton.addEventListener('click', handleResetButton);
+      }
+
+      // Инициализируем кнопки сортировки
+      const sortButtons = document.querySelectorAll('.sort-button');
+      sortButtons.forEach(button => {
+        // Начальное состояние кнопки сортировки
+        button.setAttribute('data-order', 'asc');
+        button.textContent = '▲';
+        button.classList.add('btn-light');
+        button.style.borderRadius = '0.25rem';
+
+        const columnName = button.getAttribute('data-column');
+
+        button.addEventListener('click', () => handleSort(columnName, button));
+      });
+    }
+
+    // Инициализируем обработчики событий
+    initializeEventListeners();
+
+    // Первоначальный запрос для отображения всех книг
+    fetchBooks({ search: currentSearch, sort_column: currentSortColumn, sort_order: currentSortOrder });
   });
 </script>
 

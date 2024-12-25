@@ -136,12 +136,19 @@ public class BookController {
 
     // Получение всех книг
     @GetMapping
-    public ResponseEntity<List<BookDTO>> getAllBooks() {
-        List<BookDTO> books = bookService.getAllBooks()
-                .stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(books, HttpStatus.OK);
+    public ResponseEntity<List<BookDTO>> getAllBooks(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false, name = "sort_column") String sortColumn,
+            @RequestParam(required = false, name = "sort_order") String sortOrder) {
+        try {
+            List<Book> books = bookService.getAllBooks(search, sortColumn, sortOrder);
+            List<BookDTO> bookDTOs = books.stream().map(this::mapToDTO).collect(Collectors.toList());
+            return new ResponseEntity<>(bookDTOs, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            // Логирование ошибки
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     // Обновление книги
