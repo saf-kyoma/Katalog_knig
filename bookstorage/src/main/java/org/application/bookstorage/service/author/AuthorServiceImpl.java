@@ -55,4 +55,9 @@ public class AuthorServiceImpl implements AuthorService {
     public List<Author> searchAuthorsByFio(String fio) {
         return authorRepository.findByFioContainingIgnoreCase(fio);
     }
+
+    @Override
+    public List<Author> searchAuthors(String query) {
+        return authorRepository.findByFioContainingIgnoreCaseOrNicknameContainingIgnoreCase(query, query);
+    }
 }

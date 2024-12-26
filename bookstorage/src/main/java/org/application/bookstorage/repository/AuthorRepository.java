@@ -10,6 +10,9 @@ import java.util.List;
 public interface AuthorRepository extends JpaRepository<Author, Integer> {
     // Метод для поиска авторов по частичному совпадению ФИО, игнорируя регистр
     List<Author> findByFioContainingIgnoreCase(String fio);
+    // Метод для поиска авторов по частичному совпадению ФИО или псевдонима, игнорируя регистр
+    List<Author> findByFioContainingIgnoreCaseOrNicknameContainingIgnoreCase(String fio, String nickname);
+
     // Дополнительные методы поиска при необходимости
 }
 

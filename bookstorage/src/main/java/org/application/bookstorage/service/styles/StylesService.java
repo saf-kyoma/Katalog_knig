@@ -13,5 +13,6 @@ public interface StylesService {
     void deleteStyle(Long id);
 
     Optional<Styles> getStyleByName(String name);
+    List<Styles> searchStylesByName(String name);
 }
 

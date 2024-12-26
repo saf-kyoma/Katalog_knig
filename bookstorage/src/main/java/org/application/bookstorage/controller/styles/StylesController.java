@@ -76,6 +76,14 @@ public class StylesController {
         }
     }
 
+    // Эндпоинт для поиска стилей по части названия
+    @GetMapping("/search")
+    public ResponseEntity<List<StylesDTO>> searchStyles(@RequestParam("q") String query) {
+        List<Styles> styles = stylesService.searchStylesByName(query);
+        List<StylesDTO> stylesDTO = styles.stream().map(this::mapToDTO).collect(Collectors.toList());
+        return new ResponseEntity<>(stylesDTO, HttpStatus.OK);
+    }
+
     // Ручной маппинг DTO в сущность
     private Styles mapToEntity(StylesDTO dto) {
         Styles style = new Styles();

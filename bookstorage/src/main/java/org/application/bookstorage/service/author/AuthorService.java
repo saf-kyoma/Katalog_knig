@@ -12,4 +12,6 @@ public interface AuthorService {
     Author updateAuthor(int id, Author author);
     void deleteAuthor(int id);
     List<Author> searchAuthorsByFio(String fio);
+
+    List<Author> searchAuthors(String query); // Метод поиска по ФИО и псевдониму
 }
