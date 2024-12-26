@@ -1,17 +1,14 @@
 <!DOCTYPE html>
-<html style="font-size: 16px;" lang="ru"><head>
+<html style="font-size: 16px;" lang="ru">
+<head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="utf-8">
-  <meta name="keywords" content="">
-  <meta name="description" content="">
-  <title>Редактирование издания</title>
+  <title>Редактирование издательства</title>
   <link rel="stylesheet" href="nicepage.css" media="screen">
-  <link rel="stylesheet" href="Редактирование-издателя.html" media="screen">
-  <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
-  <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
-  <meta name="generator" content="Nicepage 7.1.0, nicepage.com">
-  <meta name="referrer" content="origin">
-  <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+  <link rel="stylesheet" href="Добавление-карточки-книги.css" media="screen">
+  <script class="u-script" type="text/javascript" src="jquery.js" defer></script>
+  <script class="u-script" type="text/javascript" src="nicepage.js" defer></script>
+  <meta name="theme-color" content="#2cccc4">
 
   <style>
     /* Основные стили формы */
@@ -130,7 +127,7 @@
       background-color: #f0f0f0;
     }
 
-    /* Стили для динамических групп авторов */
+    /* Стили для динамических групп  */
     .author-group {
       border: 1px solid #ccc;
       padding: 10px;
@@ -557,86 +554,92 @@
     }
 
 
+
   </style>
+</head>
+<body class="u-body u-xl-mode" data-lang="ru">
+<header>
+  <h1>Редактирование информации об издательстве</h1>
 
-  <script type="application/ld+json">{
-    "@context": "http://schema.org",
-    "@type": "Organization",
-    "name": ""
-  }</script>
-  <meta name="theme-color" content="#2cccc4">
-  <meta property="og:title" content="Редактирование издателя">
-  <meta property="og:type" content="website">
-  <meta data-intl-tel-input-cdn-path="intlTelInput/"></head>
-<body data-path-to-root="./" data-include-products="true" class="u-body u-xl-mode" data-lang="ru">
-<section class="u-clearfix u-section-1" id="sec-64ce">
-  <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-    <nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1 d-flex justify-content-center w-100" data-responsive-from="XS" data-submenu-level="on-click">
-      <ul class="d-flex justify-content-center w-100">
-        <li class="mx-2 flex-fill text-center"><a href="Каталог.html">Каталог</a></li>
-        <li class="mx-2 flex-fill text-center"><a href="Добавление-карточки-книги.html">Добавление книги</a></li>
-        <li class="mx-2 flex-fill text-center"><a href="Страница-авторов.html">Авторы</a></li>
-        <li class="mx-2 flex-fill text-center"><a href="Страница-издательств.html">Издатели</a></li>
-        <li class="mx-2 flex-fill text-center"><a href="Вход-в-систему.html">Войти</a></li>
-        <li class="dropdown mx-2 flex-fill text-center">
-          <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">База данных</a>
-          <ul class="dropdown-menu">
-            <li><button id="DBadd" class="btn dropdown-item">Загрузить базу данных</button></li>
-            <li><button id="DBout" class="btn dropdown-item">Выгрузить базу данных</button></li>
-          </ul>
-        </li>
+</header>
+<nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1 d-flex justify-content-center w-100" data-responsive-from="XS" data-submenu-level="on-click">
+  <ul class="d-flex justify-content-center w-100">
+    <li class="mx-2 flex-fill text-center"><a href="Каталог.html">Каталог</a></li>
+    <li class="mx-2 flex-fill text-center"><a href="Страница-авторов.html">Авторы</a></li>
+    <li class="mx-2 flex-fill text-center"><a href="Страница-издательств.html">Издательства</a></li>
+    <li class="mx-2 flex-fill text-center"><a href="Вход-в-систему.html">Войти</a></li>
+    <li class="dropdown mx-2 flex-fill text-center">
+      <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">База данных</a>
+      <ul class="dropdown-menu">
+        <li><button id="DBadd" class="btn dropdown-item">Загрузить базу данных</button></li>
+        <li><button id="DBout" class="btn dropdown-item">Выгрузить базу данных</button></li>
       </ul>
-    </nav>
+    </li>
+  </ul>
+</nav>
 
-    <h4 class="u-text u-text-1">Редактирование информации об издательстве</h4>
 
-    <div class="u-form u-form-1">
-      <form action="/api/publishing_companies/update" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" style="padding: 10px;">
-        <div class="u-form-group u-form-name u-label-left u-form-group-1">
-          <label for="name" class="u-label">Название</label>
-          <input type="text" placeholder="Введите название" id="name" name="name" class="u-input u-input-rectangle u-input-1" required="">
-        </div>
 
-        <div class="u-form-group u-label-left u-form-group-2">
-          <label for="establishment_year" class="u-label">Год основания</label>
-          <input type="number" placeholder="Введите год основания" id="establishment_year" name="establishment_year" class="u-input u-input-rectangle u-input-2" required="">
-        </div>
 
-        <div class="u-form-group u-label-left u-form-group-3">
-          <label for="contact_info" class="u-label">Контактная информация</label>
-          <input type="text" placeholder="Введите контактную информацию" id="contact_info" name="contact_info" class="u-input u-input-rectangle u-input-3">
-        </div>
+<section class="u-clearfix u-section-1" id="sec-64ce">
+  <div class="container">
+    <form id="book-add-form" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form">
 
-        <div class="u-form-group u-label-left u-form-group-4">
-          <label for="city" class="u-label">Город</label>
-          <input type="text" placeholder="Введите город" id="city" name="city" class="u-input u-input-rectangle u-input-4">
-        </div>
+      <div class="u-form-group">
+        <label for="name" class="u-label">Название</label>
+        <input type="text" placeholder="Введите название издательства" id="name" name="name" class="u-input" required pattern="[A-Za-zА-Яа-я0-9\s\-]+" title="Разрешены только буквы, цифры, пробелы и дефис (-)">
+      </div>
 
-        <div class="u-form-group u-form-submit u-label-left">
-          <label class="u-label"></label>
-          <div class="u-align-left u-btn-submit-container">
-            <button type="submit" class="u-btn u-btn-round u-btn-submit u-button-style u-radius u-btn-1">Сохранить изменения</button>
-          </div>
-        </div>
-      </form>
-    </div>
+      <div class="u-form-group">
+        <label for="name" class="u-label">Год основания</label>
+        <input type="text" placeholder="Введите год основания" id="year" name="name" class="u-input" required pattern="[A-Za-zА-Яа-я0-9\s\-]+" title="Разрешены только буквы, цифры, пробелы и дефис (-)">
+      </div>
 
-    <a href="Страница-издательства.html" class="u-btn u-btn-round u-button-style u-hover-palette-1-dark-1 u-palette-1-base u-radius u-btn-2">Отмена</a>
+      <div class="u-form-group">
+        <label for="name" class="u-label">Контактная информация</label>
+        <input type="text" placeholder="Введите контактную информацию" id="contact" name="name" class="u-input" required pattern="[A-Za-zА-Яа-я0-9\s\-]+" title="Разрешены только буквы, цифры, пробелы и дефис (-)">
+      </div>
+
+      <div class="u-form-group">
+        <label for="name" class="u-label">Город</label>
+        <input type="text" placeholder="Введите город основания издательства" id="city" name="name" class="u-input" required pattern="[A-Za-zА-Яа-я0-9\s\-]+" title="Разрешены только буквы, цифры, пробелы и дефис (-)">
+      </div>
+
+      <!-- Кнопки добавления и отмены -->
+      <div class="flex-container">
+        <!-- Кнопка Добавления -->
+        <button type="submit" class="u-btn u-btn-submit">Редактировать</button>
+
+        <!-- Кнопка Отмены -->
+        <a href="Каталог.html" class="u-btn u-btn-cancel">Отмена</a>
+      </div>
+
+      <!-- Сообщения об отправке -->
+      <div class="u-form-send-message u-form-send-success">Спасибо! Ваше издательство добавлено.</div>
+      <div class="u-form-send-error u-form-send-message">Отправка не удалась. Пожалуйста, исправьте ошибки и попробуйте еще раз.</div>
+
+      <!-- Скрытые поля -->
+      <input type="hidden" value="" name="recaptchaResponse">
+      <input type="hidden" name="formServices" value="234d2f51-51fe-7107-fa98-0d7a5e49113d">
+    </form>
+  </div>
+
   </div>
 </section>
 
+<!-- Подвал сайта -->
+<footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-2f71">
+  <div class="u-clearfix u-sheet u-sheet-1">
+    <p class="u-small-text u-text u-text-variant u-text-1">
+      О вопросах и проблемах сообщать главному администратору или писать на почту <a href="mailto:GlobalMaster@book.com">GlobalMaster@book.com</a>
+    </p>
+  </div>
+</footer>
 
+<!-- Скрипты валидации и функциональности -->
+<script>
 
-<footer class="u-align-center u-clearfix u-container-align-center u-footer u-grey-80 u-footer" id="sec-2f71"><div class="u-clearfix u-sheet u-sheet-1">
-  <p class="u-small-text u-text u-text-variant u-text-1"> О вопросах и проблемах сообщать главному администратору или писать на почту GlobalMaster@book.com</p>
-</div></footer>
-<section class="u-backlink u-clearfix u-grey-80">
-  <p class="u-text">
-    <span>This site was created with the </span>
-    <a class="u-link" href="https://nicepage.com/" target="_blank" rel="nofollow">
-      <span>Nicepage</span>
-    </a>
-  </p>
-</section>
+</script>
 
-</body></html>
+</body>
+</html>
