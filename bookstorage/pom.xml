@@ -71,12 +71,19 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Lombok для автоматической генерации геттеров и сеттеров -->
+		<!-- Lombok  -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.28</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<!-- Зависимость OpenCSV для работы с CSV файлами -->
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>5.7.1</version>
 		</dependency>
 
 	</dependencies>
