@@ -325,6 +325,40 @@
         background-color: #f9f9f9;
     }
 
+    nav.u-menu {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    }
+
+    nav.u-menu ul {
+        display: flex !important;
+        justify-content: center !important;
+        width: 100% !important;
+        padding: 0;
+        margin: 0;
+    }
+
+    nav.u-menu ul li {
+        flex: 1 !important;
+        text-align: center !important;
+    }
+
+    nav.u-menu ul li a {
+        display: block;
+        width: 100%;
+        padding: 10px 0;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    nav.u-menu ul li a:hover {
+        text-decoration: underline;
+        color: #fff;
+    }
+
+
     .btn {
         display: inline-block;
         padding: 10px 15px;
@@ -343,32 +377,34 @@
   </style>
 </head>
 <body class="u-body u-xl-mode" data-lang="ru">
+<header>
+  <h1>Добавление книги</h1>
+
+</header>
+<nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1 d-flex justify-content-center w-100" data-responsive-from="XS" data-submenu-level="on-click">
+  <ul class="d-flex justify-content-center w-100">
+    <li class="mx-2 flex-fill text-center"><a href="Каталог.html">Каталог</a></li>
+    <li class="mx-2 flex-fill text-center"><a href="Страница-авторов.html">Авторы</a></li>
+    <li class="mx-2 flex-fill text-center"><a href="Страница-издательств.html">Издательства</a></li>
+    <li class="mx-2 flex-fill text-center"><a href="Вход-в-систему.html">Войти</a></li>
+  </ul>
+  <style class="menu-style">
+    @media (max-width: 539px) {
+      [data-responsive-from="XS"] .u-nav-container {
+          display: none;
+      }
+      [data-responsive-from="XS"] .menu-collapse {
+          display: block;
+      }
+    }
+  </style>
+</nav>
+
+
+
 <section class="u-clearfix u-section-1" id="sec-64ce">
-  <div class="u-clearfix u-sheet u-sheet-1">
-    <!-- Навигационный бар -->
-    <nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1" data-responsive-from="XS" data-submenu-level="on-click">
-      <ul>
-        <li><a href="Каталог.html">Каталог</a></li>
-        <li><a href="Добавление-карточки-книги.html">Добавление книги</a></li>
-        <li><a href="Страница-авторов.html">Авторы</a></li>
-        <li><a href="Страница-издательств.html">Издатели</a></li>
-        <li><a href="Вход-в-систему.html">Войти</a></li>
-      </ul>
-      <style class="menu-style">@media (max-width: 539px) {
-                        [data-responsive-from="XS"] .u-nav-container {
-                            display: none;
-                        }
-                        [data-responsive-from="XS"] .menu-collapse {
-                            display: block;
-                        }
-                    }</style>
-    </nav>
-
-    <!-- Заголовок страницы -->
-    <h4 class="u-text u-text-1">Добавление книги</h4>
-
     <!-- Форма добавления книги -->
-    <div class="u-form u-form-1">
+    <div class="container">
       <form id="book-add-form" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form">
 
         <!-- ISBN -->

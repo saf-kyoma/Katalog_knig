@@ -180,40 +180,42 @@
 </head>
 
 <body>
-<header>
+<header class="u-header" id="sec-233d" data-animation-name="" data-animation-duration="0" data-animation-delay="0" data-animation-direction="">
   <h1>Авторы</h1>
+  <nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1 d-flex justify-content-center" data-responsive-from="XS" data-submenu-level="on-click">
+    <ul class="d-flex justify-content-center">
+      <li class="mx-2"><a href="Каталог.html">Каталог</a></li>
+      <li class="mx-2"><a href="Страница-авторов.html">Авторы</a></li>
+      <li class="mx-2"><a href="Страница-издательств.html">Издательства</a></li>
+      <li class="mx-2"><a href="Вход-в-систему.html">Войти</a></li>
+    </ul>
+  </nav>
+
+
+  <div class="u-clearfix u-sheet u-valign-top u-sheet-1">
+    <!-- Подключение Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <!-- Форма поиска всегда видима, кнопки вне формы -->
+    <!-- Форма поиска -->
+    <div class="search-container">
+
+      <form id="searchForm" class="input-group">
+        <input class="form-control" type="search" name="search" value="" placeholder="Поиск по ФИО или псевдониму">
+      </form>
+      <div class="search-buttons">
+        <button id="searchButton" class="btn btn-outline-secondary">Искать</button>
+        <button id="resetButton" class="btn btn-secondary">Сбросить поиск</button>
+      </div>
+    </div>
+  </div>
 </header>
-<nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1" data-responsive-from="XS" data-submenu-level="on-click">
-  <ul>
-    <li><a href="Каталог.html">Каталог</a></li>
-    <li><a href="Добавление-карточки-книги.html">Добавление книги</a></li>
-    <li><a href="Страница-авторов.html">Авторы</a></li>
-    <li><a href="Страница-издательств.html">Издатели</a></li>
-    <li><a href="Вход-в-систему.html">Войти</a></li>
-  </ul>
-  <style class="menu-style">@media (max-width: 539px) {
-                        [data-responsive-from="XS"] .u-nav-container {
-                            display: none;
-                        }
-                        [data-responsive-from="XS"] .menu-collapse {
-                            display: block;
-                        }
-                    }</style>
-</nav>
 <div class="container">
   <!-- Элемент для отображения сообщений -->
   <div id="message-container"></div>
+  <a href="#" class="btn">Удалить выбранные</a>
 
-  <!-- Форма поиска -->
-  <div class="search-container">
-    <form id="searchForm" class="input-group">
-      <input class="form-control" type="search" name="search" value="" placeholder="Поиск по ФИО или псевдониму">
-    </form>
-    <div class="search-buttons">
-      <button id="searchButton" class="btn btn-outline-secondary">Искать</button>
-      <button id="resetButton" class="btn btn-secondary">Сбросить поиск</button>
-    </div>
-  </div>
+
 
   <table class="table table-striped table-bordered mt-3">
     <thead class="table-dark">
