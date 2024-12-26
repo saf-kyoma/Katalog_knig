@@ -426,7 +426,7 @@
                   autocomplete="off"
           >
           <!-- Список подсказок -->
-          <ul id="publishingCompany-suggestions" class="suggestions-list" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 1000; background: white; border: 1px solid #ccc; max-height: 200px; overflow-y: auto; padding-left: 0; margin-top: 0;">
+          <ul id="publishingCompany-suggestions" class="suggestions-list" style="display: none;">
             <!-- Элементы списка будут добавляться динамически -->
           </ul>
         </div>
@@ -475,7 +475,7 @@
               <div class="u-form-group">
                 <label for="authorFio" class="u-label">ФИО автора</label>
                 <input type="text" placeholder="Введите ФИО автора" id="authorFio" name="authorFio" class="u-input author-fio" required pattern="[A-Za-zА-Яа-яЁё\s\-]+" title="Разрешены только буквы, пробелы и дефис (-)">
-                <ul class="author-suggestions-list"></ul>
+                <ul class="author-suggestions-list" style="display: none;"></ul>
                 <input type="hidden" name="authorId" class="author-id">
               </div>
             </div>
@@ -657,6 +657,7 @@
       // Список подсказок для автора
       const suggestionsList = document.createElement('ul');
       suggestionsList.classList.add('author-suggestions-list');
+      suggestionsList.style.display = 'none';
       fioGroup.appendChild(suggestionsList);
 
       // Скрытое поле для хранения ID автора
@@ -752,20 +753,8 @@
     const genreTagsContainer = document.getElementById('genre-tags');
     const genresHiddenInput = document.getElementById('genres-hidden'); // Скрытое поле
 
-    // Список доступных жанров
-    const availableGenres = [
-      'Фэнтези',
-      'Триллер',
-      'Комедия',
-      'Драма',
-      'Научная фантастика',
-      'Романтика',
-      'Ужасы',
-      'Исторический',
-      'Приключения',
-      'Мистика'
-      // Добавьте другие жанры по необходимости
-    ];
+    // Удаление статического списка доступных жанров
+    // const availableGenres = [...]; // Статический список удалён
 
     // Функция для создания тэга
     function createTag(text) {
@@ -806,19 +795,36 @@
       this.value = this.value.replace(/[^A-Za-zА-Яа-яЁё\s]/g, '');
     });
 
-    // Функция для фильтрации жанров для подсказок
-    function filterGenres(query) {
-      return availableGenres.filter(genre => genre.toLowerCase().includes(query.toLowerCase()) &&
-        !Array.from(genreTagsContainer.children).some(tag => tag.firstChild.textContent.toLowerCase() === genre.toLowerCase()));
+    // Функция для создания списка подсказок на основе запроса
+    function showGenreSuggestions(query) {
+      if (query.length === 0) {
+        removeGenreSuggestions();
+        return;
+      }
+
+      fetch(`/api/styles/search?q=${encodeURIComponent(query)}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Сбой при поиске жанров');
+          }
+          return response.json();
+        })
+        .then(data => {
+          const filteredGenres = data
+            .map(style => style.name)
+            .filter(genre => !Array.from(genreTagsContainer.children).some(tag => tag.firstChild.textContent.toLowerCase() === genre.toLowerCase()));
+
+          createGenreSuggestionsList(filteredGenres);
+        })
+        .catch(error => {
+          console.error('Ошибка при получении подсказок жанров:', error);
+        });
     }
 
-    // Создание списка подсказок
-    function createSuggestionsList(filteredGenres) {
+    // Функция для создания списка подсказок
+    function createGenreSuggestionsList(filteredGenres) {
       // Удаление предыдущих подсказок
-      const existingList = document.getElementById('genre-suggestions');
-      if (existingList) {
-        existingList.remove();
-      }
+      removeGenreSuggestions();
 
       if (filteredGenres.length === 0) return;
 
@@ -832,7 +838,7 @@
         listItem.addEventListener('click', function() {
           createTag(genre);
           genreInput.value = '';
-          list.remove();
+          removeGenreSuggestions();
         });
         list.appendChild(listItem);
       });
@@ -840,24 +846,28 @@
       genreInput.parentElement.appendChild(list);
     }
 
+    // Функция для удаления списка подсказок
+    function removeGenreSuggestions() {
+      const existingList = document.getElementById('genre-suggestions');
+      if (existingList) {
+        existingList.remove();
+      }
+    }
+
     // Обработчик ввода в поле жанра
     genreInput.addEventListener('input', function() {
       const query = this.value.trim();
       if (query.length === 0) {
-        const existingList = document.getElementById('genre-suggestions');
-        if (existingList) existingList.remove();
+        removeGenreSuggestions();
         return;
       }
-
-      const filtered = filterGenres(query);
-      createSuggestionsList(filtered);
+      showGenreSuggestions(query);
     });
 
     // Закрытие подсказок при клике вне поля
     document.addEventListener('click', function (event) {
       if (!genreInput.contains(event.target) && !genreTagsContainer.contains(event.target)) {
-        const existingList = document.getElementById('genre-suggestions');
-        if (existingList) existingList.remove();
+        removeGenreSuggestions();
       }
     });
 
@@ -869,8 +879,7 @@
         if (genre !== '') { // Разрешаем добавление любых жанров, вне зависимости от списка
           createTag(genre);
           this.value = '';
-          const existingList = document.getElementById('genre-suggestions');
-          if (existingList) existingList.remove();
+          removeGenreSuggestions();
         }
       }
     });
@@ -1007,6 +1016,9 @@
       // Отправка AJAX-запроса на сервер для поиска издательств
       fetch(`/api/publishing-companies/search?q=${encodeURIComponent(query)}`)
         .then(response => {
+          if (!response.ok) {
+            throw new Error('Сбой при поиске издательств');
+          }
           console.log('Получен ответ для издательств:', response); // Логирование ответа
           return response.json();
         })

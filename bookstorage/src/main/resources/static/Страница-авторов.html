@@ -1,11 +1,28 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <!-- (Существующие мета-теги и ссылки на CSS/JS остаются без изменений) -->
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Страница авторов">
   <title>Страница авторов</title>
-  <link rel="stylesheet" href="publishing_companies.css">
+
+  <!-- Подключение Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- Подключение пользовательских стилей -->
+  <link rel="stylesheet" href="publishing_companies.css" media="screen">
+
+  <!-- Подключение jQuery и Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+5hb7ie1TVnZ1JJAG4JIDv4uE2oJe1+gXK7kHlD" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
+
+  <meta name="theme-color" content="#2cccc4">
+  <meta property="og:title" content="Страница авторов">
+  <meta property="og:type" content="website">
+
   <style>
+    /* (Существующие стили остаются без изменений) */
     body {
         font-family: Arial, sans-serif;
         margin: 0;
@@ -49,7 +66,7 @@
 
     .container {
         margin: 20px auto;
-        max-width: 800px;
+        max-width: 1000px;
         background: #fff;
         padding: 20px;
         border-radius: 8px;
@@ -72,6 +89,7 @@
         background-color: #2cccc4;
         color: white;
         text-transform: uppercase;
+        position: relative;
     }
 
     table tr:nth-child(even) {
@@ -88,18 +106,79 @@
         color: #fff;
         text-decoration: none;
         text-align: center;
+        cursor: pointer;
     }
 
     .btn:hover {
         background-color: #249a9a;
     }
 
-    .checkbox-column {
+    .sort-button {
+        background: none;
+        border: none;
+        padding: 0;
+        margin-left: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        user-select: none;
+        color: white;
+    }
+
+    .sort-button:focus {
+        outline: none;
+    }
+
+    footer {
+        background-color: #f1f1f1;
+        padding: 20px 0;
         text-align: center;
-        width: 5%;
+    }
+
+    .u-backlink {
+        background-color: #f1f1f1;
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    /* Дополнительные стили для формы поиска и кнопок */
+    .search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 15px;
+        flex-wrap: wrap;
+    }
+
+    .search-container .input-group {
+        flex: 1 1 auto;
+        min-width: 250px;
+    }
+
+    .search-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    /* Стили для сообщений */
+    .message {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .message.success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .message.error {
+        background-color: #f8d7da;
+        color: #721c24;
     }
   </style>
 </head>
+
 <body>
 <header>
   <h1>Авторы</h1>
@@ -122,42 +201,291 @@
                     }</style>
 </nav>
 <div class="container">
-  <a href="#" class="btn">Удалить выбранные</a>
+  <!-- Элемент для отображения сообщений -->
+  <div id="message-container"></div>
 
-  <table>
-    <thead>
+  <!-- Форма поиска -->
+  <div class="search-container">
+    <form id="searchForm" class="input-group">
+      <input class="form-control" type="search" name="search" value="" placeholder="Поиск по ФИО или псевдониму">
+    </form>
+    <div class="search-buttons">
+      <button id="searchButton" class="btn btn-outline-secondary">Искать</button>
+      <button id="resetButton" class="btn btn-secondary">Сбросить поиск</button>
+    </div>
+  </div>
+
+  <table class="table table-striped table-bordered mt-3">
+    <thead class="table-dark">
     <tr>
       <th class="checkbox-column"><input type="checkbox" onclick="toggleAllCheckboxes(this)"></th>
-      <th>ФИО</th>
-      <th>Дата рождения</th>
-      <th>Страна</th>
-      <th>Псевдоним</th>
+      <th>ФИО <button class="sort-button btn btn-sm btn-light" data-column="fio">▲</button></th>
+      <th>Дата рождения <button class="sort-button btn btn-sm btn-light" data-column="birthDate">▲</button></th>
+      <th>Страна <button class="sort-button btn btn-sm btn-light" data-column="country">▲</button></th>
+      <th>Псевдоним <button class="sort-button btn btn-sm btn-light" data-column="nickname">▲</button></th>
     </tr>
     </thead>
-    <tbody>
-    <tr>
-      <td class="checkbox-column"><input type="checkbox"></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td class="checkbox-column"><input type="checkbox"></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
+    <tbody id="authors-table-body">
+    <!-- Динамическое содержимое -->
+    <!-- Здесь будут динамически добавляться строки авторов -->
     </tbody>
   </table>
 </div>
+<footer>
+  <p>О вопросах и проблемах сообщать главному администратору или писать на почту GlobalMaster@book.com</p>
+</footer>
+
+<section class="u-backlink u-clearfix u-grey-80">
+  <p class="u-text">
+    <span>Этот сайт был создан с помощью </span>
+    <a class="u-link" href="https://nicepage.com/" target="_blank" rel="nofollow">
+      <span>Nicepage</span>
+    </a>
+  </p>
+</section>
+
+<!-- Пользовательский JavaScript для получения и отображения авторов -->
 <script>
-  // Функция для выбора/снятия всех чекбоксов
+  /**
+   * Глобальная функция для выбора/снятия всех чекбоксов.
+   * Сделана глобальной, чтобы была доступна из HTML.
+   */
   function toggleAllCheckboxes(source) {
-      const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+      const checkboxes = document.querySelectorAll('#authors-table-body input[type="checkbox"]');
       checkboxes.forEach(checkbox => checkbox.checked = source.checked);
   }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    let currentSortColumn = 'fio';
+    let currentSortOrder = 'asc';
+    let currentSearch = '';
+
+    /**
+     * Функция для отображения сообщений
+     * @param {string} message - Сообщение для отображения.
+     * @param {string} type - Тип сообщения ('success' или 'error').
+     */
+    function showMessage(message, type) {
+        const messageContainer = document.getElementById('message-container');
+        messageContainer.innerHTML = `<div class="message ${type}">${message}</div>`;
+        setTimeout(() => {
+            messageContainer.innerHTML = '';
+        }, 5000);
+    }
+
+    /**
+     * Функция для получения и отображения авторов
+     * @param {Object} params - Параметры запроса для получения авторов.
+     */
+    async function fetchAuthors(params = {}) {
+        try {
+            const queryParams = new URLSearchParams(params).toString();
+            // Используем эндпоинт /api/authors/search?q=... для поиска, иначе /api/authors
+            const apiUrl = params.q ? `/api/authors/search?q=${encodeURIComponent(params.q)}&sort_column=${params.sort_column}&sort_order=${params.sort_order}` :
+                                      `/api/authors?sort_column=${params.sort_column}&sort_order=${params.sort_order}`;
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+            }
+            const authors = await response.json();
+            populateAuthorsTable(authors);
+        } catch (error) {
+            console.error('Ошибка при получении авторов:', error);
+            showMessage('Не удалось загрузить список авторов.', 'error');
+        }
+    }
+
+    /**
+     * Функция для заполнения таблицы авторами
+     * @param {Array} authors - Список авторов для отображения.
+     */
+    function populateAuthorsTable(authors) {
+        const tbody = document.getElementById('authors-table-body');
+        // Очищаем существующие строки
+        tbody.innerHTML = '';
+
+        if (authors.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center">Авторы не найдены.</td></tr>';
+            return;
+        }
+
+        authors.forEach(author => {
+            const tr = document.createElement('tr');
+
+            // Чекбокс
+            const checkboxTd = document.createElement('td');
+            checkboxTd.classList.add('checkbox-column');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = author.id;
+            checkboxTd.appendChild(checkbox);
+            tr.appendChild(checkboxTd);
+
+            // ФИО (гиперссылка)
+            const fioTd = document.createElement('td');
+            fioTd.classList.add('u-table-cell');
+            const link = document.createElement('a');
+            link.href = `Информация-об-авторе.html?id=${author.id}`;
+            link.textContent = author.fio || 'Без ФИО';
+            link.classList.add('text-decoration-none', 'text-primary');
+            fioTd.appendChild(link);
+            tr.appendChild(fioTd);
+
+            // Дата рождения
+            const birthDateTd = document.createElement('td');
+            birthDateTd.classList.add('u-table-cell');
+            birthDateTd.textContent = author.birthDate || 'Не указано';
+            tr.appendChild(birthDateTd);
+
+            // Страна
+            const countryTd = document.createElement('td');
+            countryTd.classList.add('u-table-cell');
+            countryTd.textContent = author.country || 'Не указано';
+            tr.appendChild(countryTd);
+
+            // Псевдоним
+            const nicknameTd = document.createElement('td');
+            nicknameTd.classList.add('u-table-cell');
+            nicknameTd.textContent = author.nickname || 'Не указано';
+            tr.appendChild(nicknameTd);
+
+            tbody.appendChild(tr);
+        });
+    }
+
+    /**
+     * Обрабатывает отправку формы поиска.
+     * @param {Event} event - Событие отправки формы.
+     */
+    function handleSearch(event) {
+        event.preventDefault(); // Предотвращаем стандартную отправку формы
+        currentSearch = getSearchValue();
+        // Сбрасываем сортировку к значениям по умолчанию при поиске
+        currentSortColumn = 'fio';
+        currentSortOrder = 'asc';
+        resetSortButtons();
+        fetchAuthors({
+            q: currentSearch,
+            sort_column: currentSortColumn,
+            sort_order: currentSortOrder
+        });
+    }
+
+    /**
+     * Обрабатывает нажатие на кнопку "Сбросить поиск".
+     */
+    function handleResetButton() {
+        currentSearch = '';
+        const searchInput = document.querySelector('.input-group input[name="search"]');
+        searchInput.value = '';
+        // Сбрасываем сортировку к значениям по умолчанию
+        currentSortColumn = 'fio';
+        currentSortOrder = 'asc';
+        resetSortButtons();
+        fetchAuthors({
+            sort_column: currentSortColumn,
+            sort_order: currentSortOrder
+        });
+    }
+
+    /**
+     * Получает текущее значение поля поиска.
+     * @return {string} Обрезанная строка поиска.
+     */
+    function getSearchValue() {
+        const searchInput = document.querySelector('.input-group input[name="search"]');
+        return searchInput.value.trim();
+    }
+
+    /**
+     * Сбрасывает все кнопки сортировки к их исходному состоянию.
+     */
+    function resetSortButtons() {
+        const sortButtons = document.querySelectorAll('.sort-button');
+        sortButtons.forEach(button => {
+            button.setAttribute('data-order', 'asc');
+            button.textContent = '▲';
+            button.classList.remove('btn-secondary');
+            button.classList.add('btn-light');
+        });
+    }
+
+    /**
+     * Обрабатывает логику сортировки при клике на кнопку сортировки.
+     * @param {string} column - Столбец для сортировки.
+     * @param {HTMLElement} button - Элемент кнопки сортировки.
+     */
+    function handleSort(column, button) {
+        const currentOrder = button.getAttribute('data-order') || 'asc';
+        const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+        button.setAttribute('data-order', newOrder);
+        button.textContent = newOrder === 'asc' ? '▲' : '▼';
+
+        // Сбрасываем состояние других кнопок
+        const sortButtons = document.querySelectorAll('.sort-button');
+        sortButtons.forEach(btn => {
+            if (btn !== button) {
+                btn.setAttribute('data-order', 'asc');
+                btn.textContent = '▲';
+                btn.classList.remove('btn-secondary');
+                btn.classList.add('btn-light');
+            }
+        });
+
+        // Меняем стили текущей кнопки
+        if (newOrder === 'asc') {
+            button.classList.remove('btn-secondary');
+            button.classList.add('btn-light');
+        } else {
+            button.classList.remove('btn-light');
+            button.classList.add('btn-secondary');
+        }
+
+        // Обновляем текущую сортировку и делаем запрос
+        currentSortColumn = column;
+        currentSortOrder = newOrder;
+        fetchAuthors({
+            q: currentSearch,
+            sort_column: currentSortColumn,
+            sort_order: currentSortOrder
+        });
+    }
+
+    /**
+     * Инициализирует обработчики событий для формы поиска и кнопок сортировки.
+     */
+    function initializeEventListeners() {
+        // Обработчик отправки формы поиска
+        const searchForm = document.getElementById('searchForm');
+        if (searchForm) {
+            searchForm.addEventListener('submit', handleSearch);
+        }
+
+        // Обработчик кнопки "Искать"
+        const searchButton = document.getElementById('searchButton');
+        if (searchButton) {
+            searchButton.addEventListener('click', handleSearch);
+        }
+
+        // Обработчик кнопки "Сбросить поиск"
+        const resetButton = document.getElementById('resetButton');
+        if (resetButton) {
+            resetButton.addEventListener('click', handleResetButton);
+        }
+
+        // Обработчики сортировки
+        const sortButtons = document.querySelectorAll('.sort-button');
+        sortButtons.forEach(button => {
+            const columnName = button.getAttribute('data-column');
+            button.addEventListener('click', () => handleSort(columnName, button));
+        });
+    }
+
+    // Запуск и первичное наполнение таблицы
+    initializeEventListeners();
+    fetchAuthors();
+  });
 </script>
+
 </body>
 </html>
