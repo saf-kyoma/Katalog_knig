@@ -14,6 +14,314 @@
   <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
 
   <style>
+    /* Основные стили формы */
+    .u-form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    .u-label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      text-align: left;
+    }
+
+    .u-input, .u-input-number, .u-select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    /* Стили для тегов жанров */
+    .tags-input-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 5px;
+      align-items: center;
+      position: relative;
+    }
+
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .tag {
+      background-color: #3498db;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+    }
+
+    .tag:hover {
+      background-color: #2980b9;
+    }
+
+    .remove-tag {
+      margin-left: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #ffffff;
+      transition: color 0.3s ease;
+    }
+
+    .remove-tag:hover {
+      color: #ff0000;
+    }
+
+    /* Стили для списков подсказок */
+    .suggestions-list {
+      position: absolute;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      width: 100%;
+      max-height: 150px;
+      overflow-y: auto;
+      z-index: 1000;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .suggestions-list li {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .suggestions-list li:hover {
+      background-color: #f0f0f0;
+    }
+
+    .author-suggestions-list {
+      position: absolute;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      width: 100%;
+      max-height: 150px;
+      overflow-y: auto;
+      z-index: 1000;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .author-suggestions-list li {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .author-suggestions-list li:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* Стили для динамических групп авторов */
+    .author-group {
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    .remove-author {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+      color: red;
+      font-weight: bold;
+      display: none; /* Скрыто для первого автора */
+      font-size: 18px;
+      z-index: 1001;
+    }
+
+    .author-group:hover .remove-author {
+      display: block;
+    }
+
+    .add-author-btn {
+      padding: 8px 12px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .add-author-btn:hover {
+      background-color: #2980b9;
+    }
+
+    /* Стили для кнопок */
+    .buttons-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .u-btn {
+      flex: 0 1 auto;
+      min-width: 120px;
+      max-width: 200px;
+      text-align: center;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .u-btn-submit {
+      background-color: #2ecc71;
+      color: white;
+    }
+
+    .u-btn-submit:hover {
+      background-color: #27ae60;
+    }
+
+    .u-btn-cancel {
+      background-color: #e74c3c;
+      color: white;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .u-btn-cancel:hover {
+      background-color: #c0392b;
+    }
+
+    /* Стили для сообщений */
+    .u-form-send-message {
+      display: none;
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .u-form-send-success {
+      background-color: #2ecc71;
+      color: white;
+    }
+
+    .u-form-send-error {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    /* Стили для страницы */
+    .u-sheet {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .u-text-1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      writing-mode: horizontal-tb;
+      transform: rotate(0deg);
+    }
+
+    /* Медиа-запросы для адаптивности */
+    @media (max-width: 768px) {
+      .buttons-container {
+        flex-direction: column;
+      }
+
+      .u-btn {
+        width: 100%;
+        max-width: none;
+      }
+    }
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    header {
+        background-color: #2cccc4;
+        color: #fff;
+        padding: 10px 20px;
+        text-align: center;
+    }
+
+
+
+    .container {
+        margin: 20px auto;
+        max-width: 800px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        width: 25%; /* Каждая колонка равной ширины */
+    }
+
+    table th {
+        background-color: #2cccc4;
+        color: white;
+        text-transform: uppercase;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+
+
+    .btn {
+        display: inline-block;
+        padding: 10px 15px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        background-color: #2cccc4;
+        color: #fff;
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .btn:hover {
+        background-color: #249a9a;
+    }
+
+    /* (Существующие стили остаются без изменений) */
     body {
         font-family: Arial, sans-serif;
         margin: 0;
@@ -74,7 +382,6 @@
         border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
-        width: 25%; /* Каждая колонка равной ширины */
     }
 
     table th {
@@ -97,11 +404,159 @@
         color: #fff;
         text-decoration: none;
         text-align: center;
+        cursor: pointer;
     }
 
     .btn:hover {
         background-color: #249a9a;
     }
+
+    .sort-button {
+        background: none;
+        border: none;
+        padding: 0;
+        margin-left: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        user-select: none;
+    }
+
+    .sort-button:focus {
+        outline: none;
+    }
+
+    footer {
+        background-color: #f1f1f1;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    .u-backlink {
+        background-color: #f1f1f1;
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    /* Дополнительные стили для формы поиска и кнопок */
+    .search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 15px;
+        flex-wrap: wrap;
+    }
+
+    .search-container .input-group {
+        flex: 1 1 auto;
+        min-width: 250px;
+    }
+
+    .search-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    @media (max-width: 576px) {
+        .search-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .search-container .input-group,
+        .search-buttons {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .search-buttons {
+            justify-content: flex-start;
+        }
+    }
+
+    /* Стили для чекбоксов */
+    .checkbox-column {
+        text-align: center;
+        width: 50px; /* Фиксированная ширина для чекбоксов */
+    }
+
+    .checkbox-column input[type="checkbox"] {
+        transform: scale(1.2); /* Увеличение размера чекбокса для лучшей видимости */
+    }
+
+    /* Общий стиль навигации */
+    nav.u-menu {
+        background-color: #249a9a;
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    nav.u-menu ul {
+        list-style: none;
+        display: flex;
+        padding: 0;
+        margin: 0;
+    }
+
+    nav.u-menu ul li {
+        position: relative;
+        margin: 0 10px;
+    }
+
+    nav.u-menu ul li a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        display: block;
+    }
+
+    nav.u-menu ul li a:hover {
+        background-color: #2cccc4;
+        border-radius: 5px;
+    }
+
+    /* Стили для выпадающего меню */
+    nav.u-menu .dropdown {
+        position: relative;
+    }
+
+    nav.u-menu .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #fff;
+        padding: 10px 0;
+        list-style: none;
+        margin: 0;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        z-index: 10;
+    }
+
+    nav.u-menu .dropdown-menu li {
+        margin: 0;
+    }
+
+    nav.u-menu .dropdown-menu li a {
+        color: #249a9a;
+        padding: 10px 20px;
+        display: block;
+        text-align: left;
+    }
+
+    nav.u-menu .dropdown-menu li a:hover {
+        background-color: #2cccc4;
+        color: white;
+    }
+
+    /* Показываем меню при наведении */
+    nav.u-menu .dropdown:hover .dropdown-menu {
+        display: block;
+    }
+
+
   </style>
 
   <script type="application/ld+json">{
@@ -116,21 +571,21 @@
 <body data-path-to-root="./" data-include-products="true" class="u-body u-xl-mode" data-lang="ru">
 <section class="u-clearfix u-section-1" id="sec-64ce">
   <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-    <nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1" data-responsive-from="XS" data-submenu-level="on-click">
-      <ul>
-        <li><a href="Каталог.html">Каталог</a></li>
-        <li><a href="Страница-авторов.html">Авторы</a></li>
-        <li><a href="Страница-издательств.html">Издательства</a></li>
-        <li><a href="Вход-в-систему.html">Войти</a></li>
+    <nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1 d-flex justify-content-center w-100" data-responsive-from="XS" data-submenu-level="on-click">
+      <ul class="d-flex justify-content-center w-100">
+        <li class="mx-2 flex-fill text-center"><a href="Каталог.html">Каталог</a></li>
+        <li class="mx-2 flex-fill text-center"><a href="Добавление-карточки-книги.html">Добавление книги</a></li>
+        <li class="mx-2 flex-fill text-center"><a href="Страница-авторов.html">Авторы</a></li>
+        <li class="mx-2 flex-fill text-center"><a href="Страница-издательств.html">Издатели</a></li>
+        <li class="mx-2 flex-fill text-center"><a href="Вход-в-систему.html">Войти</a></li>
+        <li class="dropdown mx-2 flex-fill text-center">
+          <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">База данных</a>
+          <ul class="dropdown-menu">
+            <li><button id="DBadd" class="btn dropdown-item">Загрузить базу данных</button></li>
+            <li><button id="DBout" class="btn dropdown-item">Выгрузить базу данных</button></li>
+          </ul>
+        </li>
       </ul>
-      <style class="menu-style">@media (max-width: 539px) {
-                        [data-responsive-from="XS"] .u-nav-container {
-                            display: none;
-                        }
-                        [data-responsive-from="XS"] .menu-collapse {
-                            display: block;
-                        }
-                    }</style>
     </nav>
 
     <h4 class="u-text u-text-1">Редактирование информации об издательстве</h4>

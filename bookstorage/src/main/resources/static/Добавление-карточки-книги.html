@@ -266,6 +266,73 @@
         text-align: center;
     }
 
+
+
+    .container {
+        margin: 20px auto;
+        max-width: 800px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        width: 25%; /* Каждая колонка равной ширины */
+    }
+
+    table th {
+        background-color: #2cccc4;
+        color: white;
+        text-transform: uppercase;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+
+
+    .btn {
+        display: inline-block;
+        padding: 10px 15px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        background-color: #2cccc4;
+        color: #fff;
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .btn:hover {
+        background-color: #249a9a;
+    }
+
+    /* (Существующие стили остаются без изменений) */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    header {
+        background-color: #2cccc4;
+        color: #fff;
+        padding: 10px 20px;
+        text-align: center;
+    }
+
     nav {
         background-color: #249a9a;
         padding: 10px;
@@ -312,7 +379,6 @@
         border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
-        width: 25%; /* Каждая колонка равной ширины */
     }
 
     table th {
@@ -325,40 +391,6 @@
         background-color: #f9f9f9;
     }
 
-    nav.u-menu {
-    width: 100% !important;
-    display: flex !important;
-    justify-content: center !important;
-    }
-
-    nav.u-menu ul {
-        display: flex !important;
-        justify-content: center !important;
-        width: 100% !important;
-        padding: 0;
-        margin: 0;
-    }
-
-    nav.u-menu ul li {
-        flex: 1 !important;
-        text-align: center !important;
-    }
-
-    nav.u-menu ul li a {
-        display: block;
-        width: 100%;
-        padding: 10px 0;
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    nav.u-menu ul li a:hover {
-        text-decoration: underline;
-        color: #fff;
-    }
-
-
     .btn {
         display: inline-block;
         padding: 10px 15px;
@@ -369,11 +401,160 @@
         color: #fff;
         text-decoration: none;
         text-align: center;
+        cursor: pointer;
     }
 
     .btn:hover {
         background-color: #249a9a;
     }
+
+    .sort-button {
+        background: none;
+        border: none;
+        padding: 0;
+        margin-left: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        user-select: none;
+    }
+
+    .sort-button:focus {
+        outline: none;
+    }
+
+    footer {
+        background-color: #f1f1f1;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    .u-backlink {
+        background-color: #f1f1f1;
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    /* Дополнительные стили для формы поиска и кнопок */
+    .search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 15px;
+        flex-wrap: wrap;
+    }
+
+    .search-container .input-group {
+        flex: 1 1 auto;
+        min-width: 250px;
+    }
+
+    .search-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    @media (max-width: 576px) {
+        .search-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .search-container .input-group,
+        .search-buttons {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .search-buttons {
+            justify-content: flex-start;
+        }
+    }
+
+    /* Стили для чекбоксов */
+    .checkbox-column {
+        text-align: center;
+        width: 50px; /* Фиксированная ширина для чекбоксов */
+    }
+
+    .checkbox-column input[type="checkbox"] {
+        transform: scale(1.2); /* Увеличение размера чекбокса для лучшей видимости */
+    }
+
+    /* Общий стиль навигации */
+    nav.u-menu {
+        background-color: #249a9a;
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    nav.u-menu ul {
+        list-style: none;
+        display: flex;
+        padding: 0;
+        margin: 0;
+    }
+
+    nav.u-menu ul li {
+        position: relative;
+        margin: 0 10px;
+    }
+
+    nav.u-menu ul li a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        display: block;
+    }
+
+    nav.u-menu ul li a:hover {
+        background-color: #2cccc4;
+        border-radius: 5px;
+    }
+
+    /* Стили для выпадающего меню */
+    nav.u-menu .dropdown {
+        position: relative;
+    }
+
+    nav.u-menu .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #fff;
+        padding: 10px 0;
+        list-style: none;
+        margin: 0;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        z-index: 10;
+    }
+
+    nav.u-menu .dropdown-menu li {
+        margin: 0;
+    }
+
+    nav.u-menu .dropdown-menu li a {
+        color: #249a9a;
+        padding: 10px 20px;
+        display: block;
+        text-align: left;
+    }
+
+    nav.u-menu .dropdown-menu li a:hover {
+        background-color: #2cccc4;
+        color: white;
+    }
+
+    /* Показываем меню при наведении */
+    nav.u-menu .dropdown:hover .dropdown-menu {
+        display: block;
+    }
+
+
+
   </style>
 </head>
 <body class="u-body u-xl-mode" data-lang="ru">
@@ -384,21 +565,20 @@
 <nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1 d-flex justify-content-center w-100" data-responsive-from="XS" data-submenu-level="on-click">
   <ul class="d-flex justify-content-center w-100">
     <li class="mx-2 flex-fill text-center"><a href="Каталог.html">Каталог</a></li>
+    <li class="mx-2 flex-fill text-center"><a href="Добавление-карточки-книги.html">Добавление книги</a></li>
     <li class="mx-2 flex-fill text-center"><a href="Страница-авторов.html">Авторы</a></li>
-    <li class="mx-2 flex-fill text-center"><a href="Страница-издательств.html">Издательства</a></li>
+    <li class="mx-2 flex-fill text-center"><a href="Страница-издательств.html">Издатели</a></li>
     <li class="mx-2 flex-fill text-center"><a href="Вход-в-систему.html">Войти</a></li>
+    <li class="dropdown mx-2 flex-fill text-center">
+      <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">База данных</a>
+      <ul class="dropdown-menu">
+        <li><button id="DBadd" class="btn dropdown-item">Загрузить базу данных</button></li>
+        <li><button id="DBout" class="btn dropdown-item">Выгрузить базу данных</button></li>
+      </ul>
+    </li>
   </ul>
-  <style class="menu-style">
-    @media (max-width: 539px) {
-      [data-responsive-from="XS"] .u-nav-container {
-          display: none;
-      }
-      [data-responsive-from="XS"] .menu-collapse {
-          display: block;
-      }
-    }
-  </style>
 </nav>
+
 
 
 
