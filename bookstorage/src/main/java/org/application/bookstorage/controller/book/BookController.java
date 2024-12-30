@@ -37,6 +37,22 @@ public class BookController {
     private final StylesService stylesService;
     private final BookStylesService bookStylesService;
 
+
+    /**
+     * Эндпоинт для массового удаления книг.
+     * Метод: DELETE
+     * URL: /api/books/bulk-delete
+     * Тело запроса: список ISBN книг для удаления
+     */
+    @DeleteMapping("/bulk-delete")
+    public ResponseEntity<Void> deleteBooks(@RequestBody List<String> isbns) {
+        try {
+            bookService.deleteBooks(isbns);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
     // Создание книги
     @PostMapping
     public ResponseEntity<BookDTO> createBook(@Valid @RequestBody BookDTO bookDTO) {
