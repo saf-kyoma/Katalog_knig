@@ -109,7 +109,20 @@ public class AuthorController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+    @DeleteMapping("/bulk-delete")
+    public ResponseEntity<Void> deleteAuthors(
+            @RequestBody List<Integer> authorIds,
+            @RequestParam(name = "removeEverything", required = false, defaultValue = "false") boolean removeEverything
+    ) {
+        try {
+            // Вызываем сервисный метод
+            authorService.deleteAuthors(authorIds, removeEverything);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            // Если среди authorIds есть несуществующие авторы, либо другие ошибки
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
     // Ручной маппинг DTO в сущность
     private Author mapToEntity(AuthorDTO dto) {
         Author author = new Author();

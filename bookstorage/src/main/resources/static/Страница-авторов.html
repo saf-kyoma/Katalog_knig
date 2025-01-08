@@ -609,9 +609,7 @@
 <div class="container">
   <!-- Элемент для отображения сообщений -->
   <div id="message-container"></div>
-  <a href="#" class="btn">Удалить выбранные</a>
-
-
+  <a href="#" id="deleteSelectedButton" class="btn">Удалить выбранные</a>
 
   <table class="table table-striped table-bordered mt-3">
     <thead class="table-dark">
@@ -849,6 +847,56 @@
         });
     }
 
+function handleDeleteSelectedAuthors(event) {
+      event.preventDefault();
+
+      // Собираем все выбранные чекбоксы
+      const selectedCheckboxes = document.querySelectorAll('#authors-table-body input[type="checkbox"]:checked');
+      if (selectedCheckboxes.length === 0) {
+          showMessage('Пожалуйста, выберите хотя бы одного автора для удаления.', 'error');
+          return;
+      }
+
+      // Спросим у пользователя, удалять ли всё (true) или не удалять ничего (false)
+      const removeEverything = confirm(
+        'Удалить выбранных авторов вместе со всеми их книгами (если у книги нет других соавторов)?\n\nНажмите ОК, чтобы удалить ВСЁ\nНажмите Отмена, чтобы НЕ удалять вообще никого.'
+      );
+
+      // Если пользователь нажал «Отмена», removeEverything = false => значит вообще ничего не делаем
+      // Но всё равно отправим запрос, чтобы сервис понял, что removeEverything=false
+      // и просто вышел без удаления.
+      const authorIds = Array.from(selectedCheckboxes).map(ch => parseInt(ch.value, 10));
+
+      fetch(`/api/authors/bulk-delete?removeEverything=${removeEverything}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(authorIds)
+      })
+      .then(response => {
+          if (response.status === 204) {
+              if (removeEverything) {
+                  // Только если removeEverything=true, значит что-то действительно удалилось
+                  showMessage('Выбранные авторы и их книги (если у книги не осталось соавторов) успешно удалены.', 'success');
+                  // Перезапрашиваем список авторов
+                  fetchAuthors({
+                    q: currentSearch,
+                    sort_column: currentSortColumn,
+                    sort_order: currentSortOrder
+                  });
+              } else {
+                  // removeEverything=false => "Отмена"
+                  showMessage('Удаление отменено пользователем. Ничего не произошло.', 'success');
+              }
+          } else {
+              showMessage('Произошла ошибка при удалении авторов.', 'error');
+          }
+      })
+      .catch(error => {
+          console.error('Ошибка при удалении авторов:', error);
+          showMessage('Не удалось удалить авторов.', 'error');
+      });
+  }
+
     /**
      * Инициализирует обработчики событий для формы поиска и кнопок сортировки.
      */
@@ -871,6 +919,12 @@
             resetButton.addEventListener('click', handleResetButton);
         }
 
+        // Обработчик кнопки "Удалить выбранные"
+         const deleteButton = document.getElementById('deleteSelectedButton');
+      if (deleteButton) {
+          deleteButton.addEventListener('click', handleDeleteSelectedAuthors);
+      }
+
         // Обработчики сортировки
         const sortButtons = document.querySelectorAll('.sort-button');
         sortButtons.forEach(button => {
@@ -878,6 +932,8 @@
             button.addEventListener('click', () => handleSort(columnName, button));
         });
     }
+
+
 
     // Запуск и первичное наполнение таблицы
     initializeEventListeners();

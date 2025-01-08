@@ -744,10 +744,46 @@
     checkboxes.forEach(checkbox => checkbox.checked = source.checked);
   }
 
-  // Функция для удаления выбранных издательств (ИГНОРИРУЕМ, но оставляем структуру)
+  // Функция для удаления выбранных издательств
   function deleteSelected() {
-    alert('Функция удаления пока не реализована.');
-    // Здесь можно реализовать логику удаления выбранных издательств
+    // Получаем все выбранные чекбоксы
+    const checkboxes = document.querySelectorAll('#publishing-companies-table-body input[type="checkbox"]:checked');
+    if (checkboxes.length === 0) {
+      alert('Пожалуйста, выберите хотя бы одно издательство для удаления.');
+      return;
+    }
+
+    // Спросим подтверждение у пользователя
+    const confirmed = confirm('Вы уверены, что хотите удалить выбранные издательства?\nВсе книги данных издательств тоже будут удалены!');
+    if (!confirmed) {
+      // Если пользователь нажал "Отмена", ничего не делаем
+      return;
+    }
+
+    // Собираем массив названий издательств
+    const names = Array.from(checkboxes).map(ch => ch.dataset.name);
+
+    // Отправляем DELETE-запрос на наш новый эндпоинт /api/publishing-companies/bulk-delete
+    fetch('/api/publishing-companies/bulk-delete', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(names)
+    })
+    .then(response => {
+      if (response.status === 204) {
+        alert('Выбранные издательства (и их книги) успешно удалены.');
+        // Перезагружаем таблицу (или страницу), чтобы изменения отобразились
+        fetchPublishingCompanies();
+      } else {
+        alert('Не удалось удалить издательства. Возможно, некоторые не найдены.');
+      }
+    })
+    .catch(error => {
+      console.error('Ошибка при удалении издательств:', error);
+      alert('Произошла ошибка при удалении издательств. Подробности в консоли.');
+    });
   }
 
   // Инициализация обработчиков событий
