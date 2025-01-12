@@ -30,3 +30,4 @@ application.properties
 
 *.csv
 *.csv
+/bookstorage/csv_exports
