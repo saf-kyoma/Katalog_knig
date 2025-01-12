@@ -8,8 +8,10 @@ import java.util.Optional;
 public interface BookService {
     Book createBook(Book book);
     Optional<Book> getBookByIsbn(String isbn);
-    //List<Book> getAllBooks();
     List<Book> getAllBooks(String search, String sortColumn, String sortOrder);
     Book updateBook(String isbn, Book book);
     void deleteBook(String isbn);
+
+    // Новый метод для массового удаления
+    void deleteBooks(List<String> isbns);
 }

@@ -264,8 +264,6 @@
         display: block;
     }
 
-
-
   </style>
 </head>
 
@@ -310,7 +308,7 @@
 <section class="u-clearfix u-section-1" id="sec-25c7">
   <div class="container mt-4">
     <a href="Добавление-карточки-книги.html" id="searchButtonBook" class="btn btn-outline-secondary">Добавить книгу</a>
-    <a href="#" class="btn">Удалить выбранные</a>
+    <a href="#" id="deleteSelectedButton" class="btn">Удалить выбранные</a>
     <div class="table-responsive">
       <table class="table table-striped table-bordered">
         <!-- Удалён colgroup для автоматического распределения ширин -->
@@ -574,6 +572,57 @@
     }
 
     /**
+     * Обработчик нажатия на кнопку "Удалить выбранные".
+     */
+    function handleDeleteSelected(event) {
+        event.preventDefault(); // Предотвращаем переход по ссылке
+
+        // Собираем все выбранные чекбоксы
+        const selectedCheckboxes = document.querySelectorAll('.u-table-body-1 input[type="checkbox"]:checked');
+        if (selectedCheckboxes.length === 0) {
+            alert('Пожалуйста, выберите хотя бы одну книгу для удаления.');
+            return;
+        }
+
+        // Подтверждаем удаление
+        const confirmation = confirm(`Вы уверены, что хотите удалить ${selectedCheckboxes.length} книгу(и)?`);
+        if (!confirmation) {
+            return;
+        }
+
+        // Собираем ISBN выбранных книг
+        const isbns = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
+
+        // Отправляем запрос на массовое удаление
+        fetch('/api/books/bulk-delete', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(isbns)
+        })
+        .then(response => {
+            if (response.status === 204) {
+                // Успешное удаление
+                alert('Выбранные книги успешно удалены.');
+                // Обновляем таблицу
+                fetchBooks({
+                    search: currentSearch,
+                    sort_column: currentSortColumn,
+                    sort_order: currentSortOrder
+                });
+            } else {
+                // Ошибка при удалении
+                alert('Произошла ошибка при удалении книг.');
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка при выполнении запроса:', error);
+            alert('Произошла ошибка при удалении книг.');
+        });
+    }
+
+    /**
      * Инициализирует обработчики событий для формы поиска и кнопок сортировки.
      */
     function initializeEventListeners() {
@@ -601,6 +650,12 @@
         const columnName = button.getAttribute('data-column');
         button.addEventListener('click', () => handleSort(columnName, button));
       });
+
+      // Обработчик кнопки "Удалить выбранные"
+      const deleteButton = document.getElementById('deleteSelectedButton');
+      if (deleteButton) {
+          deleteButton.addEventListener('click', handleDeleteSelected);
+      }
     }
 
     // Запуск и первичное наполнение таблицы

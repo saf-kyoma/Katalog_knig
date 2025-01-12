@@ -66,15 +66,19 @@ public class PublishingCompanyController {
     }
 
     // Удаление издательства
-    @DeleteMapping("/{name}")
-    public ResponseEntity<Void> deletePublishingCompany(@PathVariable String name) {
+    @DeleteMapping("/bulk-delete")
+    public ResponseEntity<Void> deletePublishingCompanies(@RequestBody List<String> names) {
         try {
-            publishingCompanyService.deletePublishingCompany(name);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            publishingCompanyService.deletePublishingCompanies(names);
+            return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            // Если возникли проблемы (какое-то издательство не найдено и т.д.)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+
+
 
     // Эндпоинт для поиска издательств по части названия
     @GetMapping("/search")

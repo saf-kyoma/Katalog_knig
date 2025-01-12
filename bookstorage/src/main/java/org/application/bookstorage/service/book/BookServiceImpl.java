@@ -34,6 +34,14 @@ public class BookServiceImpl implements BookService {
 //        return bookRepository.findAll();
 //    }
 
+    public void deleteBooks(List<String> isbns) {
+        List<Book> books = bookRepository.findAllById(isbns);
+        if (books.size() != isbns.size()) {
+            throw new RuntimeException("Некоторые книги не найдены для удаления.");
+        }
+        bookRepository.deleteAll(books);
+    }
+
     @Override
     public List<Book> getAllBooks(String search, String sortColumn, String sortOrder) {
         Sort sort = Sort.unsorted();

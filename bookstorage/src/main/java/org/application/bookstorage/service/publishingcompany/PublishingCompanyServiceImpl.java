@@ -2,6 +2,7 @@ package org.application.bookstorage.service.publishingcompany;
 
 import lombok.RequiredArgsConstructor;
 import org.application.bookstorage.dao.PublishingCompany;
+import org.application.bookstorage.repository.BookRepository;
 import org.application.bookstorage.repository.PublishingCompanyRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 public class PublishingCompanyServiceImpl implements PublishingCompanyService {
 
     private final PublishingCompanyRepository publishingCompanyRepository;
+    private final BookRepository bookRepository;
 
     @Override
     public PublishingCompany createPublishingCompany(PublishingCompany company) {
@@ -43,10 +45,22 @@ public class PublishingCompanyServiceImpl implements PublishingCompanyService {
     }
 
     @Override
-    public void deletePublishingCompany(String name) {
-        PublishingCompany company = publishingCompanyRepository.findById(name)
-                .orElseThrow(() -> new RuntimeException("Издательство не найдено с именем " + name));
-        publishingCompanyRepository.delete(company);
+    public void deletePublishingCompanies(List<String> names) {
+        // 1) Находим все издательства по списку
+        List<PublishingCompany> companies = publishingCompanyRepository.findAllById(names);
+        if (companies.size() != names.size()) {
+            // Если вдруг какое-то издательство не найдено
+            throw new RuntimeException("Некоторые издательства не найдены для удаления.");
+        }
+
+        // 2) Удаляем издательства
+        //    Так как в PublishingCompany есть:
+        //    @OneToMany(mappedBy = "publishingCompany", cascade = CascadeType.ALL, orphanRemoval = true)
+        //    удалятся и все книги, связанные с этим издательством.
+        publishingCompanyRepository.deleteAll(companies);
+
+        // Всё. Благодаря cascade=ALL и orphanRemoval=true в PublishingCompany
+        // все связанные книги автоматически удалятся из Book.
     }
 
     @Override
