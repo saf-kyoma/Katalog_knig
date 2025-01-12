@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Издательства</title>
+  <title>Информация об издательстве</title>
   <link rel="stylesheet" href="publishing_companies.css">
+  <!-- Подключение Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <style>
     /* Основные стили формы */
     .u-form-group {
@@ -13,13 +16,11 @@
       margin-bottom: 15px;
       position: relative;
     }
-
     .u-label {
       font-weight: bold;
       margin-bottom: 5px;
       text-align: left;
     }
-
     .u-input, .u-input-number, .u-select {
       width: 100%;
       padding: 8px;
@@ -27,7 +28,6 @@
       border: 1px solid #ccc;
       border-radius: 4px;
     }
-
     /* Стили для тегов жанров */
     .tags-input-container {
       display: flex;
@@ -39,13 +39,11 @@
       align-items: center;
       position: relative;
     }
-
     .tags-container {
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
     }
-
     .tag {
       background-color: #3498db;
       color: white;
@@ -58,11 +56,9 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       transition: background-color 0.3s ease;
     }
-
     .tag:hover {
       background-color: #2980b9;
     }
-
     .remove-tag {
       margin-left: 8px;
       cursor: pointer;
@@ -70,11 +66,9 @@
       color: #ffffff;
       transition: color 0.3s ease;
     }
-
     .remove-tag:hover {
       color: #ff0000;
     }
-
     /* Стили для списков подсказок */
     .suggestions-list {
       position: absolute;
@@ -89,16 +83,13 @@
       padding: 0;
       margin: 0;
     }
-
     .suggestions-list li {
       padding: 8px;
       cursor: pointer;
     }
-
     .suggestions-list li:hover {
       background-color: #f0f0f0;
     }
-
     .author-suggestions-list {
       position: absolute;
       background-color: white;
@@ -112,16 +103,13 @@
       padding: 0;
       margin: 0;
     }
-
     .author-suggestions-list li {
       padding: 8px;
       cursor: pointer;
     }
-
     .author-suggestions-list li:hover {
       background-color: #f0f0f0;
     }
-
     /* Стили для динамических групп авторов */
     .author-group {
       border: 1px solid #ccc;
@@ -130,7 +118,6 @@
       margin-bottom: 15px;
       position: relative;
     }
-
     .remove-author {
       position: absolute;
       top: 10px;
@@ -142,11 +129,9 @@
       font-size: 18px;
       z-index: 1001;
     }
-
     .author-group:hover .remove-author {
       display: block;
     }
-
     .add-author-btn {
       padding: 8px 12px;
       background-color: #3498db;
@@ -155,11 +140,9 @@
       border-radius: 4px;
       cursor: pointer;
     }
-
     .add-author-btn:hover {
       background-color: #2980b9;
     }
-
     /* Стили для кнопок */
     .buttons-container {
       display: flex;
@@ -167,7 +150,6 @@
       gap: 20px;
       margin-top: 20px;
     }
-
     .u-btn {
       flex: 0 1 auto;
       min-width: 120px;
@@ -179,27 +161,22 @@
       cursor: pointer;
       font-size: 16px;
     }
-
     .u-btn-submit {
       background-color: #2ecc71;
       color: white;
     }
-
     .u-btn-submit:hover {
       background-color: #27ae60;
     }
-
     .u-btn-cancel {
       background-color: #e74c3c;
       color: white;
       text-decoration: none;
       display: inline-block;
     }
-
     .u-btn-cancel:hover {
       background-color: #c0392b;
     }
-
     /* Стили для сообщений */
     .u-form-send-message {
       display: none;
@@ -209,24 +186,20 @@
       text-align: center;
       font-weight: bold;
     }
-
     .u-form-send-success {
       background-color: #2ecc71;
       color: white;
     }
-
     .u-form-send-error {
       background-color: #e74c3c;
       color: white;
     }
-
     /* Стили для страницы */
     .u-sheet {
       max-width: 800px;
       margin: 0 auto;
       padding: 20px;
     }
-
     .u-text-1 {
       text-align: center;
       margin-bottom: 20px;
@@ -235,320 +208,226 @@
       writing-mode: horizontal-tb;
       transform: rotate(0deg);
     }
-
     /* Медиа-запросы для адаптивности */
     @media (max-width: 768px) {
       .buttons-container {
         flex-direction: column;
       }
-
       .u-btn {
         width: 100%;
         max-width: none;
       }
     }
     body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
     }
-
     header {
-        background-color: #2cccc4;
-        color: #fff;
-        padding: 10px 20px;
-        text-align: center;
+      background-color: #2cccc4;
+      color: #fff;
+      padding: 10px 20px;
+      text-align: center;
     }
-
-
-
-    .container {
-        margin: 20px auto;
-        max-width: 800px;
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-    }
-
-    table th, table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-        width: 25%; /* Каждая колонка равной ширины */
-    }
-
-    table th {
-        background-color: #2cccc4;
-        color: white;
-        text-transform: uppercase;
-    }
-
-    table tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-
-
-
-    .btn {
-        display: inline-block;
-        padding: 10px 15px;
-        margin: 5px;
-        border: none;
-        border-radius: 5px;
-        background-color: #2cccc4;
-        color: #fff;
-        text-decoration: none;
-        text-align: center;
-    }
-
-    .btn:hover {
-        background-color: #249a9a;
-    }
-
-    /* (Существующие стили остаются без изменений) */
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-    }
-
-    header {
-        background-color: #2cccc4;
-        color: #fff;
-        padding: 10px 20px;
-        text-align: center;
-    }
-
     nav {
-        background-color: #249a9a;
-        padding: 10px;
+      background-color: #249a9a;
+      padding: 10px;
     }
-
     nav ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
     }
-
     nav ul li {
-        margin: 0 15px;
+      margin: 0 15px;
     }
-
     nav ul li a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
     }
-
     nav ul li a:hover {
-        text-decoration: underline;
+      text-decoration: underline;
     }
-
     .container {
-        margin: 20px auto;
-        max-width: 800px;
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 20px auto;
+      max-width: 800px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-
     table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
     }
-
     table th, table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+      width: 25%; /* Каждая колонка равной ширины */
     }
-
     table th {
-        background-color: #2cccc4;
-        color: white;
-        text-transform: uppercase;
+      background-color: #2cccc4;
+      color: white;
+      text-transform: uppercase;
     }
-
     table tr:nth-child(even) {
-        background-color: #f9f9f9;
+      background-color: #f9f9f9;
     }
-
     .btn {
-        display: inline-block;
-        padding: 10px 15px;
-        margin: 5px;
-        border: none;
-        border-radius: 5px;
-        background-color: #2cccc4;
-        color: #fff;
-        text-decoration: none;
-        text-align: center;
-        cursor: pointer;
+      display: inline-block;
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      background-color: #2cccc4;
+      color: #fff;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer;
     }
-
     .btn:hover {
-        background-color: #249a9a;
+      background-color: #249a9a;
     }
-
     .sort-button {
-        background: none;
-        border: none;
-        padding: 0;
-        margin-left: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        user-select: none;
+      background: none;
+      border: none;
+      padding: 0;
+      margin-left: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      user-select: none;
     }
-
     .sort-button:focus {
-        outline: none;
+      outline: none;
     }
-
     footer {
-        background-color: #f1f1f1;
-        padding: 20px 0;
-        text-align: center;
+      background-color: #f1f1f1;
+      padding: 20px 0;
+      text-align: center;
     }
-
     .u-backlink {
-        background-color: #f1f1f1;
-        padding: 10px 0;
-        text-align: center;
+      background-color: #f1f1f1;
+      padding: 10px 0;
+      text-align: center;
     }
-
     /* Дополнительные стили для формы поиска и кнопок */
     .search-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        margin-top: 15px;
-        flex-wrap: wrap;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
     }
-
     .search-container .input-group {
-        flex: 1 1 auto;
-        min-width: 250px;
+      flex: 1 1 auto;
+      min-width: 250px;
     }
-
     .search-buttons {
-        display: flex;
-        gap: 10px;
+      display: flex;
+      gap: 10px;
     }
-
     @media (max-width: 576px) {
-        .search-container {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .search-container .input-group,
-        .search-buttons {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .search-buttons {
-            justify-content: flex-start;
-        }
+      .search-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .search-container .input-group,
+      .search-buttons {
+        width: 100%;
+        justify-content: center;
+      }
+      .search-buttons {
+        justify-content: flex-start;
+      }
     }
-
     /* Стили для чекбоксов */
     .checkbox-column {
-        text-align: center;
-        width: 50px; /* Фиксированная ширина для чекбоксов */
+      text-align: center;
+      width: 50px; /* Фиксированная ширина для чекбоксов */
     }
-
     .checkbox-column input[type="checkbox"] {
-        transform: scale(1.2); /* Увеличение размера чекбокса для лучшей видимости */
+      transform: scale(1.2); /* Увеличение размера чекбокса для лучшей видимости */
     }
-
     /* Общий стиль навигации */
     nav.u-menu {
-        background-color: #249a9a;
-        display: flex;
-        justify-content: center;
-        padding: 10px;
+      background-color: #249a9a;
+      display: flex;
+      justify-content: center;
+      padding: 10px;
     }
-
     nav.u-menu ul {
-        list-style: none;
-        display: flex;
-        padding: 0;
-        margin: 0;
+      list-style: none;
+      display: flex;
+      padding: 0;
+      margin: 0;
     }
-
     nav.u-menu ul li {
-        position: relative;
-        margin: 0 10px;
+      position: relative;
+      margin: 0 10px;
     }
-
     nav.u-menu ul li a {
-        color: white;
-        text-decoration: none;
-        padding: 10px 20px;
-        display: block;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      display: block;
     }
-
     nav.u-menu ul li a:hover {
-        background-color: #2cccc4;
-        border-radius: 5px;
+      background-color: #2cccc4;
+      border-radius: 5px;
     }
-
     /* Стили для выпадающего меню */
     nav.u-menu .dropdown {
-        position: relative;
+      position: relative;
     }
-
     nav.u-menu .dropdown-menu {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        background-color: #fff;
-        padding: 10px 0;
-        list-style: none;
-        margin: 0;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-        z-index: 10;
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #fff;
+      padding: 10px 0;
+      list-style: none;
+      margin: 0;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      z-index: 10;
     }
-
     nav.u-menu .dropdown-menu li {
-        margin: 0;
+      margin: 0;
     }
-
-    nav.u-menu .dropdown-menu li a {
-        color: #249a9a;
-        padding: 10px 20px;
-        display: block;
-        text-align: left;
+    nav.u-menu .dropdown-menu li a,
+    nav.u-menu .dropdown-menu li button {
+      color: #249a9a;
+      padding: 10px 20px;
+      display: block;
+      text-align: left;
+      background: none;
+      border: none;
+      width: 100%;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 14px;
     }
-
-    nav.u-menu .dropdown-menu li a:hover {
-        background-color: #2cccc4;
-        color: white;
+    nav.u-menu .dropdown-menu li a:hover,
+    nav.u-menu .dropdown-menu li button:hover {
+      background-color: #2cccc4;
+      color: white;
     }
-
     /* Показываем меню при наведении */
     nav.u-menu .dropdown:hover .dropdown-menu {
-        display: block;
+      display: block;
     }
-
-
+    /* Дополнительные стили для ссылок */
+    .text-decoration-none {
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
@@ -571,44 +450,47 @@
   </ul>
 </nav>
 <div class="container">
-  <table>
+  <!-- Информация об издательстве -->
+  <table class="table table-bordered">
     <tbody>
     <tr>
       <th>Название</th>
-      <td></td>
+      <td id="publisher-name-cell"></td>
     </tr>
     <tr>
       <th>Год Основания</th>
-      <td></td>
+      <td id="publisher-year-cell"></td>
     </tr>
     <tr>
       <th>Контактная Информация</th>
-      <td></td>
+      <td id="publisher-contact-cell"></td>
     </tr>
     <tr>
       <th>Город</th>
-      <td></td>
+      <td id="publisher-city-cell"></td>
     </tr>
     </tbody>
   </table>
-  <a href="Редактирование-издателя.html" class="btn">Редактировать</a>
-
+  <div class="btn-group mb-4">
+    <a href="Редактирование-издателя.html?name=" id="editPublisherBtn" class="btn btn-primary">Редактировать</a>
+    <button id="deletePublisherBtn" class="btn btn-danger" type="button">Удалить</button>
+  </div>
   <hr class="section-divider">
-  <!-- Форма поиска всегда видима, кнопки вне формы -->
+  <!-- Форма поиска книг -->
   <div class="search-container">
-    <form id="searchForm" class="input-group">
-      <input class="u-search-input form-control" type="search" name="search" value="" placeholder="Введите название книги">
+    <form id="searchForm" class="input-group" onsubmit="event.preventDefault();">
+      <input id="searchBookInput" class="u-search-input form-control" type="search" name="search" value="" placeholder="Введите название книги">
     </form>
     <div class="search-buttons">
-      <button id="searchButton" class="btn btn-outline-secondary">Искать</button>
-      <button id="resetButton" class="btn btn-secondary">Сбросить поиск</button>
+      <button id="searchButton" class="btn btn-outline-secondary" type="button">Искать</button>
+      <button id="resetButton" class="btn btn-secondary" type="button">Сбросить поиск</button>
     </div>
   </div>
-
-  <a href="#" class="btn">Удалить выбранные</a>
+  <!-- Кнопка удаления выбранных книг -->
+  <button id="deleteBooksBtn" class="btn btn-danger" type="button">Удалить выбранные</button>
+  <!-- Таблица книг -->
   <div class="table-responsive">
     <table class="table table-striped table-bordered">
-      <!-- Удалён colgroup для автоматического распределения ширин -->
       <thead class="table-dark">
       <tr>
         <th class="checkbox-column"><input type="checkbox" onclick="toggleAllCheckboxes(this)"></th>
@@ -620,11 +502,248 @@
         <th>ISBN <button class="sort-button btn btn-sm btn-light" data-column="isbn">▲</button></th>
       </tr>
       </thead>
-      <tbody class="u-table-body u-table-body-1">
+      <tbody class="u-table-body u-table-body-1" id="books-table-body">
       <!-- Динамическое содержимое -->
       </tbody>
     </table>
   </div>
 </div>
+<!-- Подключение Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<script>
+  // Функция для получения параметра из URL
+  function getParameterByName(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+  }
+
+  // Заполняет информацию об издательстве
+  function populatePublisherInfo(publisher) {
+    document.getElementById('publisher-name-cell').textContent = publisher.name || 'Не указано';
+    document.getElementById('publisher-year-cell').textContent = publisher.establishmentYear || 'Не указано';
+    document.getElementById('publisher-contact-cell').textContent = publisher.contactInfo || 'Не указано';
+    document.getElementById('publisher-city-cell').textContent = publisher.city || 'Не указано';
+    // Обновляем ссылку для редактирования, передавая имя издательства
+    document.getElementById('editPublisherBtn').href = 'Редактирование-издателя.html?name=' + encodeURIComponent(publisher.name);
+  }
+
+  // Запрашивает данные издательства по имени (имя передаётся в URL как параметр name)
+  function fetchPublisherData(publisherName) {
+    fetch(`/api/publishing-companies/${encodeURIComponent(publisherName)}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Издательство не найдено');
+        }
+        return response.json();
+      })
+      .then(publisher => {
+        populatePublisherInfo(publisher);
+      })
+      .catch(error => {
+        console.error('Ошибка при загрузке издательства:', error);
+        alert('Не удалось загрузить информацию об издательстве.');
+      });
+  }
+
+  // Получает список книг через API и фильтрует по издательству (сравнивая название издательства)
+  function fetchBooks(publisherName, search = '', sortColumn = 'name', sortOrder = 'asc') {
+    let apiUrl = '/api/books';
+    const params = new URLSearchParams();
+    if (search) {
+      params.append('search', search);
+    }
+    params.append('sort_column', sortColumn);
+    params.append('sort_order', sortOrder);
+    if ([...params].length > 0) {
+      apiUrl += '?' + params.toString();
+    }
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Ошибка получения книг: ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(books => {
+        // Фильтруем книги: оставляем те, где publishingCompany совпадает с именем издательства
+        const filtered = books.filter(book =>
+          book.publishingCompany && book.publishingCompany === publisherName
+        );
+        populateBooksTable(filtered);
+      })
+      .catch(error => {
+        console.error('Ошибка при загрузке книг:', error);
+        alert('Не удалось загрузить книги издательства.');
+      });
+  }
+
+  // Заполняет таблицу книг
+  function populateBooksTable(books) {
+    const tableBody = document.getElementById('books-table-body');
+    tableBody.innerHTML = '';
+    if (books.length === 0) {
+      const row = document.createElement('tr');
+      const cell = document.createElement('td');
+      cell.colSpan = 7;
+      cell.className = 'text-center';
+      cell.textContent = 'Книги не найдены.';
+      row.appendChild(cell);
+      tableBody.appendChild(row);
+      return;
+    }
+    books.forEach(book => {
+      const row = document.createElement('tr');
+      // Чекбокс
+      const checkboxTd = document.createElement('td');
+      checkboxTd.classList.add('checkbox-column');
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.value = book.isbn;
+      checkboxTd.appendChild(checkbox);
+      row.appendChild(checkboxTd);
+      // Название книги (ссылка)
+      const nameTd = document.createElement('td');
+      const link = document.createElement('a');
+      link.href = `Страница-книги.html?isbn=${book.isbn}`;
+      link.textContent = book.name || 'Без названия';
+      link.className = 'text-decoration-none';
+      link.style.color = '#0d6efd';
+      nameTd.appendChild(link);
+      row.appendChild(nameTd);
+      // Автор(ы)
+      const authorTd = document.createElement('td');
+      if (book.authors && Array.isArray(book.authors)) {
+        authorTd.textContent = book.authors.map(a => a.fio).join(', ');
+      } else {
+        authorTd.textContent = 'Не указано';
+      }
+      row.appendChild(authorTd);
+      // Дата издания
+      const yearTd = document.createElement('td');
+      yearTd.textContent = book.publicationYear || 'Не указано';
+      row.appendChild(yearTd);
+      // Издательство
+      const pubTd = document.createElement('td');
+      pubTd.textContent = book.publishingCompany || 'Не указано';
+      row.appendChild(pubTd);
+      // Количество экземпляров
+      const countTd = document.createElement('td');
+      countTd.textContent = (book.countOfBooks !== undefined) ? book.countOfBooks : 'Не указано';
+      row.appendChild(countTd);
+      // ISBN
+      const isbnTd = document.createElement('td');
+      isbnTd.textContent = book.isbn || 'Не указано';
+      row.appendChild(isbnTd);
+      tableBody.appendChild(row);
+    });
+  }
+
+  // Исправленная функция удаления издательства с использованием bulk-delete (массив из одного элемента)
+  function deletePublisher(publisherName) {
+    if (!confirm('Вы уверены, что хотите удалить это издательство? Все книги этого издательства также будут удалены!')) return;
+    fetch('/api/publishing-companies/bulk-delete', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify([publisherName])
+    })
+    .then(response => {
+      if (response.status === 204) {
+        alert('Издательство успешно удалено.');
+        window.location.href = 'Страница-издательств.html';
+      } else {
+        throw new Error('Ошибка при удалении издательства');
+      }
+    })
+    .catch(error => {
+      console.error('Ошибка при удалении издательства:', error);
+      alert('Не удалось удалить издательство.');
+    });
+  }
+
+  // Множественное удаление книг
+  function deleteSelectedBooks(publisherName) {
+    const selectedCheckboxes = document.querySelectorAll('#books-table-body input[type="checkbox"]:checked');
+    if (selectedCheckboxes.length === 0) {
+      alert('Выберите хотя бы одну книгу для удаления.');
+      return;
+    }
+    if (!confirm(`Вы уверены, что хотите удалить ${selectedCheckboxes.length} книгу(и)?`)) return;
+    const isbns = Array.from(selectedCheckboxes).map(cb => cb.value);
+    fetch('/api/books/bulk-delete', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(isbns)
+    })
+    .then(response => {
+      if (response.status === 204) {
+        alert('Выбранные книги успешно удалены.');
+        const searchValue = document.getElementById('searchBookInput').value.trim();
+        fetchBooks(publisherName, searchValue);
+      } else {
+        throw new Error('Ошибка при удалении книг.');
+      }
+    })
+    .catch(error => {
+      console.error('Ошибка при удалении книг:', error);
+      alert('Произошла ошибка при удалении книг.');
+    });
+  }
+
+  // Функция для выбора/снятия всех чекбоксов
+  function toggleAllCheckboxes(source) {
+    const checkboxes = document.querySelectorAll('#books-table-body input[type="checkbox"]');
+    checkboxes.forEach(cb => cb.checked = source.checked);
+  }
+  window.toggleAllCheckboxes = toggleAllCheckboxes;
+
+  // Обработчики поиска книг (оставляем без изменений)
+  document.addEventListener('DOMContentLoaded', function() {
+    const publisherName = getParameterByName('name');
+    if (!publisherName) {
+      alert('Имя издательства не указано в URL.');
+      return;
+    }
+    // Загружаем данные издательства
+    fetchPublisherData(publisherName);
+    // Загружаем список книг и фильтруем по издательству
+    fetchBooks(publisherName);
+    // Обработчик удаления издательства
+    document.getElementById('deletePublisherBtn').addEventListener('click', function() {
+      deletePublisher(publisherName);
+    });
+    // Обработчик поиска книг
+    document.getElementById('searchButton').addEventListener('click', function(e) {
+      e.preventDefault();
+      const searchValue = document.getElementById('searchBookInput').value.trim();
+      fetchBooks(publisherName, searchValue);
+    });
+    // Обработчик сброса поиска
+    document.getElementById('resetButton').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('searchBookInput').value = '';
+      fetchBooks(publisherName);
+    });
+    // Обработчик множественного удаления книг
+    document.getElementById('deleteBooksBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      deleteSelectedBooks(publisherName);
+    });
+    // Обработчики сортировки книг
+    const sortButtons = document.querySelectorAll('.sort-button');
+    sortButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const sortColumn = button.getAttribute('data-column');
+        let currentOrder = button.getAttribute('data-order') || 'asc';
+        const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+        button.setAttribute('data-order', newOrder);
+        button.textContent = newOrder === 'asc' ? '▲' : '▼';
+        const searchValue = document.getElementById('searchBookInput').value.trim();
+        fetchBooks(publisherName, searchValue, sortColumn, newOrder);
+      });
+    });
+  });
+</script>
 </body>
 </html>
