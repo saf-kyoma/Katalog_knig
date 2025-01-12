@@ -27,3 +27,5 @@ backfront_code.txt
 all_code.txt
 
 application.properties
+
+*.csv
