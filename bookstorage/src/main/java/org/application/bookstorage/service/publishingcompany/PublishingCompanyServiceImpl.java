@@ -1,7 +1,9 @@
 package org.application.bookstorage.service.publishingcompany;
 
 import lombok.RequiredArgsConstructor;
+import org.application.bookstorage.dao.Book;
 import org.application.bookstorage.dao.PublishingCompany;
+import org.application.bookstorage.repository.BookRepository;
 import org.application.bookstorage.repository.PublishingCompanyRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.util.Optional;
 public class PublishingCompanyServiceImpl implements PublishingCompanyService {
 
     private final PublishingCompanyRepository publishingCompanyRepository;
+    private final BookRepository bookRepository;
 
     @Override
     public PublishingCompany createPublishingCompany(PublishingCompany company) {
@@ -32,21 +35,55 @@ public class PublishingCompanyServiceImpl implements PublishingCompanyService {
     }
 
     @Override
-    public PublishingCompany updatePublishingCompany(String name, PublishingCompany companyDetails) {
-        PublishingCompany company = publishingCompanyRepository.findById(name)
-                .orElseThrow(() -> new RuntimeException("Издательство не найдено с именем " + name));
-        company.setEstablishmentYear(companyDetails.getEstablishmentYear());
-        company.setContactInfo(companyDetails.getContactInfo());
-        company.setCity(companyDetails.getCity());
-        // Обновление других полей при необходимости
-        return publishingCompanyRepository.save(company);
+    public PublishingCompany updatePublishingCompany(String originalName, PublishingCompany updatedCompany) {
+        // Находим исходное издательство по старому названию
+        PublishingCompany oldCompany = publishingCompanyRepository.findById(originalName)
+                .orElseThrow(() -> new RuntimeException("Издательство не найдено с именем " + originalName));
+
+        String newName = updatedCompany.getName();
+
+        if (!originalName.equals(newName)) {
+            // Проверяем, что новое имя не занято
+            if (publishingCompanyRepository.existsById(newName)) {
+                throw new RuntimeException("Издательство с названием " + newName + " уже существует.");
+            }
+
+            // Создаём новое издательство
+            PublishingCompany newCompany = new PublishingCompany();
+            newCompany.setName(newName);
+            newCompany.setEstablishmentYear(updatedCompany.getEstablishmentYear());
+            newCompany.setContactInfo(updatedCompany.getContactInfo());
+            newCompany.setCity(updatedCompany.getCity());
+            newCompany.setBooks(oldCompany.getBooks());
+
+            // Обновляем связь в книгах
+            for (Book book : oldCompany.getBooks()) {
+                book.setPublishingCompany(newCompany);
+            }
+
+            // Сохраняем новое издательство
+            publishingCompanyRepository.save(newCompany);
+
+            // Удаляем старое издательство
+            publishingCompanyRepository.delete(oldCompany);
+
+            return newCompany;
+        } else {
+            // Если название не меняется, просто обновляем остальные поля
+            oldCompany.setEstablishmentYear(updatedCompany.getEstablishmentYear());
+            oldCompany.setContactInfo(updatedCompany.getContactInfo());
+            oldCompany.setCity(updatedCompany.getCity());
+            return publishingCompanyRepository.save(oldCompany);
+        }
     }
 
     @Override
-    public void deletePublishingCompany(String name) {
-        PublishingCompany company = publishingCompanyRepository.findById(name)
-                .orElseThrow(() -> new RuntimeException("Издательство не найдено с именем " + name));
-        publishingCompanyRepository.delete(company);
+    public void deletePublishingCompanies(List<String> names) {
+        List<PublishingCompany> companies = publishingCompanyRepository.findAllById(names);
+        if (companies.size() != names.size()) {
+            throw new RuntimeException("Некоторые издательства не найдены для удаления.");
+        }
+        publishingCompanyRepository.deleteAll(companies);
     }
 
     @Override

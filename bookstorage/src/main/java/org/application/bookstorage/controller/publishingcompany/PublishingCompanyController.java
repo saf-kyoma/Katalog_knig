@@ -28,7 +28,6 @@ public class PublishingCompanyController {
             PublishingCompanyDTO responseDTO = mapToDTO(createdCompany);
             return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
         } catch (RuntimeException e) {
-            // Логирование ошибки можно добавить здесь
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -51,28 +50,29 @@ public class PublishingCompanyController {
         return new ResponseEntity<>(companies, HttpStatus.OK);
     }
 
-    // Обновление издательства
-    @PutMapping("/{name}")
-    public ResponseEntity<PublishingCompanyDTO> updatePublishingCompany(@PathVariable String name, @Valid @RequestBody PublishingCompanyDTO companyDTO) {
+    // Обновление издательства. Путь содержит оригинальное имя для идентификации объекта, даже если пользователь меняет название.
+    @PutMapping("/{originalName}")
+    public ResponseEntity<PublishingCompanyDTO> updatePublishingCompany(
+            @PathVariable String originalName,
+            @Valid @RequestBody PublishingCompanyDTO companyDTO) {
         try {
             PublishingCompany companyDetails = mapToEntity(companyDTO);
-            PublishingCompany updatedCompany = publishingCompanyService.updatePublishingCompany(name, companyDetails);
+            PublishingCompany updatedCompany = publishingCompanyService.updatePublishingCompany(originalName, companyDetails);
             PublishingCompanyDTO responseDTO = mapToDTO(updatedCompany);
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         } catch (RuntimeException e) {
-            // Логирование ошибки можно добавить здесь
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    // Удаление издательства
-    @DeleteMapping("/{name}")
-    public ResponseEntity<Void> deletePublishingCompany(@PathVariable String name) {
+    // Удаление издательств (bulk-delete)
+    @DeleteMapping("/bulk-delete")
+    public ResponseEntity<Void> deletePublishingCompanies(@RequestBody List<String> names) {
         try {
-            publishingCompanyService.deletePublishingCompany(name);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            publishingCompanyService.deletePublishingCompanies(names);
+            return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 

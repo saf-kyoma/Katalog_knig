@@ -7,9 +7,9 @@ import org.application.bookstorage.service.author.AuthorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,20 +37,49 @@ public class AuthorController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Получение всех авторов
+    // Получение всех авторов с поддержкой сортировки
     @GetMapping
-    public ResponseEntity<List<AuthorDTO>> getAllAuthors() {
-        List<AuthorDTO> authors = authorService.getAllAuthors()
-                .stream()
+    public ResponseEntity<List<AuthorDTO>> getAllAuthors(
+            @RequestParam(required = false, name = "sort_column") String sortColumn,
+            @RequestParam(required = false, name = "sort_order") String sortOrder) {
+        List<Author> authors = authorService.getAllAuthors();
+
+        // Применяем сортировку, если она задана
+        if (sortColumn != null && sortOrder != null) {
+            Comparator<Author> comparator = getComparator(sortColumn);
+            if ("desc".equalsIgnoreCase(sortOrder)) {
+                comparator = comparator.reversed();
+            }
+            authors = authors.stream()
+                    .sorted(comparator)
+                    .collect(Collectors.toList());
+        }
+
+        List<AuthorDTO> authorDTOs = authors.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
-        return new ResponseEntity<>(authors, HttpStatus.OK);
+        return new ResponseEntity<>(authorDTOs, HttpStatus.OK);
     }
 
     // Добавление метода поиска авторов
     @GetMapping("/search")
-    public ResponseEntity<List<AuthorDTO>> searchAuthors(@RequestParam("q") String query) {
-        List<Author> authors = authorService.searchAuthorsByFio(query);
+    public ResponseEntity<List<AuthorDTO>> searchAuthors(
+            @RequestParam("q") String query,
+            @RequestParam(required = false, name = "sort_column") String sortColumn,
+            @RequestParam(required = false, name = "sort_order") String sortOrder) {
+        List<Author> authors = authorService.searchAuthors(query);
+
+        // Применяем сортировку, если она задана
+        if (sortColumn != null && sortOrder != null) {
+            Comparator<Author> comparator = getComparator(sortColumn);
+            if ("desc".equalsIgnoreCase(sortOrder)) {
+                comparator = comparator.reversed();
+            }
+            authors = authors.stream()
+                    .sorted(comparator)
+                    .collect(Collectors.toList());
+        }
+
         List<AuthorDTO> authorDTOs = authors.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
@@ -80,7 +109,20 @@ public class AuthorController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+    @DeleteMapping("/bulk-delete")
+    public ResponseEntity<Void> deleteAuthors(
+            @RequestBody List<Integer> authorIds,
+            @RequestParam(name = "removeEverything", required = false, defaultValue = "false") boolean removeEverything
+    ) {
+        try {
+            // Вызываем сервисный метод
+            authorService.deleteAuthors(authorIds, removeEverything);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            // Если среди authorIds есть несуществующие авторы, либо другие ошибки
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
     // Ручной маппинг DTO в сущность
     private Author mapToEntity(AuthorDTO dto) {
         Author author = new Author();
@@ -101,5 +143,23 @@ public class AuthorController {
         dto.setCountry(author.getCountry());
         dto.setNickname(author.getNickname());
         return dto;
+    }
+
+    /**
+     * Возвращает компаратор для сортировки авторов по заданному столбцу.
+     */
+    private Comparator<Author> getComparator(String sortColumn) {
+        switch (sortColumn.toLowerCase()) {
+            case "fio":
+                return Comparator.comparing(Author::getFio, Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER));
+            case "birthdate":
+                return Comparator.comparing(Author::getBirthDate, Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER));
+            case "country":
+                return Comparator.comparing(Author::getCountry, Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER));
+            case "nickname":
+                return Comparator.comparing(Author::getNickname, Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER));
+            default:
+                return Comparator.comparing(Author::getFio, Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER));
+        }
     }
 }

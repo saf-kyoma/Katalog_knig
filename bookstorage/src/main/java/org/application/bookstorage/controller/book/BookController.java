@@ -1,13 +1,7 @@
 package org.application.bookstorage.controller.book;
 
 import lombok.RequiredArgsConstructor;
-import org.application.bookstorage.dao.Author;
-import org.application.bookstorage.dao.Authorship;
-import org.application.bookstorage.dao.Book;
-import org.application.bookstorage.dao.BookStyles;
-import org.application.bookstorage.dao.BookStylesId;
-import org.application.bookstorage.dao.Styles;
-import org.application.bookstorage.dao.PublishingCompany;
+import org.application.bookstorage.dao.*;
 import org.application.bookstorage.dto.BookDTO;
 import org.application.bookstorage.dto.AuthorDTO;
 import org.application.bookstorage.service.author.AuthorService;
@@ -37,6 +31,22 @@ public class BookController {
     private final StylesService stylesService;
     private final BookStylesService bookStylesService;
 
+
+    /**
+     * Эндпоинт для массового удаления книг.
+     * Метод: DELETE
+     * URL: /api/books/bulk-delete
+     * Тело запроса: список ISBN книг для удаления
+     */
+    @DeleteMapping("/bulk-delete")
+    public ResponseEntity<Void> deleteBooks(@RequestBody List<String> isbns) {
+        try {
+            bookService.deleteBooks(isbns);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
     // Создание книги
     @PostMapping
     public ResponseEntity<BookDTO> createBook(@Valid @RequestBody BookDTO bookDTO) {
@@ -158,16 +168,67 @@ public class BookController {
             // Получение или создание издательства
             PublishingCompany publishingCompany = getOrCreatePublishingCompany(bookDTO.getPublishingCompany());
 
-            // Преобразование DTO в сущность
-            Book bookDetails = mapToEntity(bookDTO);
-            bookDetails.setPublishingCompany(publishingCompany);
+            // Получаем существующую книгу
+            Book existingBook = bookService.getBookByIsbn(isbn)
+                    .orElseThrow(() -> new RuntimeException("Книга не найдена с ISBN " + isbn));
 
-            // Обновление книги
-            Book updatedBook = bookService.updateBook(isbn, bookDetails);
+            // Обновляем основные поля
+            existingBook.setName(bookDTO.getName());
+            existingBook.setPublicationYear(bookDTO.getPublicationYear());
+            existingBook.setAgeLimit(bookDTO.getAgeLimit());
+            existingBook.setPublishingCompany(publishingCompany);
+            existingBook.setPageCount(bookDTO.getPageCount());
+            existingBook.setLanguage(bookDTO.getLanguage());
+            existingBook.setCost(bookDTO.getCost());
+            existingBook.setCountOfBooks(bookDTO.getCountOfBooks());
+
+            // 1. Обновляем авторов:
+            // Очищаем существующие авторства
+            existingBook.getAuthorships().clear();
+            // Для каждого автора из DTO либо получаем существующего, либо создаём нового
+            List<Authorship> newAuthorships = bookDTO.getAuthors().stream().map(authorDTO -> {
+                Author author;
+                if (authorDTO.getId() != null) {
+                    author = authorService.getAuthorById(authorDTO.getId())
+                            .orElseThrow(() -> new RuntimeException("Автор не найден с ID: " + authorDTO.getId()));
+                } else {
+                    author = new Author();
+                    author.setFio(authorDTO.getFio());
+                    author.setBirthDate(authorDTO.getBirthDate());
+                    author.setCountry(authorDTO.getCountry());
+                    author.setNickname(authorDTO.getNickname());
+                    author = authorService.createAuthor(author);
+                }
+                Authorship authorship = new Authorship();
+                // Формируем составной ключ (при условии что ISBN книги уже установлен в existingBook)
+                authorship.setId(new AuthorshipId(existingBook.getIsbn(), author.getId()));
+                authorship.setBook(existingBook);
+                authorship.setAuthor(author);
+                return authorship;
+            }).collect(Collectors.toList());
+            // Добавляем новые авторства в книгу
+            existingBook.getAuthorships().addAll(newAuthorships);
+
+            // 2. Обновляем жанры (BookStyles):
+            // Очищаем существующие связи жанров
+            existingBook.getBookStyles().clear();
+            List<String> genres = bookDTO.getGenres();
+            for (String genreName : genres) {
+                // Ищем стиль по названию или создаём, если не найден
+                Styles style = stylesService.getStyleByName(genreName)
+                        .orElseGet(() -> stylesService.createStyle(new Styles(null, genreName, null)));
+                BookStyles bookStyle = new BookStyles();
+                bookStyle.setId(new BookStylesId(existingBook.getIsbn(), style.getId()));
+                bookStyle.setBook(existingBook);
+                bookStyle.setStyleEntity(style);
+                existingBook.getBookStyles().add(bookStyle);
+            }
+
+            // Сохраняем обновлённую книгу
+            Book updatedBook = bookService.updateBook(isbn, existingBook);
             BookDTO responseDTO = mapToDTO(updatedBook);
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         } catch (RuntimeException e) {
-            // Логирование ошибки
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

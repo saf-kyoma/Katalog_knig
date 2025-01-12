@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html style="font-size: 16px;" lang="ru">
 <head>
-  <meta charset="utf-8">
+  <!-- (Существующие мета-теги и ссылки на CSS/JS остаются без изменений) -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Каталог книг">
   <title>Каталог</title>
@@ -11,7 +12,7 @@
 
   <!-- Подключение пользовательских стилей -->
   <link rel="stylesheet" href="nicepage.css" media="screen">
-  <link rel="stylesheet" href="index.css" media="screen">
+  <link rel="stylesheet" href="Каталог.css" media="screen">
 
   <!-- Подключение jQuery и Nicepage JS -->
   <script class="u-script" type="text/javascript" src="jquery.js" defer></script>
@@ -28,6 +29,7 @@
   <meta data-intl-tel-input-cdn-path="intlTelInput/">
 
   <style>
+    /* (Существующие стили остаются без изменений) */
     body {
         font-family: Arial, sans-serif;
         margin: 0;
@@ -88,7 +90,6 @@
         border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
-        width: 16.66%; /* Каждая колонка равной ширины */
     }
 
     table th {
@@ -180,6 +181,89 @@
             justify-content: flex-start;
         }
     }
+
+    /* Стили для чекбоксов */
+    .checkbox-column {
+        text-align: center;
+        width: 50px; /* Фиксированная ширина для чекбоксов */
+    }
+
+    .checkbox-column input[type="checkbox"] {
+        transform: scale(1.2); /* Увеличение размера чекбокса для лучшей видимости */
+    }
+
+    /* Общий стиль навигации */
+    nav.u-menu {
+        background-color: #249a9a;
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    nav.u-menu ul {
+        list-style: none;
+        display: flex;
+        padding: 0;
+        margin: 0;
+    }
+
+    nav.u-menu ul li {
+        position: relative;
+        margin: 0 10px;
+    }
+
+    nav.u-menu ul li a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        display: block;
+    }
+
+    nav.u-menu ul li a:hover {
+        background-color: #2cccc4;
+        border-radius: 5px;
+    }
+
+    /* Стили для выпадающего меню */
+    nav.u-menu .dropdown {
+        position: relative;
+    }
+
+    nav.u-menu .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #fff;
+        padding: 10px 0;
+        list-style: none;
+        margin: 0;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        z-index: 10;
+    }
+
+    nav.u-menu .dropdown-menu li {
+        margin: 0;
+    }
+
+    nav.u-menu .dropdown-menu li a {
+        color: #249a9a;
+        padding: 10px 20px;
+        display: block;
+        text-align: left;
+    }
+
+    nav.u-menu .dropdown-menu li a:hover {
+        background-color: #2cccc4;
+        color: white;
+    }
+
+    /* Показываем меню при наведении */
+    nav.u-menu .dropdown:hover .dropdown-menu {
+        display: block;
+    }
+
   </style>
 </head>
 
@@ -187,23 +271,22 @@
 
 <header class="u-header" id="sec-233d" data-animation-name="" data-animation-duration="0" data-animation-delay="0" data-animation-direction="">
   <h1>Каталог</h1>
-  <nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1" data-responsive-from="XS" data-submenu-level="on-click">
-    <ul>
-      <li><a href="Каталог.html">Каталог</a></li>
-      <li><a href="Добавление-карточки-книги.html">Добавление книги</a></li>
-      <li><a href="Страница-авторов.html">Авторы</a></li>
-      <li><a href="Страница-издательств.html">Издатели</a></li>
-      <li><a href="Вход-в-систему.html">Войти</a></li>
+  <nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1 d-flex justify-content-center" data-responsive-from="XS" data-submenu-level="on-click">
+    <ul class="d-flex justify-content-center">
+      <li class="mx-2"><a href="Каталог.html">Каталог</a></li>
+      <li class="mx-2"><a href="Страница-авторов.html">Авторы</a></li>
+      <li class="mx-2"><a href="Страница-издательств.html">Издательства</a></li>
+      <li class="mx-2"><a href="Вход-в-систему.html">Войти</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle">База данных</a>
+        <ul class="dropdown-menu">
+          <li><button id="DBadd" class="btn btn-outline-secondary">Загрузить базу данных</button></li>
+          <li><button id="DBout" class="btn btn-outline-secondary">Выгрузить базу данных</button></li>
+        </ul>
+      </li>
     </ul>
-    <style class="menu-style">@media (max-width: 539px) {
-                        [data-responsive-from="XS"] .u-nav-container {
-                            display: none;
-                        }
-                        [data-responsive-from="XS"] .menu-collapse {
-                            display: block;
-                        }
-                    }</style>
   </nav>
+
 
   <div class="u-clearfix u-sheet u-valign-top u-sheet-1">
     <!-- Подключение Bootstrap JS -->
@@ -224,18 +307,14 @@
 
 <section class="u-clearfix u-section-1" id="sec-25c7">
   <div class="container mt-4">
+    <a href="Добавление-карточки-книги.html" id="searchButtonBook" class="btn btn-outline-secondary">Добавить книгу</a>
+    <a href="#" id="deleteSelectedButton" class="btn">Удалить выбранные</a>
     <div class="table-responsive">
       <table class="table table-striped table-bordered">
-        <colgroup>
-          <col style="width: 16.66%;">
-          <col style="width: 16.66%;">
-          <col style="width: 16.66%;">
-          <col style="width: 16.66%;">
-          <col style="width: 16.66%;">
-          <col style="width: 16.66%;">
-        </colgroup>
+        <!-- Удалён colgroup для автоматического распределения ширин -->
         <thead class="table-dark">
         <tr>
+          <th class="checkbox-column"><input type="checkbox" onclick="toggleAllCheckboxes(this)"></th>
           <th>Название книги <button class="sort-button btn btn-sm btn-light" data-column="name">▲</button></th>
           <th>Автор <button class="sort-button btn btn-sm btn-light" data-column="author">▲</button></th>
           <th>Дата издания <button class="sort-button btn btn-sm btn-light" data-column="publication_year">▲</button></th>
@@ -272,6 +351,15 @@
 
 <!-- Пользовательский JavaScript для получения и отображения книг -->
 <script>
+  /**
+   * Глобальная функция для выбора/снятия всех чекбоксов.
+   * Сделана глобальной, чтобы была доступна из HTML.
+   */
+  function toggleAllCheckboxes(source) {
+      const checkboxes = document.querySelectorAll('.u-table-body-1 input[type="checkbox"]');
+      checkboxes.forEach(checkbox => checkbox.checked = source.checked);
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
     let currentSortColumn = 'name';
     let currentSortOrder = 'asc';
@@ -369,7 +457,7 @@
       if (books.length === 0) {
         const row = document.createElement('tr');
         const cell = document.createElement('td');
-        cell.colSpan = 6;
+        cell.colSpan = 7; // Увеличено на 1 из-за добавленной колонки с чекбоксами
         cell.className = 'text-center';
         cell.textContent = 'Книги не найдены.';
         row.appendChild(cell);
@@ -379,6 +467,15 @@
 
       books.forEach(book => {
         const row = document.createElement('tr');
+
+        // Чекбокс
+        const checkboxTd = document.createElement('td');
+        checkboxTd.classList.add('checkbox-column');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = book.isbn; // Или другой уникальный идентификатор
+        checkboxTd.appendChild(checkbox);
+        row.appendChild(checkboxTd);
 
         // Название книги (гиперссылка)
         const nameCell = document.createElement('td');
@@ -475,6 +572,57 @@
     }
 
     /**
+     * Обработчик нажатия на кнопку "Удалить выбранные".
+     */
+    function handleDeleteSelected(event) {
+        event.preventDefault(); // Предотвращаем переход по ссылке
+
+        // Собираем все выбранные чекбоксы
+        const selectedCheckboxes = document.querySelectorAll('.u-table-body-1 input[type="checkbox"]:checked');
+        if (selectedCheckboxes.length === 0) {
+            alert('Пожалуйста, выберите хотя бы одну книгу для удаления.');
+            return;
+        }
+
+        // Подтверждаем удаление
+        const confirmation = confirm(`Вы уверены, что хотите удалить ${selectedCheckboxes.length} книгу(и)?`);
+        if (!confirmation) {
+            return;
+        }
+
+        // Собираем ISBN выбранных книг
+        const isbns = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
+
+        // Отправляем запрос на массовое удаление
+        fetch('/api/books/bulk-delete', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(isbns)
+        })
+        .then(response => {
+            if (response.status === 204) {
+                // Успешное удаление
+                alert('Выбранные книги успешно удалены.');
+                // Обновляем таблицу
+                fetchBooks({
+                    search: currentSearch,
+                    sort_column: currentSortColumn,
+                    sort_order: currentSortOrder
+                });
+            } else {
+                // Ошибка при удалении
+                alert('Произошла ошибка при удалении книг.');
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка при выполнении запроса:', error);
+            alert('Произошла ошибка при удалении книг.');
+        });
+    }
+
+    /**
      * Инициализирует обработчики событий для формы поиска и кнопок сортировки.
      */
     function initializeEventListeners() {
@@ -502,6 +650,12 @@
         const columnName = button.getAttribute('data-column');
         button.addEventListener('click', () => handleSort(columnName, button));
       });
+
+      // Обработчик кнопки "Удалить выбранные"
+      const deleteButton = document.getElementById('deleteSelectedButton');
+      if (deleteButton) {
+          deleteButton.addEventListener('click', handleDeleteSelected);
+      }
     }
 
     // Запуск и первичное наполнение таблицы

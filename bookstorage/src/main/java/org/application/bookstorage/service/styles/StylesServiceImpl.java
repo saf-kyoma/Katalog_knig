@@ -63,4 +63,9 @@ public class StylesServiceImpl implements StylesService {
         // Если совпадений нет, возвращаем пустой Optional
         return Optional.empty();
     }
+
+    @Override
+    public List<Styles> searchStylesByName(String name) {
+        return stylesRepository.findByNameContainingIgnoreCase(name);
+    }
 }

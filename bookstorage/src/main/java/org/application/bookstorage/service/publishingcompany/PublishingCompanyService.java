@@ -10,6 +10,6 @@ public interface PublishingCompanyService {
     Optional<PublishingCompany> getPublishingCompanyByName(String name);
     List<PublishingCompany> getAllPublishingCompanies();
     PublishingCompany updatePublishingCompany(String name, PublishingCompany company);
-    void deletePublishingCompany(String name);
+    void deletePublishingCompanies(List<String> names);
     List<PublishingCompany> searchPublishingCompaniesByName(String name);
 }
