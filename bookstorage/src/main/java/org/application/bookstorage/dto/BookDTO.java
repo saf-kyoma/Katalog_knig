@@ -5,6 +5,8 @@ import lombok.Data;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -15,7 +17,7 @@ public class BookDTO {
     @NotBlank(message = "Название книги не может быть пустым")
     private String name;
 
-    private String publicationYear;
+    private LocalDate publicationYear;
 
     private float ageLimit;
 
@@ -26,7 +28,7 @@ public class BookDTO {
 
     private String language;
 
-    private float cost;
+    private BigDecimal cost;
 
     private int countOfBooks;
 

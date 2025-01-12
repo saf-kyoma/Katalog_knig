@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -20,7 +21,7 @@ public class PublishingCompany {
     private String name;
 
     @Column(name = "establishment_year")
-    private int establishmentYear;
+    private LocalDate establishmentYear;
 
     @Column(name = "contact_info")
     private String contactInfo;

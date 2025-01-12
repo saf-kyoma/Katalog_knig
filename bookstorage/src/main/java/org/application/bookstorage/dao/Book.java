@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Set;
 
 
@@ -25,7 +27,7 @@ public class Book {
      private String name;
 
      @Column(name = "publication_year")
-     private String publicationYear; // Изменено на String для соответствия SQL типу date
+     private LocalDate publicationYear;
 
      @Column(name = "age_limit")
      private float ageLimit; // Изменено на float для соответствия SQL типу real
@@ -42,7 +44,7 @@ public class Book {
      private String language;
 
      @Column(name = "cost")
-     private float cost;
+     private BigDecimal cost;
 
      @Column(name = "count_of_books")
      private int countOfBooks;
