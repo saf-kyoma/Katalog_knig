@@ -259,7 +259,7 @@
             background: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         table {
             width: 100%;
@@ -354,7 +354,7 @@
             width: 50px; /* Фиксированная ширина для чекбоксов */
         }
         .checkbox-column input[type="checkbox"] {
-            transform: scale(1.2); /* Увеличение размера чекбокса для лучшей видимости */
+            transform: scale(1.2);
         }
         /* Общий стиль навигации */
         nav.u-menu {
@@ -383,7 +383,6 @@
             background-color: #2cccc4;
             border-radius: 5px;
         }
-        /* Стили для выпадающего меню */
         nav.u-menu .dropdown {
             position: relative;
         }
@@ -413,7 +412,6 @@
             background-color: #2cccc4;
             color: white;
         }
-        /* Показываем меню при наведении */
         nav.u-menu .dropdown:hover .dropdown-menu {
             display: block;
         }
@@ -432,8 +430,14 @@
         <li class="dropdown mx-2 flex-fill text-center">
             <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">База данных</a>
             <ul class="dropdown-menu">
-                <li><button id="DBadd" class="btn dropdown-item">Загрузить базу данных</button></li>
-                <li><button id="DBout" class="btn dropdown-item">Выгрузить базу данных</button></li>
+                <li>
+                    <!-- Кнопка "Загрузить базу данных" (import CSV) -->
+                    <button id="DBadd" class="btn dropdown-item">Загрузить базу данных</button>
+                </li>
+                <li>
+                    <!-- Кнопка "Выгрузить базу данных" (export CSV) -->
+                    <button id="DBout" class="btn dropdown-item">Выгрузить базу данных</button>
+                </li>
             </ul>
         </li>
     </ul>
@@ -484,6 +488,7 @@
         </p>
     </div>
 </footer>
+
 <!-- Скрипты валидации и функциональности -->
 <script>
     // Функция для получения параметра из URL
@@ -512,7 +517,6 @@
 
     // Функция для заполнения формы данными автора
     function populateForm(author) {
-      // Обновление полей формы согласно существующим id
       document.getElementById('name').value = author.fio || '';
       document.getElementById('publicationYear').value = author.birthDate || '';
       document.getElementById('contry').value = author.country || '';
@@ -527,7 +531,6 @@
         alert('ID автора не указан.');
         return;
       }
-      // Собираем данные из формы, используя корректные id
       const authorData = {
         id: authorId,
         fio: document.getElementById('name').value.trim(),
@@ -535,7 +538,6 @@
         country: document.getElementById('contry').value.trim(),
         nickname: document.getElementById('Nickname').value.trim()
       };
-      // Отправляем PUT-запрос для обновления автора
       fetch(`/api/authors/${encodeURIComponent(authorId)}`, {
         method: 'PUT',
         headers: {
@@ -550,7 +552,6 @@
         return response.json();
       })
       .then(data => {
-        // Отображаем сообщение об успешном обновлении
         const successMsg = document.querySelector('.u-form-send-success');
         successMsg.style.display = 'block';
         setTimeout(() => {
@@ -559,7 +560,6 @@
       })
       .catch(error => {
         console.error('Ошибка:', error);
-        // Отображаем сообщение об ошибке
         const errorMsg = document.querySelector('.u-form-send-error');
         errorMsg.style.display = 'block';
         setTimeout(() => {
@@ -577,6 +577,53 @@
       }
       fetchAuthorData(authorId);
     });
+
+    // *** ДОБАВЛЕННЫЙ КОД ДЛЯ КНОПОК ИМПОРТА/ЭКСПОРТА ***
+    document.addEventListener('DOMContentLoaded', function() {
+      const importBtn = document.getElementById('DBadd');
+      const exportBtn = document.getElementById('DBout');
+
+      // При нажатии на "Загрузить базу данных" (import)
+      importBtn.addEventListener('click', function() {
+        fetch('/api/csv/import', {
+          method: 'POST'
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Ошибка при импорте базы данных из CSV');
+          }
+          return response.text();
+        })
+        .then(text => {
+          alert('Импорт успешно завершён: ' + text);
+        })
+        .catch(error => {
+          console.error('Ошибка:', error);
+          alert('Не удалось выполнить импорт: ' + error.message);
+        });
+      });
+
+      // При нажатии на "Выгрузить базу данных" (export)
+      exportBtn.addEventListener('click', function() {
+        fetch('/api/csv/export', {
+          method: 'POST'
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Ошибка при экспорте базы данных в CSV');
+          }
+          return response.text();
+        })
+        .then(text => {
+          alert('Экспорт успешно завершён: ' + text);
+        })
+        .catch(error => {
+          console.error('Ошибка:', error);
+          alert('Не удалось выполнить экспорт: ' + error.message);
+        });
+      });
+    });
+    // *** КОНЕЦ ДОБАВЛЕННОГО КОДА ***
 </script>
 </body>
 </html>
