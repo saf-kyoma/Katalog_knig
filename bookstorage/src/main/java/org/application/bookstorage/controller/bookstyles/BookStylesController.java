@@ -15,6 +15,10 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// LOGGING ADDED
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/book-styles")
 @RequiredArgsConstructor
@@ -24,11 +28,16 @@ public class BookStylesController {
     private final BookService bookService;
     private final StylesService stylesService;
 
+    // LOGGING ADDED
+    private static final Logger logger = LoggerFactory.getLogger(BookStylesController.class);
+
     // Создание связи книги со стилем
     @PostMapping
     public ResponseEntity<BookStylesDTO> createBookStyles(@Valid @RequestBody BookStylesDTO bookStylesDTO) {
+        // LOGGING ADDED
+        logger.info("Получен запрос на создание связи книги со стилем: {}", bookStylesDTO);
+
         try {
-            // Проверка существования книги и стиля
             BookStyles bookStyles = mapToEntity(bookStylesDTO);
             BookStylesId id = new BookStylesId(bookStylesDTO.getBookIsbn(), bookStylesDTO.getStyleId());
 
@@ -42,10 +51,15 @@ public class BookStylesController {
 
             // Создание связи
             BookStyles createdBookStyles = bookStylesService.createBookStyles(bookStyles);
+
+            // LOGGING ADDED
+            logger.info("Связь книги со стилем успешно создана: {}", id);
+
             BookStylesDTO responseDTO = mapToDTO(createdBookStyles);
             return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
         } catch (RuntimeException e) {
-            // Логирование ошибки можно добавить здесь
+            // LOGGING ADDED
+            logger.error("Ошибка при создании связи книги со стилем: {}", e.getMessage(), e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -53,25 +67,47 @@ public class BookStylesController {
     // Получение связи книги со стилем по ключу
     @GetMapping("/{bookIsbn}/{styleId}")
     public ResponseEntity<BookStylesDTO> getBookStylesById(@PathVariable String bookIsbn, @PathVariable Long styleId) {
+        // LOGGING ADDED
+        logger.info("Получен запрос на получение связи книги со стилем: bookIsbn={}, styleId={}", bookIsbn, styleId);
+
         BookStylesId id = new BookStylesId(bookIsbn, styleId);
         return bookStylesService.getBookStylesById(id)
-                .map(bookStyles -> new ResponseEntity<>(mapToDTO(bookStyles), HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .map(bookStyles -> {
+                    // LOGGING ADDED
+                    logger.info("Связь книги со стилем найдена: {}", id);
+                    return new ResponseEntity<>(mapToDTO(bookStyles), HttpStatus.OK);
+                })
+                .orElseGet(() -> {
+                    // LOGGING ADDED
+                    logger.warn("Связь книги со стилем не найдена: {}", id);
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                });
     }
 
     // Получение всех связей книг со стилями
     @GetMapping
     public ResponseEntity<List<BookStylesDTO>> getAllBookStyles() {
+        // LOGGING ADDED
+        logger.info("Получен запрос на получение всех связей книги со стилями");
+
         List<BookStylesDTO> bookStyles = bookStylesService.getAllBookStyles()
                 .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+
+        // LOGGING ADDED
+        logger.info("Возвращено {} связей книги со стилями", bookStyles.size());
+
         return new ResponseEntity<>(bookStyles, HttpStatus.OK);
     }
 
     // Обновление связи книги со стилем
     @PutMapping("/{bookIsbn}/{styleId}")
     public ResponseEntity<BookStylesDTO> updateBookStyles(@PathVariable String bookIsbn, @PathVariable Long styleId, @Valid @RequestBody BookStylesDTO bookStylesDTO) {
+        // LOGGING ADDED
+        logger.info("Получен запрос на обновление связи книги со стилем: bookIsbn={}, styleId={}. Новые данные: {}",
+                bookIsbn, styleId, bookStylesDTO);
+
         try {
             BookStylesId oldId = new BookStylesId(bookIsbn, styleId);
             BookStyles bookStyles = new BookStyles();
@@ -80,16 +116,21 @@ public class BookStylesController {
             // Проверка существования новой книги и нового стиля
             bookStyles.setBook(bookService.getBookByIsbn(bookStylesDTO.getBookIsbn())
                     .orElseThrow(() -> new RuntimeException("Книга не найдена: " + bookStylesDTO.getBookIsbn())));
-
             bookStyles.setStyleEntity(stylesService.getStyleById(bookStylesDTO.getStyleId())
                     .orElseThrow(() -> new RuntimeException("Стиль не найден: " + bookStylesDTO.getStyleId())));
 
             // Обновление связи
             BookStyles updatedBookStyles = bookStylesService.updateBookStyles(oldId, bookStyles);
+
+            // LOGGING ADDED
+            logger.info("Связь книги со стилем успешно обновлена: старый ключ={}, новый ключ={}",
+                    oldId, updatedBookStyles.getId());
+
             BookStylesDTO responseDTO = mapToDTO(updatedBookStyles);
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         } catch (RuntimeException e) {
-            // Логирование ошибки можно добавить здесь
+            // LOGGING ADDED
+            logger.error("Ошибка при обновлении связи книги со стилем: {}", e.getMessage(), e);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -97,11 +138,20 @@ public class BookStylesController {
     // Удаление связи книги со стилем
     @DeleteMapping("/{bookIsbn}/{styleId}")
     public ResponseEntity<Void> deleteBookStyles(@PathVariable String bookIsbn, @PathVariable Long styleId) {
+        // LOGGING ADDED
+        logger.info("Получен запрос на удаление связи книги со стилем: bookIsbn={}, styleId={}", bookIsbn, styleId);
+
         try {
             BookStylesId id = new BookStylesId(bookIsbn, styleId);
             bookStylesService.deleteBookStyles(id);
+
+            // LOGGING ADDED
+            logger.info("Связь книги со стилем удалена: {}", id);
+
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (RuntimeException e) {
+            // LOGGING ADDED
+            logger.error("Ошибка при удалении связи книги со стилем: {}", e.getMessage(), e);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -119,7 +169,6 @@ public class BookStylesController {
         BookStyles bookStyles = new BookStyles();
         BookStylesId id = new BookStylesId(dto.getBookIsbn(), dto.getStyleId());
         bookStyles.setId(id);
-        // Связи устанавливаются в методах создания и обновления
         return bookStyles;
     }
 }

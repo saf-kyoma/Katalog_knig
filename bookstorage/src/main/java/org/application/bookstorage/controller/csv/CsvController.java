@@ -26,8 +26,15 @@ public class CsvController {
      */
     @PostMapping("/export")
     public ResponseEntity<String> exportData() {
+        // LOGGING ADDED
+        logger.info("Получен запрос на экспорт данных в CSV");
+
         try {
             csvService.exportData();
+
+            // LOGGING ADDED
+            logger.info("Экспорт данных в CSV успешно завершён.");
+
             return ResponseEntity.ok("Данные успешно экспортированы в CSV файлы.");
         } catch (IOException e) {
             logger.error("Ошибка при экспорте данных", e);
@@ -47,8 +54,15 @@ public class CsvController {
      */
     @PostMapping("/import")
     public ResponseEntity<String> importData() {
+        // LOGGING ADDED
+        logger.info("Получен запрос на импорт данных из CSV");
+
         try {
             csvService.importData();
+
+            // LOGGING ADDED
+            logger.info("Импорт данных из CSV успешно завершён.");
+
             return ResponseEntity.ok("Данные успешно импортированы из CSV файлов.");
         } catch (IOException e) {
             logger.error("Ошибка при импорте данных", e);
