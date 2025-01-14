@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;" lang="ru">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <script src="/js/Добавление-книги.js" defer></script>
+
+  <title>Добавление карточки книги</title>
+  <link rel="stylesheet" href="css/nicepage.css" media="screen">
+  <link rel="stylesheet" href="../css/Добавление-книги.css" media="screen">
+  <script class="u-script" type="text/javascript" src="jquery.js" defer></script>
+  <script class="u-script" type="text/javascript" src="nicepage.js" defer></script>
+  <meta name="theme-color" content="#2cccc4">
+
+
+</head>
+<body class="u-body u-xl-mode" data-lang="ru">
+<header>
+  <h1>Добавление книги</h1>
+
+</header>
+<nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1 d-flex justify-content-center w-100" data-responsive-from="XS" data-submenu-level="on-click">
+  <ul class="d-flex justify-content-center w-100">
+    <li class="mx-2 flex-fill text-center"><a href="Каталог.html">Каталог</a></li>
+    <li class="mx-2 flex-fill text-center"><a href="Авторы.html">Авторы</a></li>
+    <li class="mx-2 flex-fill text-center"><a href="Издательства.html">Издательства</a></li>
+    <li class="mx-2 flex-fill text-center"><a href="Вход-в-систему.html">Войти</a></li>
+    <li class="dropdown mx-2 flex-fill text-center">
+      <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">База данных</a>
+      <ul class="dropdown-menu">
+        <li><button id="DBadd" class="btn dropdown-item">Загрузить базу данных</button></li>
+        <li><button id="DBout" class="btn dropdown-item">Выгрузить базу данных</button></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+
+<section class="u-clearfix u-section-1" id="sec-64ce">
+    <!-- Форма добавления книги -->
+    <div class="container">
+      <form id="book-add-form" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form">
+
+        <!-- ISBN -->
+        <div class="u-form-group">
+          <label for="isbn" class="u-label">ISBN</label>
+          <input
+                  type="text"
+                  id="isbn"
+                  name="isbn"
+                  class="u-input"
+                  placeholder="978-0-00-000000-0"
+                  maxlength="17"
+                  title="Введите ISBN-13 в формате 978-0-00-000000-0"
+                  required
+          >
+        </div>
+
+        <!-- Название книги -->
+        <div class="u-form-group">
+          <label for="name" class="u-label">Название</label>
+          <input type="text" placeholder="Введите название книги" id="name" name="name" class="u-input" required pattern="[A-Za-zА-Яа-я0-9\s\-]+" title="Разрешены только буквы, цифры, пробелы и дефис (-)">
+        </div>
+
+        <!-- Год публикации -->
+        <div class="u-form-group">
+          <label for="publicationYear" class="u-label">Год</label>
+          <input type="date" id="publicationYear" name="publicationYear" class="u-input-number" required>
+        </div>
+
+        <!-- Возрастное ограничение -->
+        <div class="u-form-group">
+          <label for="ageLimit" class="u-label">Возрастное ограничение</label>
+          <select id="ageLimit" name="ageLimit" class="u-input" required>
+            <option value="" disabled selected>Выберите возрастное ограничение</option>
+            <option value="0">0+</option>
+            <option value="6">6+</option>
+            <option value="12">12+</option>
+            <option value="16">16+</option>
+            <option value="18">18+</option>
+          </select>
+        </div>
+
+        <!-- Издатель -->
+        <div class="u-form-group" style="position: relative;">
+          <label for="publishingCompany" class="u-label">Издатель</label>
+          <input
+                  type="text"
+                  placeholder="Введите название издательства"
+                  id="publishingCompany"
+                  name="publishingCompany"
+                  class="u-input"
+                  required
+                  pattern="[A-Za-zА-Яа-я0-9\s\-]+"
+                  title="Разрешены только буквы, цифры, пробелы и дефис (-)"
+                  autocomplete="off"
+          >
+          <!-- Список подсказок -->
+          <ul id="publishingCompany-suggestions" class="suggestions-list" style="display: none;">
+            <!-- Элементы списка будут добавляться динамически -->
+          </ul>
+        </div>
+
+        <!-- Количество страниц -->
+        <div class="u-form-group">
+          <label for="pageCount" class="u-label">Страницы</label>
+          <input type="number" id="pageCount" name="pageCount" class="u-input-number" value="1" min="1" max="10000" step="1" required>
+        </div>
+
+        <!-- Язык -->
+        <div class="u-form-group">
+          <label for="language" class="u-label">Язык</label>
+          <select id="language" name="language" class="u-input" required>
+            <option value="" disabled selected>Выберите язык</option>
+            <option value="Русский">Русский</option>
+            <option value="Английский">Английский</option>
+            <option value="Немецкий">Немецкий</option>
+            <option value="Китайский">Китайский</option>
+            <option value="Японский">Японский</option>
+            <option value="Португальский">Португальский</option>
+            <option value="Испанский">Испанский</option>
+            <option value="Итальянский">Итальянский</option>
+            <option value="Польский">Польский</option>
+          </select>
+        </div>
+
+        <!-- Цена -->
+        <div class="u-form-group">
+          <label for="cost" class="u-label">Цена</label>
+          <input type="number" id="cost" name="cost" class="u-input-number" min="0" step="0.01" required placeholder="Введите цену">
+        </div>
+
+        <!-- Количество книг -->
+        <div class="u-form-group">
+          <label for="countOfBooks" class="u-label">Кол-во</label>
+          <input type="number" id="countOfBooks" name="countOfBooks" class="u-input-number" value="0" min="0" max="10000" step="1" required>
+        </div>
+
+        <!-- Авторы -->
+        <div class="u-form-group">
+          <label for="authors-container" class="u-label">Авторы</label>
+          <div id="authors-container">
+            <div class="author-group">
+              <span class="remove-author">&times;</span>
+              <div class="u-form-group">
+                <label for="authorFio" class="u-label">ФИО автора</label>
+                <input type="text" placeholder="Введите ФИО автора" id="authorFio" name="authorFio" class="u-input author-fio" required pattern="[A-Za-zА-Яа-яЁё\s\-]+" title="Разрешены только буквы, пробелы и дефис (-)">
+                <ul class="author-suggestions-list" style="display: none;"></ul>
+                <input type="hidden" name="authorId" class="author-id">
+              </div>
+            </div>
+          </div>
+          <button type="button" class="add-author-btn">Добавить автора</button>
+        </div>
+
+        <!-- Жанры -->
+        <div class="u-form-group">
+          <label for="genre-input" class="u-label">Жанры</label>
+          <div class="tags-input-container">
+            <div id="genre-tags" class="tags-container"></div>
+            <input type="text" id="genre-input" class="u-input" placeholder="Введите жанр и нажмите Enter">
+            <input type="hidden" id="genres-hidden" name="genres">
+          </div>
+        </div>
+
+        <!-- Кнопки добавления и отмены -->
+        <div class="u-form-group u-form-submit buttons-container">
+          <!-- Кнопка Добавления -->
+          <button type="submit" class="u-btn u-btn-submit">Добавить</button>
+
+          <!-- Кнопка Отмены -->
+          <a href="Каталог.html" class="u-btn u-btn-cancel">Отмена</a>
+        </div>
+
+        <!-- Сообщения об отправке -->
+        <div class="u-form-send-message u-form-send-success">Спасибо! Ваша книга добавлена.</div>
+        <div class="u-form-send-error u-form-send-message">Отправка не удалась. Пожалуйста, исправьте ошибки и попробуйте еще раз.</div>
+
+        <!-- Скрытые поля -->
+        <input type="hidden" value="" name="recaptchaResponse">
+        <input type="hidden" name="formServices" value="234d2f51-51fe-7107-fa98-0d7a5e49113d">
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<!-- Подвал сайта -->
+<footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-2f71">
+  <div class="u-clearfix u-sheet u-sheet-1">
+    <p class="u-small-text u-text u-text-variant u-text-1">
+      О вопросах и проблемах сообщать главному администратору или писать на почту <a href="mailto:GlobalMaster@book.com">GlobalMaster@book.com</a>
+    </p>
+  </div>
+</footer>
+
+<!-- Скрипты валидации и функциональности -->
+
+</body>
+</html>
