@@ -883,3 +883,238 @@
   padding-top: 0;
   padding-left: 10px;
 }
+
+ /* (Существующие стили остаются без изменений) */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    header {
+        background-color: #2cccc4;
+        color: #fff;
+        padding: 10px 20px;
+        text-align: center;
+    }
+
+    nav {
+        background-color: #249a9a;
+        padding: 10px;
+    }
+
+    nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    nav ul li {
+        margin: 0 15px;
+    }
+
+    nav ul li a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    nav ul li a:hover {
+        text-decoration: underline;
+    }
+
+    .container {
+        margin: 20px auto;
+        max-width: 800px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    table th {
+        background-color: #2cccc4;
+        color: white;
+        text-transform: uppercase;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 15px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        background-color: #2cccc4;
+        color: #fff;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        background-color: #249a9a;
+    }
+
+    .sort-button {
+        background: none;
+        border: none;
+        padding: 0;
+        margin-left: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        user-select: none;
+    }
+
+    .sort-button:focus {
+        outline: none;
+    }
+
+    footer {
+        background-color: #f1f1f1;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    .u-backlink {
+        background-color: #f1f1f1;
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    /* Дополнительные стили для формы поиска и кнопок */
+    .search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 15px;
+        flex-wrap: wrap;
+    }
+
+    .search-container .input-group {
+        flex: 1 1 auto;
+        min-width: 250px;
+    }
+
+    .search-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    @media (max-width: 576px) {
+        .search-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .search-container .input-group,
+        .search-buttons {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .search-buttons {
+            justify-content: flex-start;
+        }
+    }
+
+    /* Стили для чекбоксов */
+    .checkbox-column {
+        text-align: center;
+        width: 50px; /* Фиксированная ширина для чекбоксов */
+    }
+
+    .checkbox-column input[type="checkbox"] {
+        transform: scale(1.2); /* Увеличение размера чекбокса для лучшей видимости */
+    }
+
+    /* Общий стиль навигации */
+    nav.u-menu {
+        background-color: #249a9a;
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    nav.u-menu ul {
+        list-style: none;
+        display: flex;
+        padding: 0;
+        margin: 0;
+    }
+
+    nav.u-menu ul li {
+        position: relative;
+        margin: 0 10px;
+    }
+
+    nav.u-menu ul li a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        display: block;
+    }
+
+    nav.u-menu ul li a:hover {
+        background-color: #2cccc4;
+        border-radius: 5px;
+    }
+
+    /* Стили для выпадающего меню */
+    nav.u-menu .dropdown {
+        position: relative;
+    }
+
+    nav.u-menu .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #fff;
+        padding: 10px 0;
+        list-style: none;
+        margin: 0;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        z-index: 10;
+    }
+
+    nav.u-menu .dropdown-menu li {
+        margin: 0;
+    }
+
+    nav.u-menu .dropdown-menu li a {
+        color: #249a9a;
+        padding: 10px 20px;
+        display: block;
+        text-align: left;
+    }
+
+    nav.u-menu .dropdown-menu li a:hover {
+        background-color: #2cccc4;
+        color: white;
+    }
+
+    /* Показываем меню при наведении */
+    nav.u-menu .dropdown:hover .dropdown-menu {
+        display: block;
+    }

@@ -1,357 +1,4 @@
-<!DOCTYPE html>
-<html style="font-size: 16px;" lang="ru">
-<head>
-  <!-- (Существующие мета-теги и ссылки на CSS/JS остаются без изменений) -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Каталог книг">
-  <title>Каталог</title>
-
-  <!-- Подключение Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-  <!-- Подключение пользовательских стилей -->
-  <link rel="stylesheet" href="nicepage.css" media="screen">
-  <link rel="stylesheet" href="Каталог.css" media="screen">
-
-  <!-- Подключение jQuery и Nicepage JS -->
-  <script class="u-script" type="text/javascript" src="jquery.js" defer></script>
-  <script class="u-script" type="text/javascript" src="nicepage.js" defer></script>
-
-  <meta name="generator" content="Nicepage 7.1.0, nicepage.com">
-
-  <!-- Подключение Google Fonts -->
-  <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
-
-  <meta name="theme-color" content="#2cccc4">
-  <meta property="og:title" content="Каталог">
-  <meta property="og:type" content="website">
-  <meta data-intl-tel-input-cdn-path="intlTelInput/">
-
-  <style>
-    /* (Существующие стили остаются без изменений) */
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-    }
-
-    header {
-        background-color: #2cccc4;
-        color: #fff;
-        padding: 10px 20px;
-        text-align: center;
-    }
-
-    nav {
-        background-color: #249a9a;
-        padding: 10px;
-    }
-
-    nav ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-    }
-
-    nav ul li {
-        margin: 0 15px;
-    }
-
-    nav ul li a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    nav ul li a:hover {
-        text-decoration: underline;
-    }
-
-    .container {
-        margin: 20px auto;
-        max-width: 800px;
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-    }
-
-    table th, table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-
-    table th {
-        background-color: #2cccc4;
-        color: white;
-        text-transform: uppercase;
-    }
-
-    table tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-
-    .btn {
-        display: inline-block;
-        padding: 10px 15px;
-        margin: 5px;
-        border: none;
-        border-radius: 5px;
-        background-color: #2cccc4;
-        color: #fff;
-        text-decoration: none;
-        text-align: center;
-        cursor: pointer;
-    }
-
-    .btn:hover {
-        background-color: #249a9a;
-    }
-
-    .sort-button {
-        background: none;
-        border: none;
-        padding: 0;
-        margin-left: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        user-select: none;
-    }
-
-    .sort-button:focus {
-        outline: none;
-    }
-
-    footer {
-        background-color: #f1f1f1;
-        padding: 20px 0;
-        text-align: center;
-    }
-
-    .u-backlink {
-        background-color: #f1f1f1;
-        padding: 10px 0;
-        text-align: center;
-    }
-
-    /* Дополнительные стили для формы поиска и кнопок */
-    .search-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        margin-top: 15px;
-        flex-wrap: wrap;
-    }
-
-    .search-container .input-group {
-        flex: 1 1 auto;
-        min-width: 250px;
-    }
-
-    .search-buttons {
-        display: flex;
-        gap: 10px;
-    }
-
-    @media (max-width: 576px) {
-        .search-container {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .search-container .input-group,
-        .search-buttons {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .search-buttons {
-            justify-content: flex-start;
-        }
-    }
-
-    /* Стили для чекбоксов */
-    .checkbox-column {
-        text-align: center;
-        width: 50px; /* Фиксированная ширина для чекбоксов */
-    }
-
-    .checkbox-column input[type="checkbox"] {
-        transform: scale(1.2); /* Увеличение размера чекбокса для лучшей видимости */
-    }
-
-    /* Общий стиль навигации */
-    nav.u-menu {
-        background-color: #249a9a;
-        display: flex;
-        justify-content: center;
-        padding: 10px;
-    }
-
-    nav.u-menu ul {
-        list-style: none;
-        display: flex;
-        padding: 0;
-        margin: 0;
-    }
-
-    nav.u-menu ul li {
-        position: relative;
-        margin: 0 10px;
-    }
-
-    nav.u-menu ul li a {
-        color: white;
-        text-decoration: none;
-        padding: 10px 20px;
-        display: block;
-    }
-
-    nav.u-menu ul li a:hover {
-        background-color: #2cccc4;
-        border-radius: 5px;
-    }
-
-    /* Стили для выпадающего меню */
-    nav.u-menu .dropdown {
-        position: relative;
-    }
-
-    nav.u-menu .dropdown-menu {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        background-color: #fff;
-        padding: 10px 0;
-        list-style: none;
-        margin: 0;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-        z-index: 10;
-    }
-
-    nav.u-menu .dropdown-menu li {
-        margin: 0;
-    }
-
-    nav.u-menu .dropdown-menu li a {
-        color: #249a9a;
-        padding: 10px 20px;
-        display: block;
-        text-align: left;
-    }
-
-    nav.u-menu .dropdown-menu li a:hover {
-        background-color: #2cccc4;
-        color: white;
-    }
-
-    /* Показываем меню при наведении */
-    nav.u-menu .dropdown:hover .dropdown-menu {
-        display: block;
-    }
-
-  </style>
-</head>
-
-<body data-home-page="Каталог.html" data-home-page-title="Каталог" data-path-to-root="./" data-include-products="true" class="u-body u-xl-mode" data-lang="ru">
-
-<header class="u-header" id="sec-233d" data-animation-name="" data-animation-duration="0" data-animation-delay="0" data-animation-direction="">
-  <h1>Каталог</h1>
-  <nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1 d-flex justify-content-center" data-responsive-from="XS" data-submenu-level="on-click">
-    <ul class="d-flex justify-content-center">
-      <li class="mx-2"><a href="Каталог.html">Каталог</a></li>
-      <li class="mx-2"><a href="Страница-авторов.html">Авторы</a></li>
-      <li class="mx-2"><a href="Страница-издательств.html">Издательства</a></li>
-      <li class="mx-2"><a href="Вход-в-систему.html">Войти</a></li>
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle">База данных</a>
-        <ul class="dropdown-menu">
-          <li><button id="DBadd" class="btn btn-outline-secondary">Загрузить базу данных</button></li>
-          <li><button id="DBout" class="btn btn-outline-secondary">Выгрузить базу данных</button></li>
-        </ul>
-      </li>
-    </ul>
-  </nav>
-
-
-  <div class="u-clearfix u-sheet u-valign-top u-sheet-1">
-    <!-- Подключение Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-    <!-- Форма поиска всегда видима, кнопки вне формы -->
-    <div class="search-container">
-      <form id="searchForm" class="input-group">
-        <input class="u-search-input form-control" type="search" name="search" value="" placeholder="Введите название книги">
-      </form>
-      <div class="search-buttons">
-        <button id="searchButton" class="btn btn-outline-secondary">Искать</button>
-        <button id="resetButton" class="btn btn-secondary">Сбросить поиск</button>
-      </div>
-    </div>
-  </div>
-</header>
-
-<section class="u-clearfix u-section-1" id="sec-25c7">
-  <div class="container mt-4">
-    <a href="Добавление-карточки-книги.html" id="searchButtonBook" class="btn btn-outline-secondary">Добавить книгу</a>
-    <a href="#" id="deleteSelectedButton" class="btn">Удалить выбранные</a>
-    <div class="table-responsive">
-      <table class="table table-striped table-bordered">
-        <!-- Удалён colgroup для автоматического распределения ширин -->
-        <thead class="table-dark">
-        <tr>
-          <th class="checkbox-column"><input type="checkbox" onclick="toggleAllCheckboxes(this)"></th>
-          <th>Название книги <button class="sort-button btn btn-sm btn-light" data-column="name">▲</button></th>
-          <th>Автор <button class="sort-button btn btn-sm btn-light" data-column="author">▲</button></th>
-          <th>Дата издания <button class="sort-button btn btn-sm btn-light" data-column="publication_year">▲</button></th>
-          <th>Издательство <button class="sort-button btn btn-sm btn-light" data-column="publishing_company">▲</button></th>
-          <th>Количество экземпляров <button class="sort-button btn btn-sm btn-light" data-column="count_of_books">▲</button></th>
-          <th>ISBN <button class="sort-button btn btn-sm btn-light" data-column="isbn">▲</button></th>
-        </tr>
-        </thead>
-        <tbody class="u-table-body u-table-body-1">
-        <!-- Динамическое содержимое -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<footer class="u-align-center u-clearfix u-container-align-center u-footer u-grey-80 u-footer" id="sec-2f71">
-  <div class="u-clearfix u-sheet u-sheet-1">
-    <p class="u-small-text u-text u-text-variant u-text-1">О вопросах и проблемах сообщать главному администратору или писать на почту GlobalMaster@book.com</p>
-  </div>
-</footer>
-
-<section class="u-backlink u-clearfix u-grey-80">
-  <p class="u-text">
-    <span>Этот сайт был создан с помощью </span>
-    <a class="u-link" href="https://nicepage.com/" target="_blank" rel="nofollow">
-      <span>Nicepage</span>
-    </a>
-  </p>
-</section>
-
-<!-- Bootstrap JS (если не подключён ранее) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-<!-- Пользовательский JavaScript для получения и отображения книг -->
-<script>
-  /**
+/**
    * Глобальная функция для выбора/снятия всех чекбоксов.
    * Сделана глобальной, чтобы была доступна из HTML.
    */
@@ -481,7 +128,7 @@
         const nameCell = document.createElement('td');
         nameCell.className = 'u-border-1 u-border-grey-30 u-palette-4-light-3 u-table-cell';
         const link = document.createElement('a');
-        link.href = `Страница-книги.html?isbn=${book.isbn}`;
+        link.href = `Информация-о-книге.html?isbn=${book.isbn}`;
         link.textContent = book.name || 'Без названия';
 
         // Визуальные стили ссылки
@@ -666,7 +313,49 @@
       sort_order: currentSortOrder
     });
   });
-</script>
 
-</body>
-</html>
+  // *** ДОБАВЛЕННЫЙ КОД ДЛЯ КНОПОК ИМПОРТА/ЭКСПОРТА ***
+      document.addEventListener('DOMContentLoaded', function() {
+        const importBtn = document.getElementById('DBadd');
+        const exportBtn = document.getElementById('DBout');
+
+        // При нажатии на "Загрузить базу данных" (import)
+        importBtn.addEventListener('click', function() {
+          fetch('/api/csv/import', {
+            method: 'POST'
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Ошибка при импорте базы данных из CSV');
+            }
+            return response.text();
+          })
+          .then(text => {
+            alert('Импорт успешно завершён: ' + text);
+          })
+          .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Не удалось выполнить импорт: ' + error.message);
+          });
+        });
+
+        // При нажатии на "Выгрузить базу данных" (export)
+        exportBtn.addEventListener('click', function() {
+          fetch('/api/csv/export', {
+            method: 'POST'
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Ошибка при экспорте базы данных в CSV');
+            }
+            return response.text();
+          })
+          .then(text => {
+            alert('Экспорт успешно завершён: ' + text);
+          })
+          .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Не удалось выполнить экспорт: ' + error.message);
+          });
+        });
+      });
