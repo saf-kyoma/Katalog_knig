@@ -2,6 +2,8 @@ package org.application.bookstorage.service.author;
 
 import org.application.bookstorage.dao.Author;
 import org.application.bookstorage.dao.Book;
+import org.application.bookstorage.dao.Authorship;
+import org.application.bookstorage.dao.AuthorshipId;
 import org.application.bookstorage.repository.AuthorRepository;
 import org.application.bookstorage.repository.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,8 +40,9 @@ class AuthorServiceTest {
 
     @BeforeEach
     void setUp() {
-        author1 = new Author(1, "Иванов Иван Иванович", "1990-01-01", "Россия", "ivivan", null);
-        author2 = new Author(2, "Петров Пётр Петрович", "1985-05-05", "Россия", "petrov", null);
+        // Инициализация базовых данных без авторств
+        author1 = new Author(1, "Иванов Иван Иванович", "1990-01-01", "Россия", "ivivan", new HashSet<>());
+        author2 = new Author(2, "Петров Пётр Петрович", "1985-05-05", "Россия", "petrov", new HashSet<>());
     }
 
     @Test
@@ -211,19 +214,33 @@ class AuthorServiceTest {
         // Arrange
         logger.info("Тест: deleteAuthors_ShouldDeleteAuthorsAndBooksIfRemoveEverythingTrue");
 
-        when(authorRepository.findAllById(Arrays.asList(1,2)))
-                .thenReturn(Arrays.asList(author1, author2));
+        // Создаем авторов с заполненным набором авторств
+        Author a1 = new Author(1, "Иванов Иван Иванович", "1990-01-01", "Россия", "ivivan", new HashSet<>());
+        Author a2 = new Author(2, "Петров Пётр Петрович", "1985-05-05", "Россия", "petrov", new HashSet<>());
 
-        // Упростим: автору1 приписываем книгу, у автора2 нет связей
-        // (Тестовая логика: предполагаем, что после удаления авторов,
-        //  если книга осталась без авторов, она будет удалена.)
+        // Создаем книгу, у которой есть авторство только с a1
+        Book book = new Book();
+        book.setIsbn("ISBN-111");
+        // Создаем объект авторства для a1
+        Authorship authorship = new Authorship(new AuthorshipId("ISBN-111", 1), book, a1);
+        Set<Authorship> authSet = new HashSet<>();
+        authSet.add(authorship);
+        book.setAuthorships(authSet);
+        // Привязываем это авторство к a1
+        a1.setAuthorships(authSet);
+        // Для a2 оставляем пустое множество авторств
+        a2.setAuthorships(new HashSet<>());
+
+        when(authorRepository.findAllById(Arrays.asList(1,2)))
+                .thenReturn(Arrays.asList(a1, a2));
 
         // Act
         authorService.deleteAuthors(Arrays.asList(1,2), true);
 
         // Assert
         verify(authorRepository, times(1)).findAllById(Arrays.asList(1,2));
-        verify(bookRepository, times(1)).delete(any(Book.class));
+        // Ожидаем, что книга ISBN-111 будет удалена, так как ее единственный автор (a1) входит в список
+        verify(bookRepository, times(1)).delete(eq(book));
         verify(authorRepository, times(1)).deleteAll(any());
     }
 }
