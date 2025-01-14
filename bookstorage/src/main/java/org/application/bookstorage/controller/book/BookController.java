@@ -19,6 +19,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+// LOGGING ADDED
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
@@ -31,6 +35,8 @@ public class BookController {
     private final StylesService stylesService;
     private final BookStylesService bookStylesService;
 
+    // LOGGING ADDED
+    private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 
     /**
      * Эндпоинт для массового удаления книг.
@@ -40,16 +46,29 @@ public class BookController {
      */
     @DeleteMapping("/bulk-delete")
     public ResponseEntity<Void> deleteBooks(@RequestBody List<String> isbns) {
+        // LOGGING ADDED
+        logger.info("Получен запрос на массовое удаление книг: {}", isbns);
+
         try {
             bookService.deleteBooks(isbns);
+
+            // LOGGING ADDED
+            logger.info("Массовое удаление книг успешно завершено.");
+
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
+            // LOGGING ADDED
+            logger.error("Ошибка при массовом удалении книг: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
     // Создание книги
     @PostMapping
     public ResponseEntity<BookDTO> createBook(@Valid @RequestBody BookDTO bookDTO) {
+        // LOGGING ADDED
+        logger.info("Получен запрос на создание книги: {}", bookDTO);
+
         try {
             // Получение или создание издательства
             PublishingCompany publishingCompany = getOrCreatePublishingCompany(bookDTO.getPublishingCompany());
@@ -112,11 +131,15 @@ public class BookController {
             // Сохранение книги
             Book createdBook = bookService.createBook(book);
 
+            // LOGGING ADDED
+            logger.info("Книга успешно создана: ISBN={}", createdBook.getIsbn());
+
             // Преобразование в DTO
             BookDTO responseDTO = mapToDTO(createdBook);
             return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
         } catch (RuntimeException e) {
-            // Логирование ошибки (рекомендуется использовать логгер)
+            // LOGGING ADDED
+            logger.error("Ошибка при создании книги: {}", e.getMessage(), e);
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -132,6 +155,10 @@ public class BookController {
             PublishingCompany newCompany = new PublishingCompany();
             newCompany.setName(companyName.trim());
             // Устанавливаем другие поля издательства, если необходимо
+
+            // LOGGING ADDED
+            logger.info("Издательство не найдено, создаём новое: {}", newCompany.getName());
+
             return publishingCompanyService.createPublishingCompany(newCompany);
         });
     }
@@ -139,9 +166,20 @@ public class BookController {
     // Получение книги по ISBN
     @GetMapping("/{isbn}")
     public ResponseEntity<BookDTO> getBookByIsbn(@PathVariable String isbn) {
+        // LOGGING ADDED
+        logger.info("Получен запрос на получение книги по ISBN: {}", isbn);
+
         return bookService.getBookByIsbn(isbn)
-                .map(book -> new ResponseEntity<>(mapToDTO(book), HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .map(book -> {
+                    // LOGGING ADDED
+                    logger.info("Книга найдена: ISBN={}", book.getIsbn());
+                    return new ResponseEntity<>(mapToDTO(book), HttpStatus.OK);
+                })
+                .orElseGet(() -> {
+                    // LOGGING ADDED
+                    logger.warn("Книга с ISBN {} не найдена", isbn);
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                });
     }
 
     // Получение всех книг
@@ -150,12 +188,21 @@ public class BookController {
             @RequestParam(required = false) String search,
             @RequestParam(required = false, name = "sort_column") String sortColumn,
             @RequestParam(required = false, name = "sort_order") String sortOrder) {
+        // LOGGING ADDED
+        logger.info("Получен запрос на получение всех книг. search={}, sort_column={}, sort_order={}",
+                search, sortColumn, sortOrder);
+
         try {
             List<Book> books = bookService.getAllBooks(search, sortColumn, sortOrder);
             List<BookDTO> bookDTOs = books.stream().map(this::mapToDTO).collect(Collectors.toList());
+
+            // LOGGING ADDED
+            logger.info("Поиск завершён. Найдено {} книг.", bookDTOs.size());
+
             return new ResponseEntity<>(bookDTOs, HttpStatus.OK);
         } catch (RuntimeException e) {
-            // Логирование ошибки
+            // LOGGING ADDED
+            logger.error("Ошибка при получении списка книг: {}", e.getMessage(), e);
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -164,6 +211,9 @@ public class BookController {
     // Обновление книги
     @PutMapping("/{isbn}")
     public ResponseEntity<BookDTO> updateBook(@PathVariable String isbn, @Valid @RequestBody BookDTO bookDTO) {
+        // LOGGING ADDED
+        logger.info("Получен запрос на обновление книги ISBN={}. Новые данные: {}", isbn, bookDTO);
+
         try {
             // Получение или создание издательства
             PublishingCompany publishingCompany = getOrCreatePublishingCompany(bookDTO.getPublishingCompany());
@@ -183,9 +233,7 @@ public class BookController {
             existingBook.setCountOfBooks(bookDTO.getCountOfBooks());
 
             // 1. Обновляем авторов:
-            // Очищаем существующие авторства
             existingBook.getAuthorships().clear();
-            // Для каждого автора из DTO либо получаем существующего, либо создаём нового
             List<Authorship> newAuthorships = bookDTO.getAuthors().stream().map(authorDTO -> {
                 Author author;
                 if (authorDTO.getId() != null) {
@@ -200,21 +248,17 @@ public class BookController {
                     author = authorService.createAuthor(author);
                 }
                 Authorship authorship = new Authorship();
-                // Формируем составной ключ (при условии что ISBN книги уже установлен в existingBook)
                 authorship.setId(new AuthorshipId(existingBook.getIsbn(), author.getId()));
                 authorship.setBook(existingBook);
                 authorship.setAuthor(author);
                 return authorship;
             }).collect(Collectors.toList());
-            // Добавляем новые авторства в книгу
             existingBook.getAuthorships().addAll(newAuthorships);
 
             // 2. Обновляем жанры (BookStyles):
-            // Очищаем существующие связи жанров
             existingBook.getBookStyles().clear();
             List<String> genres = bookDTO.getGenres();
             for (String genreName : genres) {
-                // Ищем стиль по названию или создаём, если не найден
                 Styles style = stylesService.getStyleByName(genreName)
                         .orElseGet(() -> stylesService.createStyle(new Styles(null, genreName, null)));
                 BookStyles bookStyle = new BookStyles();
@@ -226,9 +270,15 @@ public class BookController {
 
             // Сохраняем обновлённую книгу
             Book updatedBook = bookService.updateBook(isbn, existingBook);
+
+            // LOGGING ADDED
+            logger.info("Книга с ISBN {} успешно обновлена", isbn);
+
             BookDTO responseDTO = mapToDTO(updatedBook);
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         } catch (RuntimeException e) {
+            // LOGGING ADDED
+            logger.error("Ошибка при обновлении книги ISBN {}: {}", isbn, e.getMessage(), e);
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -237,10 +287,19 @@ public class BookController {
     // Удаление книги
     @DeleteMapping("/{isbn}")
     public ResponseEntity<Void> deleteBook(@PathVariable String isbn) {
+        // LOGGING ADDED
+        logger.info("Получен запрос на удаление книги ISBN={}", isbn);
+
         try {
             bookService.deleteBook(isbn);
+
+            // LOGGING ADDED
+            logger.info("Книга с ISBN {} успешно удалена", isbn);
+
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (RuntimeException e) {
+            // LOGGING ADDED
+            logger.error("Ошибка при удалении книги ISBN {}: {}", isbn, e.getMessage(), e);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -252,12 +311,10 @@ public class BookController {
         book.setName(dto.getName());
         book.setPublicationYear(dto.getPublicationYear());
         book.setAgeLimit(dto.getAgeLimit());
-        // Издательство устанавливается отдельно
         book.setPageCount(dto.getPageCount());
         book.setLanguage(dto.getLanguage());
         book.setCost(dto.getCost());
         book.setCountOfBooks(dto.getCountOfBooks());
-        // Инициализация множеств, если необходимо
         if (book.getAuthorships() == null) {
             book.setAuthorships(new java.util.HashSet<>());
         }
@@ -274,16 +331,12 @@ public class BookController {
         dto.setName(book.getName());
         dto.setPublicationYear(book.getPublicationYear());
         dto.setAgeLimit(book.getAgeLimit());
-
-        // Устанавливаем название издательства
         dto.setPublishingCompany(book.getPublishingCompany().getName());
-
         dto.setPageCount(book.getPageCount());
         dto.setLanguage(book.getLanguage());
         dto.setCost(book.getCost());
         dto.setCountOfBooks(book.getCountOfBooks());
 
-        // Маппинг авторов
         List<AuthorDTO> authors = book.getAuthorships().stream()
                 .map(authorship -> {
                     AuthorDTO authorDTO = new AuthorDTO();
@@ -297,7 +350,6 @@ public class BookController {
 
         dto.setAuthors(authors);
 
-        // Маппинг жанров
         List<String> genres = book.getBookStyles().stream()
                 .map(bookStyle -> bookStyle.getStyleEntity().getName())
                 .collect(Collectors.toList());
