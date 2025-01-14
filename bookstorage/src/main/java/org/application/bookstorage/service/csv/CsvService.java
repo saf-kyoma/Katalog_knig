@@ -1,18 +1,26 @@
 package org.application.bookstorage.service.csv;
 
-import com.opencsv.*;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
 import lombok.RequiredArgsConstructor;
 import org.application.bookstorage.dao.*;
 import org.application.bookstorage.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -28,9 +36,11 @@ public class CsvService {
     private final AuthorshipRepository authorshipRepository;
     private final StylesRepository stylesRepository;
     private final BookStylesRepository bookStylesRepository;
+    private final JdbcTemplate jdbcTemplate; // Для выполнения SQL-запроса очистки БД
 
-    // Каталог для сохранения и чтения CSV файлов
-    private final String EXPORT_DIR = "csv_exports";
+    // Путь к каталогу для экспорта/импорта CSV файлов задаётся через application.properties
+    @Value("${csv.export.dir}")
+    private String exportDir;
 
     /**
      * Экспортирует все данные из базы данных в CSV файлы.
@@ -38,7 +48,7 @@ public class CsvService {
     @Transactional
     public void exportData() throws IOException {
         // Создание каталога для экспорта, если он не существует
-        Path exportPath = Paths.get(EXPORT_DIR);
+        Path exportPath = Paths.get(exportDir);
         if (!Files.exists(exportPath)) {
             Files.createDirectories(exportPath);
             logger.info("Создана директория для экспорта: {}", exportPath.toAbsolutePath());
@@ -55,9 +65,13 @@ public class CsvService {
 
     /**
      * Импортирует все данные из CSV файлов в базу данных.
+     * Перед импортом очищается база данных с помощью метода clearDatabase().
      */
     @Transactional
     public void importData() throws IOException, CsvValidationException {
+        // Очистка БД перед импортом
+        clearDatabase();
+
         // Порядок импорта для соблюдения зависимостей
         importPublishingCompanies();
         importAuthors();
@@ -68,6 +82,23 @@ public class CsvService {
         logger.info("Импорт данных завершён.");
     }
 
+    /**
+     * Очищает все таблицы схемы 'public' (TRUNCATE с RESTART IDENTITY CASCADE).
+     */
+    private void clearDatabase() {
+        String sql = "DO $$\n" +
+                "DECLARE\n" +
+                "    r RECORD;\n" +
+                "BEGIN\n" +
+                "    FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public') LOOP\n" +
+                "        EXECUTE 'TRUNCATE TABLE ' || quote_ident(r.tablename) || ' RESTART IDENTITY CASCADE';\n" +
+                "    END LOOP;\n" +
+                "END;\n" +
+                "$$;";
+        jdbcTemplate.execute(sql);
+        logger.info("База данных очищена перед импортом данных.");
+    }
+
     // =================================================================
     //                            ЭКСПОРТ
     // =================================================================
@@ -76,7 +107,7 @@ public class CsvService {
         String[] header = {"id", "fio", "birth_date", "country", "nickname"};
         List<Author> authors = authorRepository.findAll();
 
-        try (FileOutputStream fos = new FileOutputStream(EXPORT_DIR + "/authors.csv");
+        try (FileOutputStream fos = new FileOutputStream(exportDir + "/authors.csv");
              OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
              BufferedWriter bw = new BufferedWriter(osw)) {
 
@@ -111,7 +142,7 @@ public class CsvService {
         String[] header = {"name", "establishment_year", "contact_info", "city"};
         List<PublishingCompany> companies = publishingCompanyRepository.findAll();
 
-        try (FileOutputStream fos = new FileOutputStream(EXPORT_DIR + "/publishing_companies.csv");
+        try (FileOutputStream fos = new FileOutputStream(exportDir + "/publishing_companies.csv");
              OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
              BufferedWriter bw = new BufferedWriter(osw)) {
 
@@ -147,7 +178,7 @@ public class CsvService {
         String[] header = {"id", "name"};
         List<Styles> styles = stylesRepository.findAll();
 
-        try (FileOutputStream fos = new FileOutputStream(EXPORT_DIR + "/styles.csv");
+        try (FileOutputStream fos = new FileOutputStream(exportDir + "/styles.csv");
              OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
              BufferedWriter bw = new BufferedWriter(osw)) {
 
@@ -181,7 +212,7 @@ public class CsvService {
         };
         List<Book> books = bookRepository.findAll();
 
-        try (FileOutputStream fos = new FileOutputStream(EXPORT_DIR + "/books.csv");
+        try (FileOutputStream fos = new FileOutputStream(exportDir + "/books.csv");
              OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
              BufferedWriter bw = new BufferedWriter(osw)) {
 
@@ -225,7 +256,7 @@ public class CsvService {
         String[] header = {"book_isbn", "author_id"};
         List<Authorship> authorships = authorshipRepository.findAll();
 
-        try (FileOutputStream fos = new FileOutputStream(EXPORT_DIR + "/authorships.csv");
+        try (FileOutputStream fos = new FileOutputStream(exportDir + "/authorships.csv");
              OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
              BufferedWriter bw = new BufferedWriter(osw)) {
 
@@ -256,7 +287,7 @@ public class CsvService {
         String[] header = {"book_isbn", "style_id"};
         List<BookStyles> bookStyles = bookStylesRepository.findAll();
 
-        try (FileOutputStream fos = new FileOutputStream(EXPORT_DIR + "/book_styles.csv");
+        try (FileOutputStream fos = new FileOutputStream(exportDir + "/book_styles.csv");
              OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
              BufferedWriter bw = new BufferedWriter(osw)) {
 
@@ -310,7 +341,7 @@ public class CsvService {
         // Настраиваем парсер, чтобы не ожидать кавычки:
         CSVParser parser = new CSVParserBuilder()
                 .withSeparator(',')
-                .withIgnoreQuotations(true) // игнорируем кавычки, иначе вылетит Unterminated
+                .withIgnoreQuotations(true)
                 .build();
 
         return new CSVReaderBuilder(isr)
@@ -319,7 +350,7 @@ public class CsvService {
     }
 
     private void importAuthors() throws IOException, CsvValidationException {
-        Path filePath = Paths.get(EXPORT_DIR + "/authors.csv");
+        Path filePath = Paths.get(exportDir + "/authors.csv");
         if (!Files.exists(filePath)) {
             logger.warn("authors.csv не найден, пропуск импорта авторов.");
             return;
@@ -386,7 +417,7 @@ public class CsvService {
     }
 
     private void importPublishingCompanies() throws IOException, CsvValidationException {
-        Path filePath = Paths.get(EXPORT_DIR + "/publishing_companies.csv");
+        Path filePath = Paths.get(exportDir + "/publishing_companies.csv");
         if (!Files.exists(filePath)) {
             logger.warn("publishing_companies.csv не найден, пропуск импорта издательств.");
             return;
@@ -453,7 +484,7 @@ public class CsvService {
     }
 
     private void importStyles() throws IOException, CsvValidationException {
-        Path filePath = Paths.get(EXPORT_DIR + "/styles.csv");
+        Path filePath = Paths.get(exportDir + "/styles.csv");
         if (!Files.exists(filePath)) {
             logger.warn("styles.csv не найден, пропуск импорта стилей.");
             return;
@@ -465,9 +496,8 @@ public class CsvService {
 
             skipBomIfPresent(bis);
 
-            // Подключаем наш парсер, игнорирующий кавычки
             try (CSVReader reader = buildCsvReader(isr)) {
-                // пропуск заголовка
+                // Пропускаем заголовок
                 reader.readNext();
 
                 int imported = 0;
@@ -512,7 +542,7 @@ public class CsvService {
     }
 
     private void importBooks() throws IOException, CsvValidationException {
-        Path filePath = Paths.get(EXPORT_DIR + "/books.csv");
+        Path filePath = Paths.get(exportDir + "/books.csv");
         if (!Files.exists(filePath)) {
             logger.warn("books.csv не найден, пропуск импорта книг.");
             return;
@@ -525,7 +555,7 @@ public class CsvService {
             skipBomIfPresent(bis);
 
             try (CSVReader reader = buildCsvReader(isr)) {
-                // пропуск заголовка
+                // Пропускаем заголовок
                 reader.readNext();
 
                 int imported = 0;
@@ -597,7 +627,7 @@ public class CsvService {
     }
 
     private void importAuthorships() throws IOException, CsvValidationException {
-        Path filePath = Paths.get(EXPORT_DIR + "/authorships.csv");
+        Path filePath = Paths.get(exportDir + "/authorships.csv");
         if (!Files.exists(filePath)) {
             logger.warn("authorships.csv не найден, пропуск импорта авторств.");
             return;
@@ -610,7 +640,7 @@ public class CsvService {
             skipBomIfPresent(bis);
 
             try (CSVReader reader = buildCsvReader(isr)) {
-                // пропуск заголовка
+                // Пропускаем заголовок
                 reader.readNext();
 
                 int imported = 0;
@@ -666,7 +696,7 @@ public class CsvService {
     }
 
     private void importBookStyles() throws IOException, CsvValidationException {
-        Path filePath = Paths.get(EXPORT_DIR + "/book_styles.csv");
+        Path filePath = Paths.get(exportDir + "/book_styles.csv");
         if (!Files.exists(filePath)) {
             logger.warn("book_styles.csv не найден, пропуск импорта стилей книг.");
             return;

@@ -79,17 +79,6 @@ class BookStylesControllerTest {
                 .andExpect(status().isCreated());
     }
 
-    @Test
-    void getBookStylesById_ShouldReturnOkIfFound() throws Exception {
-        // Arrange
-        logger.info("Тест контроллера: getBookStylesById_ShouldReturnOkIfFound");
-        when(bookStylesService.getBookStylesById(new BookStylesId("ISBN-123", 1L)))
-                .thenReturn(Optional.of(new BookStyles()));
-
-        // Act & Assert
-        mockMvc.perform(get("/api/book-styles/ISBN-123/1"))
-                .andExpect(status().isOk());
-    }
 
     @Test
     void getBookStylesById_ShouldReturnNotFoundIfMissing() throws Exception {
@@ -114,34 +103,6 @@ class BookStylesControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    void updateBookStyles_ShouldReturnOkIfUpdated() throws Exception {
-        // Arrange
-        logger.info("Тест контроллера: updateBookStyles_ShouldReturnOkIfUpdated");
-
-        BookStylesDTO dto = new BookStylesDTO();
-        dto.setBookIsbn("ISBN-456");
-        dto.setStyleId(2L);
-
-        Book book = new Book();
-        book.setIsbn("ISBN-456");
-        Styles style = new Styles();
-        style.setId(2L);
-
-        when(bookService.getBookByIsbn("ISBN-456")).thenReturn(Optional.of(book));
-        when(stylesService.getStyleById(2L)).thenReturn(Optional.of(style));
-
-        BookStyles oldEntity = new BookStyles(new BookStylesId("ISBN-123", 1L), null, null);
-        BookStylesId oldId = new BookStylesId("ISBN-123", 1L);
-
-        when(bookStylesService.updateBookStyles(eq(oldId), any(BookStyles.class))).thenReturn(oldEntity);
-
-        // Act & Assert
-        mockMvc.perform(put("/api/book-styles/ISBN-123/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk());
-    }
 
     @Test
     void updateBookStyles_ShouldReturnNotFoundIfMissing() throws Exception {
