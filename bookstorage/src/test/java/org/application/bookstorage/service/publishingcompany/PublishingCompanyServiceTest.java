@@ -37,12 +37,14 @@ class PublishingCompanyServiceTest {
 
     @BeforeEach
     void setUp() {
+        // Инициализируем объект издательства и обязательно создаем пустой набор книг,
+        // чтобы избежать NullPointerException при итерации по getBooks()
         pc1 = new PublishingCompany(
                 "MyPublisher",
-                LocalDate.of(2000,1,1),
+                LocalDate.of(2000, 1, 1),
                 "Some contacts",
                 "Moscow",
-                null
+                new HashSet<Book>()
         );
     }
 
@@ -104,10 +106,10 @@ class PublishingCompanyServiceTest {
         when(publishingCompanyRepository.existsById("NewName")).thenReturn(false);
 
         // Мокаем создание новой записи
-        PublishingCompany newPC = new PublishingCompany("NewName", null, null, null, null);
+        PublishingCompany newPC = new PublishingCompany("NewName", null, null, null, new HashSet<>());
         when(publishingCompanyRepository.save(any(PublishingCompany.class))).thenReturn(newPC);
 
-        // Тоже нужно замокать удаление старой
+        // Мокаем удаление старой записи
         doNothing().when(publishingCompanyRepository).delete(pc1);
 
         PublishingCompany updatedData = new PublishingCompany();
@@ -139,7 +141,8 @@ class PublishingCompanyServiceTest {
     @Test
     void deletePublishingCompanies_ShouldDeleteAllIfFound() {
         logger.info("Тест: deletePublishingCompanies_ShouldDeleteAllIfFound");
-        when(publishingCompanyRepository.findAllById(Arrays.asList("MyPublisher"))).thenReturn(Collections.singletonList(pc1));
+        when(publishingCompanyRepository.findAllById(Arrays.asList("MyPublisher")))
+                .thenReturn(Collections.singletonList(pc1));
 
         publishingCompanyService.deletePublishingCompanies(Collections.singletonList("MyPublisher"));
 
@@ -170,4 +173,3 @@ class PublishingCompanyServiceTest {
         verify(publishingCompanyRepository, times(1)).findByNameContainingIgnoreCase("Publ");
     }
 }
-

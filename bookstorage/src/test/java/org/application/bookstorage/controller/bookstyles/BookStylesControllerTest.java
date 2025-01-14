@@ -11,7 +11,6 @@ import org.application.bookstorage.service.bookstyles.BookStylesService;
 import org.application.bookstorage.service.styles.StylesService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +20,17 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(BookStylesController.class)
@@ -38,8 +43,10 @@ class BookStylesControllerTest {
 
     @MockitoBean
     private BookStylesService bookStylesService;
+
     @MockitoBean
     private BookService bookService;
+
     @MockitoBean
     private StylesService stylesService;
 
@@ -47,6 +54,7 @@ class BookStylesControllerTest {
 
     @Test
     void createBookStyles_ShouldReturnCreated() throws Exception {
+        // Arrange
         logger.info("Тест контроллера: createBookStyles_ShouldReturnCreated");
 
         BookStylesDTO dto = new BookStylesDTO();
@@ -64,6 +72,7 @@ class BookStylesControllerTest {
         BookStyles entity = new BookStyles(new BookStylesId("ISBN-123", 1L), book, style);
         when(bookStylesService.createBookStyles(any(BookStyles.class))).thenReturn(entity);
 
+        // Act & Assert
         mockMvc.perform(post("/api/book-styles")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
@@ -72,38 +81,42 @@ class BookStylesControllerTest {
 
     @Test
     void getBookStylesById_ShouldReturnOkIfFound() throws Exception {
+        // Arrange
         logger.info("Тест контроллера: getBookStylesById_ShouldReturnOkIfFound");
-
         when(bookStylesService.getBookStylesById(new BookStylesId("ISBN-123", 1L)))
                 .thenReturn(Optional.of(new BookStyles()));
 
+        // Act & Assert
         mockMvc.perform(get("/api/book-styles/ISBN-123/1"))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getBookStylesById_ShouldReturnNotFoundIfMissing() throws Exception {
+        // Arrange
         logger.info("Тест контроллера: getBookStylesById_ShouldReturnNotFoundIfMissing");
-
         when(bookStylesService.getBookStylesById(new BookStylesId("NOBOOK", 999L)))
                 .thenReturn(Optional.empty());
 
+        // Act & Assert
         mockMvc.perform(get("/api/book-styles/NOBOOK/999"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void getAllBookStyles_ShouldReturnOk() throws Exception {
+        // Arrange
         logger.info("Тест контроллера: getAllBookStyles_ShouldReturnOk");
-
         when(bookStylesService.getAllBookStyles()).thenReturn(Collections.emptyList());
 
+        // Act & Assert
         mockMvc.perform(get("/api/book-styles"))
                 .andExpect(status().isOk());
     }
 
     @Test
     void updateBookStyles_ShouldReturnOkIfUpdated() throws Exception {
+        // Arrange
         logger.info("Тест контроллера: updateBookStyles_ShouldReturnOkIfUpdated");
 
         BookStylesDTO dto = new BookStylesDTO();
@@ -122,6 +135,8 @@ class BookStylesControllerTest {
         BookStylesId oldId = new BookStylesId("ISBN-123", 1L);
 
         when(bookStylesService.updateBookStyles(eq(oldId), any(BookStyles.class))).thenReturn(oldEntity);
+
+        // Act & Assert
         mockMvc.perform(put("/api/book-styles/ISBN-123/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
@@ -130,6 +145,7 @@ class BookStylesControllerTest {
 
     @Test
     void updateBookStyles_ShouldReturnNotFoundIfMissing() throws Exception {
+        // Arrange
         logger.info("Тест контроллера: updateBookStyles_ShouldReturnNotFoundIfMissing");
 
         BookStylesDTO dto = new BookStylesDTO();
@@ -138,6 +154,7 @@ class BookStylesControllerTest {
 
         when(bookService.getBookByIsbn("NoBook")).thenReturn(Optional.empty());
 
+        // Act & Assert
         mockMvc.perform(put("/api/book-styles/ISBN-123/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
@@ -146,8 +163,10 @@ class BookStylesControllerTest {
 
     @Test
     void deleteBookStyles_ShouldReturnNoContent() throws Exception {
+        // Arrange
         logger.info("Тест контроллера: deleteBookStyles_ShouldReturnNoContent");
 
+        // Act & Assert
         mockMvc.perform(delete("/api/book-styles/{bookIsbn}/{styleId}", "ISBN-123", 1L))
                 .andExpect(status().isNoContent());
 
@@ -157,13 +176,14 @@ class BookStylesControllerTest {
 
     @Test
     void deleteBookStyles_ShouldReturnNotFoundIfMissing() throws Exception {
+        // Arrange
         logger.info("Тест контроллера: deleteBookStyles_ShouldReturnNotFoundIfMissing");
 
         doThrow(new RuntimeException("Not found")).when(bookStylesService)
                 .deleteBookStyles(new BookStylesId("NOBOOK", 999L));
 
+        // Act & Assert
         mockMvc.perform(delete("/api/book-styles/NOBOOK/999"))
                 .andExpect(status().isNotFound());
     }
 }
-

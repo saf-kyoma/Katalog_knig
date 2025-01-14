@@ -3,7 +3,6 @@ package org.application.bookstorage.controller.csv;
 import org.application.bookstorage.service.csv.CsvService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +32,10 @@ class CsvControllerTest {
 
     @Test
     void exportData_ShouldReturnOk() throws Exception {
+        // Arrange
         logger.info("Тест контроллера: exportData_ShouldReturnOk");
 
+        // Act & Assert
         mockMvc.perform(post("/api/csv/export")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -44,10 +45,11 @@ class CsvControllerTest {
 
     @Test
     void exportData_ShouldReturnErrorIfException() throws Exception {
+        // Arrange
         logger.info("Тест контроллера: exportData_ShouldReturnErrorIfException");
-
         doThrow(new IOException("IO Error")).when(csvService).exportData();
 
+        // Act & Assert
         mockMvc.perform(post("/api/csv/export"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().string("Ошибка при экспорте данных: IO Error"));
@@ -55,8 +57,10 @@ class CsvControllerTest {
 
     @Test
     void importData_ShouldReturnOk() throws Exception {
+        // Arrange
         logger.info("Тест контроллера: importData_ShouldReturnOk");
 
+        // Act & Assert
         mockMvc.perform(post("/api/csv/import"))
                 .andExpect(status().isOk());
 
@@ -65,13 +69,13 @@ class CsvControllerTest {
 
     @Test
     void importData_ShouldReturnErrorIfException() throws Exception {
+        // Arrange
         logger.info("Тест контроллера: importData_ShouldReturnErrorIfException");
-
         doThrow(new IOException("IO Error")).when(csvService).importData();
 
+        // Act & Assert
         mockMvc.perform(post("/api/csv/import"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().string("Ошибка при импорте данных: IO Error"));
     }
 }
-

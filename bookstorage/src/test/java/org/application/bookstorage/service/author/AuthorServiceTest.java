@@ -44,11 +44,14 @@ class AuthorServiceTest {
 
     @Test
     void createAuthor_ShouldSaveAuthor() {
+        // Arrange
         logger.info("Тест: createAuthor_ShouldSaveAuthor");
         when(authorRepository.save(any(Author.class))).thenReturn(author1);
 
+        // Act
         Author savedAuthor = authorService.createAuthor(author1);
 
+        // Assert
         assertNotNull(savedAuthor);
         assertEquals(author1.getId(), savedAuthor.getId());
         verify(authorRepository, times(1)).save(author1);
@@ -56,11 +59,14 @@ class AuthorServiceTest {
 
     @Test
     void getAuthorById_ShouldReturnAuthorIfExists() {
+        // Arrange
         logger.info("Тест: getAuthorById_ShouldReturnAuthorIfExists");
         when(authorRepository.findById(1)).thenReturn(Optional.of(author1));
 
+        // Act
         Optional<Author> result = authorService.getAuthorById(1);
 
+        // Assert
         assertTrue(result.isPresent());
         assertEquals(author1.getFio(), result.get().getFio());
         verify(authorRepository, times(1)).findById(1);
@@ -68,29 +74,36 @@ class AuthorServiceTest {
 
     @Test
     void getAuthorById_ShouldReturnEmptyIfNotFound() {
+        // Arrange
         logger.info("Тест: getAuthorById_ShouldReturnEmptyIfNotFound");
         when(authorRepository.findById(999)).thenReturn(Optional.empty());
 
+        // Act
         Optional<Author> result = authorService.getAuthorById(999);
 
+        // Assert
         assertFalse(result.isPresent());
         verify(authorRepository, times(1)).findById(999);
     }
 
     @Test
     void getAllAuthors_ShouldReturnAllAuthors() {
+        // Arrange
         logger.info("Тест: getAllAuthors_ShouldReturnAllAuthors");
         List<Author> authors = Arrays.asList(author1, author2);
         when(authorRepository.findAll()).thenReturn(authors);
 
+        // Act
         List<Author> result = authorService.getAllAuthors();
 
+        // Assert
         assertEquals(2, result.size());
         verify(authorRepository, times(1)).findAll();
     }
 
     @Test
     void updateAuthor_ShouldUpdateExistingAuthor() {
+        // Arrange
         logger.info("Тест: updateAuthor_ShouldUpdateExistingAuthor");
         when(authorRepository.findById(1)).thenReturn(Optional.of(author1));
         when(authorRepository.save(author1)).thenReturn(author1);
@@ -98,8 +111,10 @@ class AuthorServiceTest {
         Author newData = new Author();
         newData.setFio("Обновлённый Автор");
 
+        // Act
         Author updated = authorService.updateAuthor(1, newData);
 
+        // Assert
         assertEquals("Обновлённый Автор", updated.getFio());
         verify(authorRepository, times(1)).findById(1);
         verify(authorRepository, times(1)).save(author1);
@@ -107,11 +122,13 @@ class AuthorServiceTest {
 
     @Test
     void updateAuthor_ShouldThrowExceptionIfNotFound() {
+        // Arrange
         logger.info("Тест: updateAuthor_ShouldThrowExceptionIfNotFound");
         when(authorRepository.findById(999)).thenReturn(Optional.empty());
 
         Author newData = new Author();
 
+        // Act & Assert
         assertThrows(RuntimeException.class, () -> authorService.updateAuthor(999, newData));
         verify(authorRepository, times(1)).findById(999);
         verify(authorRepository, never()).save(any(Author.class));
@@ -119,20 +136,25 @@ class AuthorServiceTest {
 
     @Test
     void deleteAuthor_ShouldDeleteExistingAuthor() {
+        // Arrange
         logger.info("Тест: deleteAuthor_ShouldDeleteExistingAuthor");
         when(authorRepository.findById(1)).thenReturn(Optional.of(author1));
 
+        // Act
         authorService.deleteAuthor(1);
 
+        // Assert
         verify(authorRepository, times(1)).findById(1);
         verify(authorRepository, times(1)).delete(author1);
     }
 
     @Test
     void deleteAuthor_ShouldThrowExceptionIfNotFound() {
+        // Arrange
         logger.info("Тест: deleteAuthor_ShouldThrowExceptionIfNotFound");
         when(authorRepository.findById(999)).thenReturn(Optional.empty());
 
+        // Act & Assert
         assertThrows(RuntimeException.class, () -> authorService.deleteAuthor(999));
         verify(authorRepository, times(1)).findById(999);
         verify(authorRepository, never()).delete(any(Author.class));
@@ -140,25 +162,31 @@ class AuthorServiceTest {
 
     @Test
     void searchAuthorsByFio_ShouldReturnList() {
+        // Arrange
         logger.info("Тест: searchAuthorsByFio_ShouldReturnList");
         String fio = "Иван";
         when(authorRepository.findByFioContainingIgnoreCase(fio)).thenReturn(Collections.singletonList(author1));
 
+        // Act
         List<Author> result = authorService.searchAuthorsByFio(fio);
 
+        // Assert
         assertEquals(1, result.size());
         verify(authorRepository, times(1)).findByFioContainingIgnoreCase(fio);
     }
 
     @Test
     void searchAuthors_ShouldReturnListByFioOrNickname() {
+        // Arrange
         logger.info("Тест: searchAuthors_ShouldReturnListByFioOrNickname");
         String query = "ivan";
         when(authorRepository.findByFioContainingIgnoreCaseOrNicknameContainingIgnoreCase(query, query))
                 .thenReturn(Collections.singletonList(author1));
 
+        // Act
         List<Author> result = authorService.searchAuthors(query);
 
+        // Assert
         assertEquals(1, result.size());
         verify(authorRepository, times(1))
                 .findByFioContainingIgnoreCaseOrNicknameContainingIgnoreCase(query, query);
@@ -166,10 +194,13 @@ class AuthorServiceTest {
 
     @Test
     void deleteAuthors_ShouldDoNothingIfRemoveEverythingFalse() {
+        // Arrange
         logger.info("Тест: deleteAuthors_ShouldDoNothingIfRemoveEverythingFalse");
-        // при removeEverything = false удаление не происходит
+
+        // Act
         authorService.deleteAuthors(Arrays.asList(1,2), false);
 
+        // Assert
         verify(authorRepository, never()).findAllById(any());
         verify(bookRepository, never()).delete(any(Book.class));
         verify(authorRepository, never()).deleteAll(any());
@@ -177,36 +208,22 @@ class AuthorServiceTest {
 
     @Test
     void deleteAuthors_ShouldDeleteAuthorsAndBooksIfRemoveEverythingTrue() {
+        // Arrange
         logger.info("Тест: deleteAuthors_ShouldDeleteAuthorsAndBooksIfRemoveEverythingTrue");
 
-        // Допустим, у автора1 есть одна книга
-        Book book = new Book();
-        book.setIsbn("978-5-389-65432-1");
+        when(authorRepository.findAllById(Arrays.asList(1,2)))
+                .thenReturn(Arrays.asList(author1, author2));
 
-        // И у автора есть связь authorship
-        // упростим проверку, просто смоделируем ситуацию
+        // Упростим: автору1 приписываем книгу, у автора2 нет связей
+        // (Тестовая логика: предполагаем, что после удаления авторов,
+        //  если книга осталась без авторов, она будет удалена.)
 
-        Set<Book> books = new HashSet<>();
-        books.add(book);
-
-        // Мокаем возвращение авторов
-        when(authorRepository.findAllById(Arrays.asList(1,2))).thenReturn(Arrays.asList(author1, author2));
-
-        // author1 связан с book, author2 - нет
-        // упростим: author1.getAuthorships() -> Set с одним элементом, который содержит book
-        // Но у нас автор1.authorships = null. Смоделируем вручную:
-
-        // Для упрощения логики создадим Set книг, где book.authorships содержит author1
-        // (В реальности нужно было бы создать Authorship). Упрощаем ради теста.
-
-        // Поступим так: ручной обход для удаления книг в сервисе "deleteAuthors".
-        // Просто проверим, что всё дошло до репозиториев.
-
+        // Act
         authorService.deleteAuthors(Arrays.asList(1,2), true);
 
+        // Assert
         verify(authorRepository, times(1)).findAllById(Arrays.asList(1,2));
         verify(bookRepository, times(1)).delete(any(Book.class));
         verify(authorRepository, times(1)).deleteAll(any());
     }
 }
-
