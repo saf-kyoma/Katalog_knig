@@ -130,7 +130,7 @@ function deleteAuthor(authorId) {
     .then(response => {
       if (response.ok) {
         alert('Автор успешно удалён.');
-        window.location.href = 'Страница-авторов.html';
+        window.location.href = 'Авторы.html';
       } else {
         throw new Error('Ошибка при удалении автора');
       }

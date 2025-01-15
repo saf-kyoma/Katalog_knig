@@ -136,7 +136,7 @@ function deletePublisher(publisherName) {
   .then(response => {
     if (response.status === 204) {
       alert('Издательство успешно удалено.');
-      window.location.href = 'Страница-издательств.html';
+      window.location.href = 'Издательства.html';
     } else {
       throw new Error('Ошибка при удалении издательства');
     }
