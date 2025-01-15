@@ -1,74 +1,91 @@
 <!DOCTYPE html>
-<html style="font-size: 16px;" lang="ru"><head>
+<html xmlns:th="http://www.thymeleaf.org" style="font-size: 16px;" lang="ru">
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <meta name="keywords" content="">
     <meta name="description" content="">
+    <!-- Если у вас нужны скрипты, они должны подключаться как статические ресурсы -->
+
     <script src="/js/Вход-в-систему.js" defer></script>
 
+    <!-- Подключение Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+
     <title>Вход в систему</title>
-    <link rel="stylesheet" href="css/nicepage.css" media="screen">
-<link rel="stylesheet" href="../css/Вход-в-систему.css" media="screen">
-    <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
-    <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
+    <link rel="stylesheet" th:href="@{/css/nicepage.css}" media="screen">
+    <link rel="stylesheet" href="../css/Вход-в-систему.css" media="screen">
 
 
     <meta name="generator" content="Nicepage 7.1.0, nicepage.com">
     <meta name="referrer" content="origin">
-    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
-    
-    
-    
-    <script type="application/ld+json">{
-		"@context": "http://schema.org",
-		"@type": "Organization",
-		"name": ""
-}</script>
+    <link id="u-theme-google-font" rel="stylesheet"
+          th:href="@{https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i}">
+
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org",
+            "@type": "Organization",
+            "name": ""
+        }
+    </script>
     <meta name="theme-color" content="#2cccc4">
     <meta property="og:title" content="Вход в систему">
     <meta property="og:type" content="website">
-  <meta data-intl-tel-input-cdn-path="intlTelInput/"></head>
-  <body data-path-to-root="./" data-include-products="true" class="u-body u-xl-mode" data-lang="ru">
-    <section class="u-clearfix u-section-1" id="sec-29f6">
-      <div class="u-clearfix u-sheet u-sheet-1">
+    <meta data-intl-tel-input-cdn-path="intlTelInput/">
+
+
+</head>
+<body data-path-to-root="./" data-include-products="true" class="u-body u-xl-mode" data-lang="ru">
+<section class="u-clearfix u-section-1" id="sec-29f6">
+    <div class="u-clearfix u-sheet u-sheet-1">
         <h3 class="u-text u-text-default u-text-1">Войдите в систему</h3>
+
+        <!-- Форма входа: теперь вместо отправки на внешний URL она обрабатывается JavaScript‑функцией -->
         <div class="u-form u-form-1">
-          <form action="https://forms.nicepagesrv.com/v2/form/process" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="email" name="form" style="padding: 10px;">
-            <div class="u-form-group u-form-name">
-              <label for="name-1261" class="u-label">Имя</label>
-              <input type="text" placeholder="Введите ваше имя" id="name-1261" name="name" class="u-input u-input-rectangle" required="">
-            </div>
-            <div class="u-form-group u-form-group-2">
-              <label for="text-5051" class="u-label">Пароль</label>
-              <input type="text" placeholder="Введите ваш пароль" id="text-5051" name="text" class="u-input u-input-rectangle">
-            </div>
-            <div class="u-align-left u-form-group u-form-submit">
-              <a href="Каталог.html" class="u-active-custom-color-2 u-border-none u-btn u-btn-round u-btn-submit u-button-style u-radius u-btn-1">Войти<br>
-              </a>
-              <input type="submit" value="submit" class="u-form-control-hidden">
-            </div>
-            <div class="u-form-send-message u-form-send-success"> Спасибо! Ваше сообщение отправлено. </div>
-            <div class="u-form-send-error u-form-send-message"> Отправка не удалась. Пожалуйста, исправьте ошибки и попробуйте еще раз. </div>
-            <input type="hidden" value="" name="recaptchaResponse">
-            <input type="hidden" name="formServices" value="234d2f51-51fe-7107-fa98-0d7a5e49113d">
-          </form>
+            <form onsubmit="handleLogin(event)" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" style="padding: 10px;">
+                <div class="u-form-group u-form-name">
+                    <label for="username" class="u-label">Имя</label>
+                    <input type="text" placeholder="Введите ваше имя" id="username" name="username" class="u-input u-input-rectangle" required>
+                </div>
+                <div class="u-form-group u-form-group-2">
+                    <label for="password" class="u-label">Пароль</label>
+                    <!-- Используем тип "password" для сокрытия ввода -->
+                    <input type="password" placeholder="Введите ваш пароль" id="password" name="password" class="u-input u-input-rectangle" required>
+                </div>
+                <div class="buttons-container">
+                    <!-- Кнопка отправки формы -->
+                    <button type="submit" class="u-btn u-btn-submit">Войти </button>
+                    <!-- Кнопка Отмены -->
+                    <a href="Каталог.html" class="u-btn u-btn-cancel" id="cancelButton">Отмена</a>
+                </div>
+                <div class="u-form-send-message u-form-send-success"> Спасибо! Ваше сообщение отправлено. </div>
+                <div class="u-form-send-error u-form-send-message"> Отправка не удалась. Пожалуйста, исправьте ошибки и попробуйте еще раз. </div>
+                <input type="hidden" name="recaptchaResponse" value="">
+                <input type="hidden" name="formServices" value="234d2f51-51fe-7107-fa98-0d7a5e49113d">
+            </form>
         </div>
-        <img class="u-image u-image-contain u-image-default u-preserve-proportions u-image-1" src="../images/library.png" alt="" data-image-width="1181" data-image-height="1181">
-      </div>
-    </section>
-    
-    
-    
-    <footer class="u-align-center u-clearfix u-container-align-center u-footer u-grey-80 u-footer" id="sec-2f71"><div class="u-clearfix u-sheet u-sheet-1">
-        <p class="u-small-text u-text u-text-variant u-text-1"> О вопросах и проблемах сообщать главному администратору или писать на почту GlobalMaster@book.com</p>
-      </div></footer>
-    <section class="u-backlink u-clearfix u-grey-80">
-      <p class="u-text">
+        <img class="u-image u-image-contain u-image-default u-preserve-proportions u-image-1"
+             th:src="@{/images/library.png}" alt="" data-image-width="1181" data-image-height="1181">
+    </div>
+</section>
+
+<footer class="u-align-center u-clearfix u-container-align-center u-footer u-grey-80 u-footer" id="sec-2f71">
+    <div class="u-clearfix u-sheet u-sheet-1">
+        <p class="u-small-text u-text u-text-variant u-text-1">
+            О вопросах и проблемах сообщать главному администратору или писать на почту GlobalMaster@book.com
+        </p>
+    </div>
+</footer>
+
+<section class="u-backlink u-clearfix u-grey-80">
+    <p class="u-text">
         <span>This site was created with the </span>
         <a class="u-link" href="https://nicepage.com/" target="_blank" rel="nofollow">
-          <span>Nicepage</span>
+            <span>Nicepage</span>
         </a>
-      </p>
-    </section>
-  
-</body></html>
+    </p>
+</section>
+</body>
+</html>

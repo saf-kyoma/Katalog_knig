@@ -884,8 +884,7 @@
   padding-left: 10px;
 }
 
- /* (Существующие стили остаются без изменений) */
-    body {
+ /* (Существующие стили остаются без изменений) */body {
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
@@ -1118,3 +1117,42 @@
     nav.u-menu .dropdown:hover .dropdown-menu {
         display: block;
     }
+
+     @media (max-width: 576px) {
+            .search-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-container .input-group,
+            .search-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .search-buttons {
+                justify-content: flex-start;
+            }
+     }
+
+     .u-input, .u-input-number, .u-select
+     {
+           width: 100%;
+           padding: 8px;
+           box-sizing: border-box;
+           border: 1px solid #ccc;
+           border-radius: 4px;
+         }
+
+         /* Стили для тегов жанров */
+         .tags-input-container {
+           display: flex;
+           flex-wrap: wrap;
+           gap: 5px;
+           border: 1px solid #ccc;
+           border-radius: 4px;
+           padding: 5px;
+           align-items: center;
+           position: relative;
+     }
+

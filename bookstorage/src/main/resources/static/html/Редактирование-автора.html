@@ -4,34 +4,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <title>Редактирование автора</title>
-    <link rel="stylesheet" href="css/nicepage.css" media="screen">
+
     <link rel="stylesheet" href="../css/Добавление-книги.css" media="screen">
-    <script class="u-script" type="text/javascript" src="jquery.js" defer></script>
-    <script class="u-script" type="text/javascript" src="nicepage.js" defer></script>
     <meta name="theme-color" content="#2cccc4">
     <script src="/js/Редактирование-автора.js" defer></script>
-
-
 </head>
 <body class="u-body u-xl-mode" data-lang="ru">
 <header>
     <h1>Редактирование информации об авторе</h1>
 </header>
-<nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1 d-flex justify-content-center w-100" data-responsive-from="XS" data-submenu-level="on-click">
+<nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1 d-flex justify-content-center w-100"
+     data-responsive-from="XS" data-submenu-level="on-click">
     <ul class="d-flex justify-content-center w-100">
         <li class="mx-2 flex-fill text-center"><a href="Каталог.html">Каталог</a></li>
         <li class="mx-2 flex-fill text-center"><a href="Авторы.html">Авторы</a></li>
         <li class="mx-2 flex-fill text-center"><a href="Издательства.html">Издательства</a></li>
-        <li class="mx-2 flex-fill text-center"><a href="Вход-в-систему.html">Войти</a></li>
+        <!-- Элемент входа -->
+        <li class="mx-2 flex-fill text-center" id="loginLink"><a href="Вход-в-систему.html">Войти</a></li>
+        <!-- Элемент выхода (изначально скрыт) -->
+        <li class="dropdown mx-2 flex-fill text-center" id="logoutMenuItem" style="display: none;">
+            <a href="#" id="logoutButton" class="btn btn-outline-danger">Выход</a>
+        </li>
         <li class="dropdown mx-2 flex-fill text-center">
             <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">База данных</a>
             <ul class="dropdown-menu">
                 <li>
-                    <!-- Кнопка "Загрузить базу данных" (import CSV) -->
                     <button id="DBadd" class="btn dropdown-item">Загрузить базу данных</button>
                 </li>
                 <li>
-                    <!-- Кнопка "Выгрузить базу данных" (export CSV) -->
                     <button id="DBout" class="btn dropdown-item">Выгрузить базу данных</button>
                 </li>
             </ul>
@@ -64,8 +64,8 @@
             </div>
             <!-- Кнопки -->
             <div class="buttons-container">
-                <button type="submit" class="u-btn u-btn-submit">Редактировать</button>
-                <a href="Авторы.html" class="u-btn u-btn-cancel">Отмена</a>
+                <button type="submit" id="editAuthorSubmitBtn" class="u-btn u-btn-submit">Редактировать</button>
+                <a href="Авторы.html" id="cancelButton" class="u-btn u-btn-cancel">Отмена</a>
             </div>
             <!-- Сообщения об отправке -->
             <div class="u-form-send-message u-form-send-success">Спасибо! Автор обновлен.</div>
@@ -84,7 +84,5 @@
         </p>
     </div>
 </footer>
-
-
 </body>
 </html>
