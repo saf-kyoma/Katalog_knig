@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;" lang="ru">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>Редактирование автора</title>
+
+    <link rel="stylesheet" href="../css/Добавление-книги.css" media="screen">
+    <meta name="theme-color" content="#2cccc4">
+    <script src="/js/Редактирование-автора.js" defer></script>
+</head>
+<body class="u-body u-xl-mode" data-lang="ru">
+<header>
+    <h1>Редактирование информации об авторе</h1>
+</header>
+<nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1 d-flex justify-content-center w-100"
+     data-responsive-from="XS" data-submenu-level="on-click">
+    <ul class="d-flex justify-content-center w-100">
+        <li class="mx-2 flex-fill text-center"><a href="Каталог.html">Каталог</a></li>
+        <li class="mx-2 flex-fill text-center"><a href="Авторы.html">Авторы</a></li>
+        <li class="mx-2 flex-fill text-center"><a href="Издательства.html">Издательства</a></li>
+        <!-- Элемент входа -->
+        <li class="mx-2 flex-fill text-center" id="loginLink"><a href="Вход-в-систему.html">Войти</a></li>
+        <!-- Элемент выхода (изначально скрыт) -->
+        <li class="dropdown mx-2 flex-fill text-center" id="logoutMenuItem" style="display: none;">
+            <a href="#" id="logoutButton" class="btn btn-outline-danger">Выход</a>
+        </li>
+        <li class="dropdown mx-2 flex-fill text-center">
+            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">База данных</a>
+            <ul class="dropdown-menu">
+                <li>
+                    <button id="DBadd" class="btn dropdown-item">Загрузить базу данных</button>
+                </li>
+                <li>
+                    <button id="DBout" class="btn dropdown-item">Выгрузить базу данных</button>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+<section class="u-clearfix u-section-1" id="sec-64ce">
+    <div class="container">
+        <!-- Форма редактирования автора -->
+        <form id="author-edit-form" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form">
+            <!-- ФИО (обязательное) -->
+            <div class="u-form-group">
+                <label for="name" class="u-label">ФИО</label>
+                <input type="text" placeholder="Введите ФИО автора" id="name" name="name" class="u-input" required pattern="[A-Za-zА-Яа-яЁё0-9\s\-]+" title="Разрешены буквы, цифры, пробелы и дефис (-)">
+            </div>
+            <!-- Дата рождения (не обязательное) -->
+            <div class="u-form-group">
+                <label for="publicationYear" class="u-label">Дата рождения</label>
+                <input type="date" id="publicationYear" name="birthday" class="u-input-number">
+            </div>
+            <!-- Страна (не обязательное) -->
+            <div class="u-form-group">
+                <label for="contry" class="u-label">Страна</label>
+                <input type="text" placeholder="Введите страну" id="contry" name="contry" class="u-input" pattern="[A-Za-zА-Яа-яЁё0-9\s\-]+" title="Разрешены буквы, цифры, пробелы и дефис (-)">
+            </div>
+            <!-- Псевдоним (не обязательное) -->
+            <div class="u-form-group">
+                <label for="Nickname" class="u-label">Псевдоним</label>
+                <input type="text" placeholder="Введите псевдоним автора" id="Nickname" name="nickname" class="u-input" pattern="[A-Za-zА-Яа-яЁё0-9\s\-]+" title="Разрешены буквы, цифры, пробелы и дефис (-)">
+            </div>
+            <!-- Кнопки -->
+            <div class="buttons-container">
+                <button type="submit" id="editAuthorSubmitBtn" class="u-btn u-btn-submit">Редактировать</button>
+                <a href="Авторы.html" id="cancelButton" class="u-btn u-btn-cancel">Отмена</a>
+            </div>
+            <!-- Сообщения об отправке -->
+            <div class="u-form-send-message u-form-send-success">Спасибо! Автор обновлен.</div>
+            <div class="u-form-send-error u-form-send-message">Отправка не удалась. Пожалуйста, исправьте ошибки и попробуйте еще раз.</div>
+            <!-- Скрытые поля -->
+            <input type="hidden" name="recaptchaResponse" value="">
+            <input type="hidden" name="formServices" value="234d2f51-51fe-7107-fa98-0d7a5e49113d">
+        </form>
+    </div>
+</section>
+<footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-2f71">
+    <div class="u-clearfix u-sheet u-sheet-1">
+        <p class="u-small-text u-text u-text-variant u-text-1">
+            О вопросах и проблемах сообщать главному администратору или писать на почту
+            <a href="mailto:GlobalMaster@book.com">GlobalMaster@book.com</a>
+        </p>
+    </div>
+</footer>
+</body>
+</html>

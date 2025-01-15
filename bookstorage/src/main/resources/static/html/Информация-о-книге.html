@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/js/Информация-о-книге.js" defer></script>
+
+    <title>Страница книги</title>
+    <link rel="stylesheet" href="../css/Информация-о-книге.css" media="screen">
+</head>
+<body>
+<header>
+    <h1>Информация о книге</h1>
+</header>
+<nav class="u-dropdown-icon u-menu u-menu-dropdown u-menu-1 d-flex justify-content-center w-100" data-responsive-from="XS" data-submenu-level="on-click">
+    <ul class="d-flex justify-content-center w-100">
+        <li class="mx-2 flex-fill text-center"><a href="Каталог.html">Каталог</a></li>
+        <li class="mx-2 flex-fill text-center"><a href="Авторы.html">Авторы</a></li>
+        <li class="mx-2 flex-fill text-center"><a href="Издательства.html">Издательства</a></li>
+        <li class="mx-2 flex-fill text-center"><a href="Вход-в-систему.html">Войти</a></li>
+        <!-- Элемент для "Выхода" (изначально скрыт) -->
+        <li class="dropdown mx-2 flex-fill text-center" id="logoutMenuItem" style="display: none;">
+            <a href="#" id="logoutButton" class="btn btn-outline-danger">Выход</a>
+        </li>
+        <li class="dropdown mx-2 flex-fill text-center">
+            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">База данных</a>
+            <ul class="dropdown-menu">
+                <li><button id="DBadd" class="btn dropdown-item">Загрузить базу данных</button></li>
+                <li><button id="DBout" class="btn dropdown-item">Выгрузить базу данных</button></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+<div class="container">
+    <table>
+        <tbody>
+        <tr>
+            <th>ISBN</th>
+            <td id="isbn"></td>
+        </tr>
+        <tr>
+            <th>Название</th>
+            <td id="name"></td>
+        </tr>
+        <tr>
+            <th>Год публикации</th>
+            <td id="publicationYear"></td>
+        </tr>
+        <tr>
+            <th>Возрастное ограничение</th>
+            <td id="ageLimit"></td>
+        </tr>
+        <tr>
+            <th>Издатель</th>
+            <td id="publishingCompany"></td>
+        </tr>
+        <tr>
+            <th>Число страниц</th>
+            <td id="pageCount"></td>
+        </tr>
+        <tr>
+            <th>Язык</th>
+            <td id="language"></td>
+        </tr>
+        <tr>
+            <th>Цена</th>
+            <td id="cost"></td>
+        </tr>
+        <tr>
+            <th>Кол-во экземпляров</th>
+            <td id="countOfBooks"></td>
+        </tr>
+        <tr>
+            <th>Авторы</th>
+            <td id="authors"></td>
+        </tr>
+        <tr>
+            <th>Жанры</th>
+            <td id="genres"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a id="editButton" class="btn">Редактировать</a>
+    <a href="Каталог.html" id="deleteButton" class="btn">Удалить</a>
+
+    <div id="message" class="message"></div>
+</div>
+
+</body>
+</html>
