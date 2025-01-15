@@ -359,3 +359,125 @@
           });
         });
       });
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+          // Получаем токен из localStorage (токен должен сохраняться после успешного входа под ключом "jwtToken")
+          const token = localStorage.getItem("jwtToken");
+
+          // Получаем элементы по их id (не изменяя ваши имена)
+          const loginLink = document.getElementById("loginLink");
+          const logoutMenuItem = document.getElementById("logoutMenuItem");
+          const searchButtonBook = document.getElementById("searchButtonBook");
+          const deleteSelectedButton = document.getElementById("deleteSelectedButton");
+
+          if (token) {
+            // Если токен найден – пользователь авторизован.
+            if (loginLink) {
+              loginLink.style.display = "none";
+            }
+            if (logoutMenuItem) {
+              logoutMenuItem.style.display = "block";
+            }
+            // Разблокируем кнопки "Добавить книгу" и "Удалить выбранные"
+            if (searchButtonBook) {
+              searchButtonBook.classList.remove("disabled");
+              searchButtonBook.removeAttribute("aria-disabled");
+              searchButtonBook.removeAttribute("tabindex");
+              searchButtonBook.style.pointerEvents = "auto";
+              searchButtonBook.style.opacity = "1";
+              searchButtonBook.title = "";
+            }
+            if (deleteSelectedButton) {
+              deleteSelectedButton.classList.remove("disabled");
+              deleteSelectedButton.removeAttribute("aria-disabled");
+              deleteSelectedButton.removeAttribute("tabindex");
+              deleteSelectedButton.style.pointerEvents = "auto";
+              deleteSelectedButton.style.opacity = "1";
+              deleteSelectedButton.title = "";
+            }
+          } else {
+            // Если токен отсутствует – пользователь не авторизован.
+            if (logoutMenuItem) {
+              logoutMenuItem.style.display = "none";
+            }
+            // Блокируем кнопки "Добавить книгу" и "Удалить выбранные": добавляем класс disabled и стили затемнения
+            if (searchButtonBook) {
+              searchButtonBook.classList.add("disabled");
+              searchButtonBook.setAttribute("aria-disabled", "true");
+              searchButtonBook.setAttribute("tabindex", "-1");
+              searchButtonBook.style.pointerEvents = "none";
+              searchButtonBook.style.opacity = "0.5";
+              searchButtonBook.title = "Для добавления книги необходимо войти в систему";
+            }
+            if (deleteSelectedButton) {
+              deleteSelectedButton.classList.add("disabled");
+              deleteSelectedButton.setAttribute("aria-disabled", "true");
+              deleteSelectedButton.setAttribute("tabindex", "-1");
+              deleteSelectedButton.style.pointerEvents = "none";
+              deleteSelectedButton.style.opacity = "0.5";
+              deleteSelectedButton.title = "Для удаления выбранных книг необходимо войти в систему";
+            }
+          }
+
+          // Обработчик для кнопки "Выход"
+          const logoutButton = document.getElementById("logoutButton");
+          if (logoutButton) {
+            logoutButton.addEventListener("click", function (e) {
+              e.preventDefault();
+              localStorage.removeItem("jwtToken");
+              alert("Вы вышли из системы.");
+              window.location.reload();
+            });
+          }
+        });
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Проверяем наличие токена
+  const token = localStorage.getItem("jwtToken");
+  const dbMenu = document.querySelector(".dropdown[data-bs-toggle='dropdown']");
+  const importBtn = document.getElementById("DBadd");
+  const exportBtn = document.getElementById("DBout");
+
+  if (!token) {
+    // 1. Скрыть весь пункт меню "База данных"
+    if (dbMenu) {
+      dbMenu.style.pointerEvents = "none";
+      dbMenu.style.opacity = "0.5";
+      dbMenu.title = "Для доступа к базе данных необходимо войти в систему";
+    }
+
+    // 2. Заблокировать кнопки внутри меню
+    [importBtn, exportBtn].forEach(btn => {
+      if (btn) {
+        btn.classList.add("disabled");
+        btn.setAttribute("aria-disabled", "true");
+        btn.style.pointerEvents = "none";
+        btn.style.opacity = "0.5";
+        btn.title = "Для выполнения действия необходимо войти в систему";
+        btn.style.backgroundColor = "#2cccc4";
+                btn.style.color = "#ffffff";
+      }
+    });
+  } else {
+    // Если токен есть — разблокировать кнопки и меню
+    if (dbMenu) {
+      dbMenu.style.pointerEvents = "auto";
+      dbMenu.style.opacity = "1";
+      dbMenu.title = "";
+    }
+    [importBtn, exportBtn].forEach(btn => {
+      if (btn) {
+        btn.classList.remove("disabled");
+        btn.removeAttribute("aria-disabled");
+        btn.style.pointerEvents = "auto";
+        btn.style.opacity = "1";
+        btn.title = "";
+      }
+    });
+  }
+});
